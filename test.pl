@@ -2,9 +2,19 @@
 
 ## ---------------------------------------------
 
-class Ast {}
+class Ast {
+
+    method Eval ( Env $env ) {
+        die "Unknown Ast Node: $exp";
+    }
+}
+
 class Const is Ast {
     has Any $.value;
+
+    method Eval ( Env $env ) {
+        return $exp;
+    }
 
     method Str { "Const< " ~ $.value ~ " >" }
 }
@@ -12,12 +22,20 @@ class Const is Ast {
 class Var is Ast {
     has Str $.name;
 
+    method Eval ( Env $env ) {
+        return $env.get( $exp.name ) // die "Unable to find the variable: " ~ $exp.name;
+    }
+
     method Str { "Var< " ~ $.name ~ " >" }
 }
 
 class Cons is Ast {
     has Ast $.head;
     has Ast $.tail;
+
+    method Eval ( Env $env ) {
+        return $exp;
+    }    
  
     method Str { "Cons< " ~ $.head ~ " :: " ~ $.tail ~ " >" }
 }
@@ -25,6 +43,16 @@ class Cons is Ast {
 class Fun is Ast {
     has     @.params;
     has Ast $.body;
+
+    method Eval ( Env $env ) {
+        return -> @args {
+            my $new_env = $env.clone;
+            loop (my $i = 0; $i < @args.elems; $i++ ) {
+                $new_env.set( $exp.params[ $i ], @args[ $i ] )
+            }
+            evalPhP( $exp.body, $new_env );
+        }
+    }
 
     method Str { "Fun< (" ~ @.params.join(", ") ~ ") " ~ $.body ~ " >" }
 }
@@ -34,12 +62,29 @@ class Let is Ast {
     has Ast $.value;
     has Ast $.body;
 
+    method Eval ( Env $env ) {
+        my $new_env = $env.clone;
+        $new_env.set( $exp.name, evalPhP( $exp.value, $env ) );
+        return evalPhP( $exp.body, $new_env );
+    }
+
     method Str { "Let< " ~ $.name ~ " = " ~ $.value ~ "; " ~ $.body ~ " >" }
 }
 
 class Apply is Ast {
     has Str $.name;
     has     @.args;
+
+    method Eval ( Env $env ) {
+
+        my $code    = $env.get( $exp.name );
+        my $new_env = $env.clone;
+        $code(
+            $exp.args.map( -> $arg { 
+                evalPhP( $arg, $new_env ) 
+            })
+        );
+    }
 
     method Str { "Appy< " ~ $.name ~ " (" ~ @.args.join(", ") ~ ") >" }
 }
@@ -55,51 +100,6 @@ class Env {
 
 ## ---------------------------------------------
 
-multi evalPhP ( Fun $exp, Env $env ) {
-    return -> @args {
-        my $new_env = $env.clone;
-        loop (my $i = 0; $i < @args.elems; $i++ ) {
-            $new_env.set( $exp.params[ $i ], @args[ $i ] )
-        }
-        evalPhP( $exp.body, $new_env );
-    }
-}
-
-multi evalPhP ( Apply $exp, Env $env ) {
-
-    my $code    = $env.get( $exp.name );
-    my $new_env = $env.clone;
-    $code(
-        $exp.args.map( -> $arg { 
-            evalPhP( $arg, $new_env ) 
-        })
-    );
-}
-
-multi evalPhP ( Let $exp, Env $env ) {
-    my $new_env = $env.clone;
-    $new_env.set( $exp.name, evalPhP( $exp.value, $env ) );
-    return evalPhP( $exp.body, $new_env );
-}
-
-multi evalPhP ( Cons $exp, Env $env ) {
-    return $exp;
-}
-
-multi evalPhP ( Var $exp, Env $env ) {
-    return $env.get( $exp.name ) // die "Unable to find the variable: " ~ $exp.name;
-}
-
-multi evalPhP ( Const $exp, Env $env ) {
-    return $exp;
-}
-
-multi evalPhP ( Ast $exp, Env $env ) {
-    die "Unknown Ast Node: $exp";
-}
-
-## ---------------------------------------------
-
 my Env $root_env = Env.new;
 
 $root_env.set(
@@ -108,8 +108,7 @@ $root_env.set(
     }
 );
 
-say ~ evalPhP( 
-    Let.new(
+say ~ Let.new(
         name  => 'add',
         value => Fun.new(
             params => [ 'x', 'y' ],
@@ -128,8 +127,6 @@ say ~ evalPhP(
                 Const.new( value => 30 ),
             ]
         ),
-    ), 
-    $root_env
-);
+    ).Eval( $root_env );
 
 ## ---------------------------------------------
