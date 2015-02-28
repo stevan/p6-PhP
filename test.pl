@@ -2,59 +2,68 @@
 
 ## ---------------------------------------------
 
+class Env {
+    has %.pad;
+
+    method get    ( Str $key )             { %.pad{ $key }          }
+    method set    ( Str $key, Any $value ) { %.pad{ $key } = $value }
+}
+
+## ---------------------------------------------
+
 class Ast {
 
-    method Eval ( Env $env ) {
-        die "Unknown Ast Node: $exp";
+    method evaluate ( Env $env ) {
+        die "Unknown Ast Node: " ~ self;
     }
 }
 
 class Const is Ast {
     has Any $.value;
 
-    method Eval ( Env $env ) {
-        return $exp;
+    method evaluate ( Env $env ) {
+        return self;
     }
 
-    method Str { "Const< " ~ $.value ~ " >" }
+    method Str { "Const(" ~ $.value ~ ")" }
 }
 
 class Var is Ast {
     has Str $.name;
 
-    method Eval ( Env $env ) {
-        return $env.get( $exp.name ) // die "Unable to find the variable: " ~ $exp.name;
+    method evaluate ( Env $env ) {
+        return $env.get( $.name ) // die "Unable to find the variable: " ~ $.name;
     }
 
-    method Str { "Var< " ~ $.name ~ " >" }
+    method Str { "Var\{" ~ $.name ~ "\}" }
 }
 
 class Cons is Ast {
     has Ast $.head;
     has Ast $.tail;
 
-    method Eval ( Env $env ) {
-        return $exp;
+    method evaluate ( Env $env ) {
+        return self;
     }    
  
-    method Str { "Cons< " ~ $.head ~ " :: " ~ $.tail ~ " >" }
+    method Str { "Cons[ " ~ $.head ~ " :: " ~ $.tail ~ " ]" }
 }
 
 class Fun is Ast {
     has     @.params;
     has Ast $.body;
 
-    method Eval ( Env $env ) {
+    method evaluate ( Env $env ) {
         return -> @args {
             my $new_env = $env.clone;
             loop (my $i = 0; $i < @args.elems; $i++ ) {
-                $new_env.set( $exp.params[ $i ], @args[ $i ] )
+                $new_env.set( @.params[ $i ], @args[ $i ] )
             }
-            evalPhP( $exp.body, $new_env );
+            $.body.evaluate( $new_env );
         }
     }
 
-    method Str { "Fun< (" ~ @.params.join(", ") ~ ") " ~ $.body ~ " >" }
+    method Str { "Fun (" ~ @.params.join(", ") ~ ") \{ " ~ $.body ~ " \}" }
 }
 
 class Let is Ast {
@@ -62,40 +71,31 @@ class Let is Ast {
     has Ast $.value;
     has Ast $.body;
 
-    method Eval ( Env $env ) {
+    method evaluate ( Env $env ) {
         my $new_env = $env.clone;
-        $new_env.set( $exp.name, evalPhP( $exp.value, $env ) );
-        return evalPhP( $exp.body, $new_env );
+        $new_env.set( $.name, $.value.evaluate( $env ) );
+        return $.body.evaluate( $new_env );
     }
 
-    method Str { "Let< " ~ $.name ~ " = " ~ $.value ~ "; " ~ $.body ~ " >" }
+    method Str { "Let " ~ $.name ~ " = " ~ $.value ~ "; " ~ $.body ~ ";" }
 }
 
 class Apply is Ast {
     has Str $.name;
     has     @.args;
 
-    method Eval ( Env $env ) {
+    method evaluate ( Env $env ) {
 
-        my $code    = $env.get( $exp.name );
+        my $code    = $env.get( $.name ) // die "Unable to find function to apply: " ~ $.name;;
         my $new_env = $env.clone;
         $code(
-            $exp.args.map( -> $arg { 
-                evalPhP( $arg, $new_env ) 
+            self.args.map( -> $arg { 
+                $arg.evaluate( $new_env ) 
             })
         );
     }
 
-    method Str { "Appy< " ~ $.name ~ " (" ~ @.args.join(", ") ~ ") >" }
-}
-
-## ---------------------------------------------
-
-class Env {
-    has %.pad;
-
-    method get    ( Str $key )             { %.pad{ $key }          }
-    method set    ( Str $key, Any $value ) { %.pad{ $key } = $value }
+    method Str { "Appy " ~ $.name ~ "(" ~ @.args.join(", ") ~ ")" }
 }
 
 ## ---------------------------------------------
@@ -127,6 +127,6 @@ say ~ Let.new(
                 Const.new( value => 30 ),
             ]
         ),
-    ).Eval( $root_env );
+    ); #.evaluate( $root_env );
 
 ## ---------------------------------------------
