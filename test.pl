@@ -100,7 +100,15 @@ multi evaluate ( Let $exp, Env $env ) {
 }
 
 multi evaluate ( LetRec $exp, Env $env ) {
-    
+    my $new_env = $env.clone;
+    my @defs    = $exp.definitions.clone;
+
+    while ( @defs ) {
+        my ($var, $value) = (@defs.shift, @defs.shift);
+        $env.set( $var, evaluate( $value, $new_env ) );
+    }
+
+    return evaluate( $exp.body, $new_env );
 }
 
 multi evaluate ( Apply $exp, Env $env ) {
@@ -112,7 +120,7 @@ multi evaluate ( Apply $exp, Env $env ) {
 }
 
 multi evaluate ( Condition $exp, Env $env ) {
-    evaluate( $exp.condition, $env ).value == $env.get('#TRUE').value
+    evaluate( $exp.condition, $env ) === $env.get('#TRUE')
         ?? evaluate( $exp.if_true, $env )
         !! evaluate( $exp.if_false, $env )
 }
@@ -141,20 +149,62 @@ $root_env.set('<=', -> ($l, $r) { ($l.value <= $r.value) ?? $TRUE !! $FALSE });
 $root_env.set('>' , -> ($l, $r) { ($l.value >  $r.value) ?? $TRUE !! $FALSE });
 $root_env.set('>=', -> ($l, $r) { ($l.value >= $r.value) ?? $TRUE !! $FALSE });
 
-say pprint evaluate(
-    Condition.new(
-        condition => Apply.new(
-            name => '==',
+say pprint evaluate
+    LetRec.new(
+        definitions => [
+            'mul', Function.new(
+                params => [ 'x', 'y' ],
+                body   => Condition.new(
+                    condition => Apply.new( 
+                        name => '==',
+                        args => [
+                            Variable.new( name => 'y' ),
+                            Literal.new( value => 1 )
+                        ]
+                    ),
+                    if_true  => Variable.new( name => 'x' ),
+                    if_false => Apply.new(
+                        name => '+',
+                        args => [
+                            Variable.new( name => 'x' ),
+                            Apply.new(
+                                name => 'mul',
+                                args => [
+                                    Variable.new( name => 'x' ),
+                                    Apply.new(
+                                        name => '-',
+                                        args => [
+                                            Variable.new( name => 'y' ),
+                                            Literal.new( value => 1 )
+                                        ]
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                )
+            )
+        ],
+        body => Apply.new(
+            name => 'mul',
             args => [
-                Literal.new( value => 2 ),
-                Literal.new( value => 2 ),
+                Literal.new( value => 5 ),
+                Literal.new( value => 5 )
             ]
-        ),
-        if_true  => Literal.new( value => 'TRUE!!!'  ),
-        if_false => Literal.new( value => 'FALSE!!!' ),
-
-    ), 
+        )
+    ),
+    #Condition.new(
+    #    condition => Apply.new(
+    #        name => '==',
+    #        args => [
+    #            Literal.new( value => 2 ),
+    #            Literal.new( value => 3 ),
+    #        ]
+    #    ),
+    #    if_true  => Literal.new( value => 'TRUE!!!'  ),
+    #    if_false => Literal.new( value => 'FALSE!!!' ),
+    #), 
     $root_env 
-);
+;
 
 ## ---------------------------------------------
