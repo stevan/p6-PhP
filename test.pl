@@ -59,81 +59,65 @@ class Env {
     method set ( Pair $pair ) { %.pad{ $pair.key } = $pair.value       }
 }
 
-class Scope {
-    has Env @.env;
-
-    method current { @.env[*-1] }
-    method enter   { @.env.push( Env.new( :parent( self.current ) ) ) }
-    method leave   { @.env.pop }
-}
-
 ## ---------------------------------------------
 
-multi evaluate ( Ast $exp, Scope $scope ) {
+multi evaluate ( Ast $exp, Env $env ) {
     die "Unknown Ast Node: " ~ $exp;
 }
 
-multi evaluate ( Literal $exp, Scope $scope ) {
+multi evaluate ( Literal $exp, Env $env ) {
     return $exp;
 }
 
-multi evaluate ( Var $exp, Scope $scope ) {
-    return $scope.current.get( $exp.name ) // die "Unable to find the variable: " ~ $exp.name;
+multi evaluate ( Var $exp, Env $env ) {
+    return $env.get( $exp.name ) // die "Unable to find the variable: " ~ $exp.name;
 }
 
-multi evaluate ( ConsCell $exp, Scope $scope ) {
+multi evaluate ( ConsCell $exp, Env $env ) {
     return $exp;
 }    
 
-multi evaluate ( Let $exp, Scope $scope ) {
-    $scope.enter;
-    $scope.current.set: $exp.name => evaluate( $exp.value, $scope );
-    my $result = evaluate( $exp.body, $scope );
-    $scope.leave;
-    $result;
+multi evaluate ( Let $exp, Env $env ) {
+    my $new_env = Env.new( :parent( $env ) );
+    $new_env.set: $exp.name => evaluate( $exp.value, $new_env );
+    evaluate( $exp.body, $new_env );
 }
 
-multi evaluate ( LetRec $exp, Scope $scope ) {
-    $scope.enter;
+multi evaluate ( LetRec $exp, Env $env ) {
+    my $new_env = Env.new( :parent( $env ) );
     for $exp.definitions -> $def { 
-        $scope.current.set: $def.key => evaluate( $def.value, $scope ) 
+        $new_env.set: $def.key => evaluate( $def.value, $new_env ) 
     }
-    my $result = evaluate( $exp.body, $scope );
-    $scope.leave;
-    $result;
+    evaluate( $exp.body, $new_env );
 }
 
-multi evaluate ( Func $exp, Scope $scope ) {
+multi evaluate ( Func $exp, Env $env ) {
     return $exp;
 }
 
-multi evaluate ( NativeFunc $exp, Scope $scope ) {
+multi evaluate ( NativeFunc $exp, Env $env ) {
     return $exp;
 }
 
-multi evaluate ( Apply $exp, Scope $scope ) {
-    my $code = $scope.current.get( $exp.name ) // die "Unable to find function to apply: " ~ $exp.name;
-
-    $scope.enter;
+multi evaluate ( Apply $exp, Env $env ) {
+    my $code    = $env.get( $exp.name ) // die "Unable to find function to apply: " ~ $exp.name;
+    my $new_env = Env.new( :parent( $env ) );
 
     loop (my $i = 0; $i < $exp.args.elems; $i++ ) {
-        $scope.current.set: $code.params[ $i ] => evaluate( $exp.args[ $i ], $scope );
+        $new_env.set: $code.params[ $i ] => evaluate( $exp.args[ $i ], $new_env );
     }
 
-    my $result = do if $code.?extern {
-        $code.extern.( $scope );
+    if $code.?extern {
+        $code.extern.( $new_env );
     } else {
-        evaluate( $code.body, $scope );
-    };
-
-    $scope.leave;
-    $result;
+        evaluate( $code.body, $new_env );
+    }
 }
 
-multi evaluate ( Cond $exp, Scope $scope ) {
-    evaluate( $exp.condition, $scope ) === $scope.current.get('#TRUE')
-        ?? evaluate( $exp.if_true, $scope )
-        !! evaluate( $exp.if_false, $scope )
+multi evaluate ( Cond $exp, Env $env ) {
+    evaluate( $exp.condition, $env ) === $env.get('#TRUE')
+        ?? evaluate( $exp.if_true, $env )
+        !! evaluate( $exp.if_false, $env )
 }
 
 ## ---------------------------------------------
@@ -148,17 +132,17 @@ my Env $root_env .= new;
 $root_env.set: '#TRUE'  => $TRUE;
 $root_env.set: '#FALSE' => $FALSE;
 
-$root_env.set: '+' => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($scope) { Literal.new( :value( $scope.current.get('l').value + $scope.current.get('r').value ) ) } ) );
-$root_env.set: '*' => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($scope) { Literal.new( :value( $scope.current.get('l').value * $scope.current.get('r').value ) ) } ) );
-$root_env.set: '/' => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($scope) { Literal.new( :value( $scope.current.get('l').value / $scope.current.get('r').value ) ) } ) );
-$root_env.set: '-' => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($scope) { Literal.new( :value( $scope.current.get('l').value - $scope.current.get('r').value ) ) } ) );
+$root_env.set: '+' => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($env) { Literal.new( :value( $env.get('l').value + $env.get('r').value ) ) } ) );
+$root_env.set: '*' => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($env) { Literal.new( :value( $env.get('l').value * $env.get('r').value ) ) } ) );
+$root_env.set: '/' => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($env) { Literal.new( :value( $env.get('l').value / $env.get('r').value ) ) } ) );
+$root_env.set: '-' => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($env) { Literal.new( :value( $env.get('l').value - $env.get('r').value ) ) } ) );
 
-$root_env.set: '==' => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($scope) { ($scope.current.get('l').value == $scope.current.get('r').value) ?? $TRUE !! $FALSE } ) );
-$root_env.set: '!=' => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($scope) { ($scope.current.get('l').value != $scope.current.get('r').value) ?? $TRUE !! $FALSE } ) );
-$root_env.set: '<'  => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($scope) { ($scope.current.get('l').value <  $scope.current.get('r').value) ?? $TRUE !! $FALSE } ) );
-$root_env.set: '<=' => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($scope) { ($scope.current.get('l').value <= $scope.current.get('r').value) ?? $TRUE !! $FALSE } ) );
-$root_env.set: '>'  => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($scope) { ($scope.current.get('l').value >  $scope.current.get('r').value) ?? $TRUE !! $FALSE } ) );
-$root_env.set: '>=' => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($scope) { ($scope.current.get('l').value >= $scope.current.get('r').value) ?? $TRUE !! $FALSE } ) );
+$root_env.set: '==' => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($env) { ($env.get('l').value == $env.get('r').value) ?? $TRUE !! $FALSE } ) );
+$root_env.set: '!=' => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($env) { ($env.get('l').value != $env.get('r').value) ?? $TRUE !! $FALSE } ) );
+$root_env.set: '<'  => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($env) { ($env.get('l').value <  $env.get('r').value) ?? $TRUE !! $FALSE } ) );
+$root_env.set: '<=' => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($env) { ($env.get('l').value <= $env.get('r').value) ?? $TRUE !! $FALSE } ) );
+$root_env.set: '>'  => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($env) { ($env.get('l').value >  $env.get('r').value) ?? $TRUE !! $FALSE } ) );
+$root_env.set: '>=' => NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($env) { ($env.get('l').value >= $env.get('r').value) ?? $TRUE !! $FALSE } ) );
 
 my $root_node = LetRec.new(
     :definitions(
@@ -212,7 +196,7 @@ my $root_node = LetRec.new(
     )
 );
 
-say evaluate( $root_node, Scope.new( :env($root_env) ) ).perl;
+say evaluate( $root_node, $root_env ).perl;
 
 ## ---------------------------------------------
 
