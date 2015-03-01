@@ -19,6 +19,11 @@
 
 - new for loop was hard to remember, makes sense, but unintuitive for p5
 
+- it is not clear how to organize packages/classes
+    - this is something we encountered in p5-mop as well
+    - in Perl 5 there is a clear correspondence with package and files
+        - this is not as clear ...
+
 # Misc
 
 - Getting syntax highlighting working was a must
