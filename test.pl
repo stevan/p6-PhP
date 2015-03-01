@@ -107,11 +107,8 @@ multi evaluate ( Apply $exp, Env $env ) {
         $new_env.set: $code.params[ $i ] => evaluate( $exp.args[ $i ], $new_env );
     }
 
-    if $code.?extern {
-        $code.extern.( $new_env );
-    } else {
-        evaluate( $code.body, $new_env );
-    }
+    return $code.extern.( $new_env ) if $code.?extern;
+    return evaluate( $code.body, $new_env );
 }
 
 multi evaluate ( Cond $exp, Env $env ) {
