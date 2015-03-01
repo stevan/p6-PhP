@@ -48,14 +48,14 @@ my $root_node = PhP::Parser::LetRec.new(
         PhP::Parser::Apply.new(
             :name( 'mul' ),
             :args(
-                PhP::Parser::Literal.new( :value( 10 ) ),
-                PhP::Parser::Literal.new( :value( 8 ) ),
+                PhP::Parser::Literal.new( :value( 13 ) ),
+                PhP::Parser::Literal.new( :value( 2 ) ),
             )
         )
     )
 );
 
-say run( $root_node ).perl;
+say PhP::Interpreter::run( $root_node ).perl;
 
 ## ---------------------------------------------
 

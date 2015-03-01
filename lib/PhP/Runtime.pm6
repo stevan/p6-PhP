@@ -13,10 +13,10 @@ package PhP::Runtime {
     my Bool $IS_BOOTSTRAPPED = False;
     my Env  $ROOT_ENV;
 
-    sub is_bootstrapped is export { $IS_BOOTSTRAPPED }
-    sub root_env        is export { $ROOT_ENV }
+    our sub is_bootstrapped { $IS_BOOTSTRAPPED }
+    our sub root_env        { $ROOT_ENV }
 
-    sub bootstrap is export {
+    our sub bootstrap {
         state $TRUE  = PhP::Parser::Literal.new( :value( True  ) );
         state $FALSE = PhP::Parser::Literal.new( :value( False ) );
 

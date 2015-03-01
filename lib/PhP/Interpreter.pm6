@@ -3,9 +3,9 @@ package PhP::Interpreter {
     use PhP::Parser;
     use PhP::Runtime;
 
-    sub run ( PhP::Parser::Ast $exp ) is export {
-        bootstrap;
-        evaluate( $exp, root_env );
+    our sub run ( PhP::Parser::Ast $exp ) {
+        PhP::Runtime::bootstrap;
+        evaluate( $exp, PhP::Runtime::root_env );
     }
 
     multi evaluate ( PhP::Parser::Ast $exp, PhP::Runtime::Env $env ) {
