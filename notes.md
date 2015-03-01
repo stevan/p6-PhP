@@ -24,6 +24,8 @@
     - in Perl 5 there is a clear correspondence with package and files
         - this is not as clear ...
 
+- the fact that subroutines need an `our` before them to be public was odd
+
 # Misc
 
 - Getting syntax highlighting working was a must
