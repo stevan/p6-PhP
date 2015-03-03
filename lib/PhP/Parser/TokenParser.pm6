@@ -13,6 +13,16 @@ package PhP::Parser::TokenParser {
         has Str       $.token;
     }
 
+    class TokenIterator {
+        has Int     $.pointer = 0;
+        has Actions $.actions;
+
+        method has_next { $.pointer <= $.actions.tokens.elems }
+        method next     { $.actions.tokens[ $.pointer++  ]    }
+        method current  { $.actions.tokens[ $.pointer    ]    }
+        method peek     { $.actions.tokens[ $.pointer +1 ]    }
+    }
+
     class Actions {
         has Token @.tokens;
 
@@ -85,7 +95,7 @@ package PhP::Parser::TokenParser {
     our sub parse ( Str $source ) {
         my $actions = Actions.new;
         my $match   = Parser.parse( $source, :$actions );
-        return $actions.tokens;
+        return TokenIterator.new( :$actions );
     }
 
 }
