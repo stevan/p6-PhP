@@ -19,12 +19,14 @@ package PhP::Runtime {
     our sub bootstrap {
         state $TRUE  = PhP::AST::Literal.new( :value( True  ) );
         state $FALSE = PhP::AST::Literal.new( :value( False ) );
+        state $NIL   = PhP::AST::ConsCell.new;
 
         return if $IS_BOOTSTRAPPED;
 
         $ROOT_ENV .= new;
         $ROOT_ENV.set: '#TRUE'  => $TRUE;
         $ROOT_ENV.set: '#FALSE' => $FALSE;
+        $ROOT_ENV.set: '#NIL'   => $NIL;
 
         $ROOT_ENV.set: '+' => PhP::AST::NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($env) { PhP::AST::Literal.new( :value( $env.get('l').value + $env.get('r').value ) ) } ) );
         $ROOT_ENV.set: '*' => PhP::AST::NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($env) { PhP::AST::Literal.new( :value( $env.get('l').value * $env.get('r').value ) ) } ) );
@@ -37,6 +39,11 @@ package PhP::Runtime {
         $ROOT_ENV.set: '<=' => PhP::AST::NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($env) { ($env.get('l').value <= $env.get('r').value) ?? $TRUE !! $FALSE } ) );
         $ROOT_ENV.set: '>'  => PhP::AST::NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($env) { ($env.get('l').value >  $env.get('r').value) ?? $TRUE !! $FALSE } ) );
         $ROOT_ENV.set: '>=' => PhP::AST::NativeFunc.new( :params( 'l', 'r' ) :extern( sub ($env) { ($env.get('l').value >= $env.get('r').value) ?? $TRUE !! $FALSE } ) );
+
+        $ROOT_ENV.set: '::'     => PhP::AST::NativeFunc.new( :params( 'h', 't' ) :extern( sub ($env) { PhP::AST::ConsCell.new(:head($env.get('h')), :tail($env.get('t'))) } ) );
+        $ROOT_ENV.set: 'head'   => PhP::AST::NativeFunc.new( :params( 'x' ) :extern( sub ($env) { $env.get('x').is_nil ?? die "Cannot call `head` on #NIL" !! $env.get('x').head } ) );
+        $ROOT_ENV.set: 'tail'   => PhP::AST::NativeFunc.new( :params( 'x' ) :extern( sub ($env) { $env.get('x').is_nil ?? die "Cannot call `tail` on #NIL" !! $env.get('x').tail } ) );
+        $ROOT_ENV.set: 'is_nil' => PhP::AST::NativeFunc.new( :params( 'x' ) :extern( sub ($env) { $env.get('x').is_nil ?? $TRUE !! $FALSE } ) );
 
         $IS_BOOTSTRAPPED = True;
     }

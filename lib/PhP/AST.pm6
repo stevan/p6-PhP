@@ -11,8 +11,10 @@ package PhP::AST {
     }
 
     class ConsCell is Ast {
-        has Ast $.head;
-        has Ast $.tail;
+        has Ast      $.head;
+        has ConsCell $.tail;
+
+        method is_nil { !$.head and !$.tail  }
     }
 
     class Func is Ast {
