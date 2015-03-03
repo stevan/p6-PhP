@@ -19,6 +19,11 @@
 - given/when dispatching is tricky
     - I know this is tied to smartmatch, ... and smartmatch is tricky
 
+- documentation on testing was easy to find
+    - testing was very easy to do as it hasn't changed much
+    - but I couldn't find Test.pm anywhere
+        - https://github.com/rakudo/rakudo/blob/nom/lib/Test.pm
+
 # Error messages
 
 - error messages vary widely
