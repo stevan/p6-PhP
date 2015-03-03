@@ -18,11 +18,15 @@ package PhP::AST {
     class Func is Ast {
         has Str @.params;
         has Ast $.body;
+
+        method arity { @.params.elems }
     }
 
     class NativeFunc is Ast {
         has Str   @.params;
         has Block $.extern;
+
+        method arity { @.params.elems }
     }
 
     class Let is Ast {
