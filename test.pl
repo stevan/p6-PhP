@@ -1,38 +1,45 @@
 #!perl6
 
-use PhP::Parser;
-use PhP::Interpreter;
+use PhP;
 
-my $root_node = PhP::Parser::LetRec.new(
+# let mul = fun (x, y) 
+#               if ( y == 1 ) 
+#                   then x 
+#                   else x + mul( x, y - 1 ) 
+# in
+#    mul 13, 2
+# ;;
+
+my $root_node = PhP::AST::LetRec.new(
     :definitions(
-        'mul' => PhP::Parser::Func.new(
+        'mul' => PhP::AST::Func.new(
             :params( 'x', 'y' ),
             :body(
-                PhP::Parser::Cond.new(
+                PhP::AST::Cond.new(
                     :condition(
-                        PhP::Parser::Apply.new( 
+                        PhP::AST::Apply.new( 
                             :name( '==' ),
                             :args(
-                                PhP::Parser::Var.new( :name( 'y' ) ),
-                                PhP::Parser::Literal.new( :value(  1  ) ),
+                                PhP::AST::Var.new( :name( 'y' ) ),
+                                PhP::AST::Literal.new( :value(  1  ) ),
                             )
                         )
                     ),
-                    :if_true( PhP::Parser::Var.new( :name( 'x' ) ) ),
+                    :if_true( PhP::AST::Var.new( :name( 'x' ) ) ),
                     :if_false(
-                        PhP::Parser::Apply.new(
+                        PhP::AST::Apply.new(
                             :name( '+' ),
                             :args(
-                                PhP::Parser::Var.new( :name( 'x' ) ),
-                                PhP::Parser::Apply.new(
+                                PhP::AST::Var.new( :name( 'x' ) ),
+                                PhP::AST::Apply.new(
                                     :name( 'mul' ),
                                     :args(
-                                        PhP::Parser::Var.new( :name( 'x' ) ),
-                                        PhP::Parser::Apply.new(
+                                        PhP::AST::Var.new( :name( 'x' ) ),
+                                        PhP::AST::Apply.new(
                                             :name( '-' ),
                                             :args(
-                                                PhP::Parser::Var.new( :name( 'y' ) ),
-                                                PhP::Parser::Literal.new( :value(  1  ) ),
+                                                PhP::AST::Var.new( :name( 'y' ) ),
+                                                PhP::AST::Literal.new( :value(  1  ) ),
                                             )
                                         )
                                     )
@@ -45,11 +52,11 @@ my $root_node = PhP::Parser::LetRec.new(
         )
     ),
     :body(
-        PhP::Parser::Apply.new(
+        PhP::AST::Apply.new(
             :name( 'mul' ),
             :args(
-                PhP::Parser::Literal.new( :value( 13 ) ),
-                PhP::Parser::Literal.new( :value( 2 ) ),
+                PhP::AST::Literal.new( :value( 13 ) ),
+                PhP::AST::Literal.new( :value( 2 ) ),
             )
         )
     )
