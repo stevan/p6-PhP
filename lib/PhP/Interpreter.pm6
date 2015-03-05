@@ -10,21 +10,21 @@ package PhP::Interpreter {
 
     # private ...
 
+    # handle an unknown node type ...
     multi evaluate ( PhP::AST::Ast $exp, PhP::Runtime::Env $env ) {
         die "Unknown Ast Node: " ~ $exp;
     }
 
-    multi evaluate ( PhP::AST::Literal $exp, PhP::Runtime::Env $env ) {
+    # handle terminal nodes, they all do this ...
+    multi evaluate ( PhP::AST::Terminal $exp, PhP::Runtime::Env $env ) {
         return $exp;
     }
+
+    # evaluate all the things!
 
     multi evaluate ( PhP::AST::Var $exp, PhP::Runtime::Env $env ) {
         return $env.get( $exp.name ) // die "Unable to find the variable: " ~ $exp.name;
-    }
-
-    multi evaluate ( PhP::AST::ConsCell $exp, PhP::Runtime::Env $env ) {
-        return $exp;
-    }    
+    } 
 
     multi evaluate ( PhP::AST::Let $exp, PhP::Runtime::Env $env ) {
         my $new_env = PhP::Runtime::Env.new( :parent( $env ) );
@@ -38,14 +38,6 @@ package PhP::Interpreter {
             $new_env.set: $def.key => evaluate( $def.value, $new_env ) 
         }
         evaluate( $exp.body, $new_env );
-    }
-
-    multi evaluate ( PhP::AST::Func $exp, PhP::Runtime::Env $env ) {
-        return $exp;
-    }
-
-    multi evaluate ( PhP::AST::NativeFunc $exp, PhP::Runtime::Env $env ) {
-        return $exp;
     }
 
     multi evaluate ( PhP::AST::Apply $exp, PhP::Runtime::Env $env ) {
