@@ -17,10 +17,16 @@ grammar PhP {
 
     rule expression {
         [    
-        | <literal>    <.ws>? <binary-op> <.ws>? <expression> 
-        | <identifier> <.ws>? <binary-op> <.ws>? <expression> 
+        | <binary-expression>
         | <literal>        
         | <identifier>              
+        ]
+    }
+
+    rule binary-expression {
+        [
+        | <literal>    <.ws>? <binary-op> <.ws>? <expression> 
+        | <identifier> <.ws>? <binary-op> <.ws>? <expression> 
         ]
     }
 
@@ -56,5 +62,3 @@ grammar PhP {
 
 my $match = PhP.parse('let x = 2 + 2 in x + 3 * 10 / x ;;');
 say ~ $match.gist;
-
-
