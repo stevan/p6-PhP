@@ -91,5 +91,10 @@
 
 - the fact that subroutines need an `our` before them to be public was odd
 
+# refactors to show
+
+- e7106955f0f60cbd83bf2e16552e223c00a2f8f2 => adding in the terminal nodes
+
+
 
 
