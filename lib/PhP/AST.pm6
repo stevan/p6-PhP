@@ -38,12 +38,6 @@ package PhP::AST {
     }
 
     class Let is Ast {
-        has Str $.name;
-        has Ast $.value;
-        has Ast $.body;
-    }
-
-    class LetRec is Ast {
         has Pair @.definitions;
         has Ast  $.body;
     }

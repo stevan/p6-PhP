@@ -28,12 +28,6 @@ package PhP::Interpreter {
 
     multi evaluate ( PhP::AST::Let $exp, PhP::Runtime::Env $env ) {
         my $new_env = PhP::Runtime::Env.new( :parent( $env ) );
-        $new_env.set: $exp.name => evaluate( $exp.value, $new_env );
-        evaluate( $exp.body, $new_env );
-    }
-
-    multi evaluate ( PhP::AST::LetRec $exp, PhP::Runtime::Env $env ) {
-        my $new_env = PhP::Runtime::Env.new( :parent( $env ) );
         for $exp.definitions -> $def { 
             $new_env.set: $def.key => evaluate( $def.value, $new_env ) 
         }

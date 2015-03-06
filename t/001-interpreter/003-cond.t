@@ -23,8 +23,7 @@ subtest {
 
     my $result = PhP::Interpreter::run( 
         PhP::AST::Let.new(
-            :name('x'),
-            :value( PhP::AST::Literal.new( :value(10) ) ),
+            :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
             :body(
                 PhP::AST::Cond.new(
                     :condition(
@@ -59,8 +58,7 @@ subtest {
 
     my $result = PhP::Interpreter::run( 
         PhP::AST::Let.new(
-            :name('x'),
-            :value( PhP::AST::Literal.new( :value(10) ) ),
+            :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
             :body(
                 PhP::AST::Cond.new(
                     :condition(
@@ -95,8 +93,7 @@ subtest {
 
     my $result = PhP::Interpreter::run( 
         PhP::AST::Let.new(
-            :name('x'),
-            :value( PhP::AST::Literal.new( :value(10) ) ),
+            :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
             :body(
                 PhP::AST::Cond.new(
                     :condition(
@@ -131,8 +128,7 @@ subtest {
 
     my $result = PhP::Interpreter::run( 
         PhP::AST::Let.new(
-            :name('x'),
-            :value( PhP::AST::Literal.new( :value(10) ) ),
+            :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
             :body(
                 PhP::AST::Cond.new(
                     :condition(
@@ -167,8 +163,7 @@ subtest {
 
     my $result = PhP::Interpreter::run( 
         PhP::AST::Let.new(
-            :name('x'),
-            :value( PhP::AST::Literal.new( :value(10) ) ),
+            :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
             :body(
                 PhP::AST::Cond.new(
                     :condition(
@@ -203,8 +198,7 @@ subtest {
 
     my $result = PhP::Interpreter::run( 
         PhP::AST::Let.new(
-            :name('x'),
-            :value( PhP::AST::Literal.new( :value(10) ) ),
+            :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
             :body(
                 PhP::AST::Cond.new(
                     :condition(

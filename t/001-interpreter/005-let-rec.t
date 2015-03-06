@@ -10,7 +10,7 @@ plan *;
 
 subtest {
     # CODE:
-    # let rec mul = func (x, y) { 
+    # let mul = func (x, y) { 
     #     if y == 1 
     #         then x
     #         else x + mul( x, y - 1 )
@@ -19,9 +19,9 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::LetRec.new(
+        PhP::AST::Let.new(
             :definitions(
-                'mul' => PhP::AST::Func.new(
+                mul => PhP::AST::Func.new(
                     :params( 'x', 'y' ),
                     :body(
                         PhP::AST::Cond.new(
@@ -80,7 +80,7 @@ subtest {
 
 subtest {
     # CODE:
-    # let rec factorial = func (n) { 
+    # let factorial = func (n) { 
     #     if n == 1 
     #         then 1
     #         else n * factorial( n - 1 )
@@ -89,9 +89,9 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::LetRec.new(
+        PhP::AST::Let.new(
             :definitions(
-                'factorial' => PhP::AST::Func.new(
+                factorial => PhP::AST::Func.new(
                     :params( 'n' ),
                     :body(
                         PhP::AST::Cond.new(
@@ -148,7 +148,7 @@ subtest {
 
 subtest {
     # CODE:
-    # let rec 
+    # let 
     #     is_even = func (n) -> if n == 0 then true  else is_odd( n - 1 ),
     #     is_odd  = func (n) -> if n == 0 then false else is_even( n - 1 ),
     #  in
@@ -156,7 +156,7 @@ subtest {
     # ;;
 
     my @definitions = (
-        'is_even' => PhP::AST::Func.new(
+        is_even => PhP::AST::Func.new(
             :params( 'n' ),
             :body(
                 PhP::AST::Cond.new(
@@ -187,7 +187,7 @@ subtest {
                 )
             )
         ),
-        'is_odd' => PhP::AST::Func.new(
+        is_odd => PhP::AST::Func.new(
             :params( 'n' ),
             :body(
                 PhP::AST::Cond.new(
@@ -222,7 +222,7 @@ subtest {
 
     {
         my $result = PhP::Interpreter::run( 
-            PhP::AST::LetRec.new(
+            PhP::AST::Let.new(
                 :definitions(@definitions),
                 :body(
                     PhP::AST::Apply.new(
@@ -243,7 +243,7 @@ subtest {
 
     {
         my $result = PhP::Interpreter::run( 
-            PhP::AST::LetRec.new(
+            PhP::AST::Let.new(
                 :definitions(@definitions),
                 :body(
                     PhP::AST::Apply.new(
@@ -264,7 +264,7 @@ subtest {
 
     {
         my $result = PhP::Interpreter::run( 
-            PhP::AST::LetRec.new(
+            PhP::AST::Let.new(
                 :definitions(@definitions),
                 :body(
                     PhP::AST::Apply.new(
@@ -285,7 +285,7 @@ subtest {
 
     {
         my $result = PhP::Interpreter::run( 
-            PhP::AST::LetRec.new(
+            PhP::AST::Let.new(
                 :definitions(@definitions),
                 :body(
                     PhP::AST::Apply.new(

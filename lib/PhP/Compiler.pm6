@@ -16,8 +16,6 @@ package PhP::Compiler {
 
     multi emit ( PhP::AST::Let $exp ) { ... }
 
-    multi emit ( PhP::AST::LetRec $exp ) { ... }
-
     multi emit ( PhP::AST::Func $exp ) { ... }
 
     multi emit ( PhP::AST::NativeFunc $exp ) { ... }

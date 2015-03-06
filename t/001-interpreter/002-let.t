@@ -14,8 +14,7 @@ subtest {
 
     my $result = PhP::Interpreter::run( 
         PhP::AST::Let.new(
-            :name('x'),
-            :value( PhP::AST::Literal.new( :value(10) ) ),
+            :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
             :body( PhP::AST::Var.new( :name('x') ) ), 
         ) 
     );
@@ -32,9 +31,8 @@ subtest {
 
     my $result = PhP::Interpreter::run( 
         PhP::AST::Let.new(
-            :name('x'),
-            :value( 
-                PhP::AST::Apply.new(
+            :definitions( 
+                x => PhP::AST::Apply.new(
                     :name('+'),
                     :args(
                         PhP::AST::Literal.new( :value(2) ), 
@@ -54,27 +52,22 @@ subtest {
 
 subtest {
     # CODE:
-    # let x = 5 in  
-    # let y = 5 in 
+    # let x = 5, y = 5 in 
     #     x + y
     # ;;
 
     my $result = PhP::Interpreter::run( 
         PhP::AST::Let.new(
-            :name('x'),
-            :value( PhP::AST::Literal.new( :value(5) ) ),
+            :definitions( 
+                x => PhP::AST::Literal.new( :value(5) ),
+                y => PhP::AST::Literal.new( :value(5) ) 
+            ),
             :body(
-                PhP::AST::Let.new(
-                    :name('y'),
-                    :value( PhP::AST::Literal.new( :value(5) ) ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name('+'),
-                            :args(
-                                PhP::AST::Var.new( :name('x') ), 
-                                PhP::AST::Var.new( :name('y') ),
-                            )
-                        )
+                PhP::AST::Apply.new(
+                    :name('+'),
+                    :args(
+                        PhP::AST::Var.new( :name('x') ), 
+                        PhP::AST::Var.new( :name('y') ),
                     )
                 )
             )

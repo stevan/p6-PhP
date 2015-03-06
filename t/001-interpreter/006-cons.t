@@ -16,9 +16,8 @@ subtest {
 
     my $result = PhP::Interpreter::run( 
         PhP::AST::Let.new(
-            :name('x'),
-            :value(
-                PhP::AST::Apply.new(
+            :definitions(
+                x => PhP::AST::Apply.new(
                     :name('::'),
                     :args(
                         PhP::AST::Literal.new( :value( 1 ) ),
@@ -49,9 +48,8 @@ subtest {
 
     my $result = PhP::Interpreter::run( 
         PhP::AST::Let.new(
-            :name('x'),
-            :value(
-                PhP::AST::Apply.new(
+            :definitions(
+                x => PhP::AST::Apply.new(
                     :name('::'),
                     :args(
                         PhP::AST::Literal.new( :value( 1 ) ),
@@ -82,9 +80,8 @@ subtest {
 
     my $result = PhP::Interpreter::run( 
         PhP::AST::Let.new(
-            :name('x'),
-            :value(
-                PhP::AST::Apply.new(
+            :definitions(
+                x => PhP::AST::Apply.new(
                     :name('::'),
                     :args(
                         PhP::AST::Literal.new( :value( 1 ) ),
@@ -120,9 +117,8 @@ subtest {
 
     my $result = PhP::Interpreter::run( 
         PhP::AST::Let.new(
-            :name('x'),
-            :value(
-                PhP::AST::Apply.new(
+            :definitions(
+                x => PhP::AST::Apply.new(
                     :name('::'),
                     :args(
                         PhP::AST::Literal.new( :value( 1 ) ),
