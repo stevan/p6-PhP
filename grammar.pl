@@ -2,6 +2,56 @@
 
 use v6;
 
+class PhP::Actions {
+
+    method TOP ($/) { $/.make( $/.<statement>.made ) }
+
+    method statement ($/) {
+        $/.make( $/.<let-statement>.made );
+    }
+
+    method let-statement ($/) {
+        my ($value, $body) = @( $/.<expression> );
+        $/.make(
+            PhP::AST::Let.new(
+                :name( $/.<identifier>.made.name ),
+                :value( $value.made ),
+                :body( $body.made )
+            )
+        );
+    }
+
+    method expression ($/) {
+        $/.make( 
+            $/.<binary-expression>.made
+                //
+            $/.<identifier>.made
+                //
+            $/.<literal>.made 
+        );
+    }
+
+    method binary-expression ($/) {
+        $/.make( 
+            PhP::AST::Apply.new( 
+                :name( ~ $/.<binary-op> ),
+                :args( 
+                    ($/.<literal> // $/.<identifier>).made,
+                    $/.<expression>.made 
+                )
+            ) 
+        );
+    }
+
+    method literal ($/) {
+        $/.make( PhP::AST::Literal.new( :value( ~ $/ ) ) );
+    }
+
+    method identifier ($/) {
+        $/.make( PhP::AST::Var.new( :name( ~ $/ ) ) );
+    }
+}
+
 grammar PhP {
     token TOP  { <statement> }
 
