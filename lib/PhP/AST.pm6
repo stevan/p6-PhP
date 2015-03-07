@@ -1,3 +1,5 @@
+use v6;
+
 package PhP::AST {
     
     class Ast {}
