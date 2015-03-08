@@ -9,7 +9,11 @@ class PhP::Parser::Actions {
     }
 
     method statement ($/) {
-        $/.make( $/.<let-statement>.made );
+        $/.make( 
+            $/.<let-statement>.made 
+                //
+            $/.<expression>.made 
+        );
     }
 
     ## let statement
@@ -38,19 +42,46 @@ class PhP::Parser::Actions {
         );
     }
 
-    method let-body ($/) {
-        $/.make( $/.<expression>.made );
-    }
-
     # ...
 
     method expression ($/) {
         $/.make( 
+            $/.<apply-expression>.made
+                //
+            $/.<cond-expression>.made
+                //
             $/.<binary-expression>.made
                 //
             $/.<identifier>.made
                 //
             $/.<literal>.made 
+                //
+            $/.<expression>.made
+        );
+    }
+
+    method apply-expression ($/) {
+        $/.make(
+            PhP::AST::Apply.new(
+                :name( ~ $/.<identifier> ),
+                :args(
+                    $/.<apply-argument>.map: { $_.made }
+                )
+            )
+        );
+    }
+
+    method apply-argument ($/) {
+        $/.make( $/.<expression>.made );
+    }
+
+    method cond-expression ($/) {
+        $/.make(
+            PhP::AST::Cond.new(
+                :condition( $/.<condition>.made ),
+                :if_true(   $/.<if_true>.made   ),
+                :if_false(  $/.<if_false>.made  ),
+            )
         );
     }
 
@@ -67,7 +98,7 @@ class PhP::Parser::Actions {
     }
 
     method literal ($/) {
-        $/.make( PhP::AST::Literal.new( :value( ~ $/ ) ) );
+        $/.make( PhP::AST::Literal.new( :value( ~$/ ) ) );
     }
 
     method identifier ($/) {
