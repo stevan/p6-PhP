@@ -7,13 +7,14 @@ grammar PhP::Parser::Grammar {
     rule statement {
         [
         | <let-statement> 
+        | <expression>
         ]
     }
 
     # let blocks ...
 
     rule let-statement {
-        "let" <.ws>? <let-value>+ <.ws>? "in" <.ws>? <let-body> <.ws>? ";;"
+        "let" <.ws>? <let-value>+ <.ws>? "in" <.ws>? <let-body=expression> <.ws>? ";;"
     }    
 
     rule let-value {
@@ -25,10 +26,6 @@ grammar PhP::Parser::Grammar {
         | <func-statement>  
         | <expression>
         ]
-    } 
-
-    rule let-body {
-        <expression>
     } 
 
     # functions ...
@@ -80,7 +77,7 @@ grammar PhP::Parser::Grammar {
     }
 
     rule cond-expression {
-        "if" <.ws>? <expression> <.ws>? "then" <.ws>? <expression> <.ws>? "else" <.ws>? <expression>
+        "if" <.ws>? <condition=.expression> <.ws>? "then" <.ws>? <if_true=.expression> <.ws>? "else" <.ws>? <if_false=.expression>
     }
 
     rule binary-expression {
@@ -96,7 +93,7 @@ grammar PhP::Parser::Grammar {
         [
         | "+"  | "-"  | "*" | "/" 
         | "==" | "!=" 
-        | "<"  | "<=" | "=>" | ">"
+        | "<"  | "<=" | ">=" | ">"
         ]
     }
 
