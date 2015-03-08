@@ -17,14 +17,10 @@ class PhP::Parser::Actions {
     method let-statement ($/) {
         $/.make(
             PhP::AST::Let.new(
-                :definitions( $/.<let-value-set>.made ),
+                :definitions( $/.<let-value>.map: { $_.made } ),
                 :body( $/.<let-body>.made )
             )
         );
-    }
-
-    method let-value-set ($/) {
-        $/.make( $/.<let-value>.map: { $_.made } );
     }
 
     method let-value ($/) {    

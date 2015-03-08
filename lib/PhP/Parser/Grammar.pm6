@@ -13,12 +13,8 @@ grammar PhP::Parser::Grammar {
     # let blocks ...
 
     rule let-statement {
-        "let" <.ws>? <let-value-set> <.ws>? "in" <.ws>? <let-body> <.ws>? ";;"
+        "let" <.ws>? <let-value>+ <.ws>? "in" <.ws>? <let-body> <.ws>? ";;"
     }    
-
-    rule let-value-set {
-        <let-value>+
-    }
 
     rule let-value {
         <identifier> <.ws>? "=" <.ws>? <let-statement-value> (",")?
@@ -38,12 +34,8 @@ grammar PhP::Parser::Grammar {
     # functions ...
 
     rule func-statement {
-        "fun" <.ws>? "(" <func-param-list> ")" <.ws>? "\{" <.ws>? <func-body> <.ws>? "\}"
+        "fun" <.ws>? "(" <func-param>+ ")" <.ws>? "\{" <.ws>? <func-body> <.ws>? "\}"
     }    
-
-    rule func-param-list {
-        <func-param>+
-    }
 
     rule func-param {
         <identifier> (",")?
@@ -80,11 +72,7 @@ grammar PhP::Parser::Grammar {
     }
 
     rule apply-expression {
-        <identifier> <.ws>? "(" <.ws>? <apply-argument-list> <.ws>? ")"
-    }
-
-    rule apply-argument-list {
-        <apply-argument>+
+        <identifier> <.ws>? "(" <.ws>? <apply-argument>+ <.ws>? ")"
     }
 
     rule apply-argument {
