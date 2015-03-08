@@ -4,6 +4,9 @@ package PhP::Parser {
 
     use PhP::AST;
 
-    our sub parse ( Str $source, %opts? --> PhP::AST::Ast ) { ... } 
+    use PhP::Parser::Grammar;
+    use PhP::Parser::Actions;
+
+    our sub parse ( Str $source, %opts? ) returns PhP::AST::Ast { ... } 
 
 }
