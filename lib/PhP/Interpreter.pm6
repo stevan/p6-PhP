@@ -13,22 +13,22 @@ package PhP::Interpreter {
     # private ...
 
     # handle an unknown node type ...
-    multi evaluate ( PhP::AST::Ast $exp, PhP::Runtime::Env $env ) {
+    multi evaluate ( PhP::AST::Ast $exp, PhP::Runtime::Env $env ) returns PhP::AST::Ast {
         die "Unknown Ast Node: " ~ $exp;
     }
 
     # handle terminal nodes, they all do this ...
-    multi evaluate ( PhP::AST::Terminal $exp, PhP::Runtime::Env $env ) {
+    multi evaluate ( PhP::AST::Terminal $exp, PhP::Runtime::Env $env ) returns PhP::AST::Ast {
         return $exp;
     }
 
     # evaluate all the things!
 
-    multi evaluate ( PhP::AST::Var $exp, PhP::Runtime::Env $env ) {
+    multi evaluate ( PhP::AST::Var $exp, PhP::Runtime::Env $env ) returns PhP::AST::Ast {
         return $env.get( $exp.name ) // die "Unable to find the variable: " ~ $exp.name;
     } 
 
-    multi evaluate ( PhP::AST::Let $exp, PhP::Runtime::Env $env ) {
+    multi evaluate ( PhP::AST::Let $exp, PhP::Runtime::Env $env ) returns PhP::AST::Ast {
         my $new_env = PhP::Runtime::Env.new( :parent( $env ) );
         for $exp.definitions -> $def { 
             $new_env.set: $def.key => evaluate( $def.value, $new_env ) 
@@ -36,7 +36,7 @@ package PhP::Interpreter {
         evaluate( $exp.body, $new_env );
     }
 
-    multi evaluate ( PhP::AST::Apply $exp, PhP::Runtime::Env $env ) {
+    multi evaluate ( PhP::AST::Apply $exp, PhP::Runtime::Env $env ) returns PhP::AST::Ast {
         my $code    = $env.get( $exp.name ) // die "Unable to find function to apply: " ~ $exp.name;
         my $new_env = PhP::Runtime::Env.new( :parent( $env ) );
 
@@ -48,7 +48,7 @@ package PhP::Interpreter {
         return evaluate( $code.body, $new_env );
     }
 
-    multi evaluate ( PhP::AST::Cond $exp, PhP::Runtime::Env $env ) {
+    multi evaluate ( PhP::AST::Cond $exp, PhP::Runtime::Env $env ) returns PhP::AST::Ast {
         evaluate( $exp.condition, $env ) === $env.get('#TRUE')
             ?? evaluate( $exp.if_true, $env )
             !! evaluate( $exp.if_false, $env )
