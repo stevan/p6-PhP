@@ -36,10 +36,29 @@ class PhP::Parser::Actions {
 
     method let-statement-value ($/) {
         $/.make( 
-            #$/.<func-statement>.made
-                #//
+            $/.<func-statement>.made
+                //
             $/.<expression>.made
         );
+    }
+
+    # func statements
+
+    method func-statement ($/) {
+        $/.make(
+            PhP::AST::Func.new(
+                :params( $/.<func-param>.map: { $_.made } ),
+                :body( $/.<func-body>.made )
+            )
+        );
+    }    
+
+    method func-param ($/) {
+        $/.make( ~ $/.<identifier> )
+    }
+
+    method func-body ($/) {
+        $/.make( $/.<expression>.made )
     }
 
     # ...
