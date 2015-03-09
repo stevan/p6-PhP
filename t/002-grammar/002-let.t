@@ -75,5 +75,36 @@ subtest {
     is $unit.result.value, 10, '... got the expected value';
 }, '... multiple variables with complex expressions';
 
+subtest {
+    my $unit = PhP::run(q[
+        let x = 2 in
+        let y = 5 in
+        let z = 3 in 
+            x + y + z 
+        ;;
+    ]);
+
+    isa_ok $unit.result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+
+    is $unit.result.value, 10, '... got the expected value';
+}, '... multiple variables in nested let expressions';
+
+subtest {
+    my $unit = PhP::run(q[
+        let x = 2     in
+        let y = x + 5 in
+        let z = 1 + x in 
+            y + z 
+        ;;
+    ]);
+
+    isa_ok $unit.result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+
+    is $unit.result.value, 10, '... got the expected value';
+}, '... multiple variables with complex nested let expressions';
+
+
 done;
 
