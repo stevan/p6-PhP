@@ -2,7 +2,9 @@
 Modules ...
 ---------------------------------------------------------------------------------------------------------
 
-@export foo, bar
+# in lib/Math.php
+
+@export add, mul, sub, div
 
 let add = func (x, y) { x + y },
     mul = func (x, y) { x * y },
@@ -11,6 +13,18 @@ let add = func (x, y) { x + y },
 in
     ()
 ;;
+
+# in main.php
+
+@import lib/Math into Math
+
+Math.add(2, 2)
+
+# or if you call -I lib/ main.php 
+
+@import Math
+
+Math.add(2, 2)
 
 ---------------------------------------------------------------------------------------------------------
 
