@@ -238,7 +238,7 @@ subtest {
         isa_ok $result, PhP::AST::Literal;
         isa_ok $result, PhP::AST::Ast;
 
-        ok ?( $result === PhP::Runtime::root_env.get('#TRUE') ), '... got the value we expected';
+        ok ?( $result === $PhP::Runtime::TRUE ), '... got the value we expected';
     }
 
     {
@@ -259,7 +259,7 @@ subtest {
         isa_ok $result, PhP::AST::Literal;
         isa_ok $result, PhP::AST::Ast;
 
-        ok ?( $result === PhP::Runtime::root_env.get('#FALSE') ), '... got the value we expected';
+        ok ?( $result === $PhP::Runtime::FALSE ), '... got the value we expected';
     }
 
     {
@@ -280,7 +280,7 @@ subtest {
         isa_ok $result, PhP::AST::Literal;
         isa_ok $result, PhP::AST::Ast;
 
-        ok ?( $result === PhP::Runtime::root_env.get('#FALSE') ), '... got the value we expected';
+        ok ?( $result === $PhP::Runtime::FALSE ), '... got the value we expected';
     }
 
     {
@@ -301,7 +301,7 @@ subtest {
         isa_ok $result, PhP::AST::Literal;
         isa_ok $result, PhP::AST::Ast;
 
-        ok ?( $result === PhP::Runtime::root_env.get('#TRUE') ), '... got the value we expected';
+        ok ?( $result === $PhP::Runtime::TRUE ), '... got the value we expected';
     }
 
 }, '... testing multually recursive even/odd predicate';

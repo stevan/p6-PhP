@@ -69,7 +69,7 @@ subtest {
     isa_ok $result, PhP::AST::ConsCell;
     isa_ok $result, PhP::AST::Ast;
 
-    ok $( $result === PhP::Runtime::root_env.get('#NIL') ), '... got the value we expected';
+    ok $( $result === $PhP::Runtime::NIL ), '... got the value we expected';
 }, '... testing simple list w/ tail function';
 
 subtest {
@@ -106,7 +106,7 @@ subtest {
     isa_ok $result, PhP::AST::Literal;
     isa_ok $result, PhP::AST::Ast;
 
-    ok $( $result === PhP::Runtime::root_env.get('#TRUE') ), '... got the value we expected';
+    ok $( $result === $PhP::Runtime::TRUE ), '... got the value we expected';
 }, '... testing simple list w/ is_nil(tail()) function';
 
 subtest {
