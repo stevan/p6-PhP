@@ -8,7 +8,7 @@ package PhP::Interpreter {
     our sub run ( PhP::Runtime::CompilationUnit $unit ) {
         my $result = evaluate( $unit.root, $unit.env );
         $unit.set_result( $result );
-        $unit;
+        return $unit;
     }
 
     # private ...
