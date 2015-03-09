@@ -57,4 +57,11 @@ package PhP::Runtime {
         }
     }
 
+    class CompilationUnit {
+        has PhP::AST::Ast $.root;
+        has Env           $.env = RootEnv.new.bootstrap;
+
+        has %.directives;
+    }
+
 }

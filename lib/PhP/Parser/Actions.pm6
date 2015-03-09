@@ -1,11 +1,16 @@
 use v6;
 
 use PhP::AST;
+use PhP::Runtime;
 
 class PhP::Parser::Actions {
 
     method TOP ($/) { 
-        $/.make( $/.<statement>.made );
+        $/.make( 
+            PhP::Runtime::CompilationUnit.new(
+                :root( $/.<statement>.made )
+            )
+        );
     }
 
     method statement ($/) {

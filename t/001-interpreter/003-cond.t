@@ -22,24 +22,28 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
-            :body(
-                PhP::AST::Cond.new(
-                    :condition(
-                        PhP::AST::Apply.new(
-                            :name('=='),
-                            :args(
-                                PhP::AST::Var.new( :name('x') ),
-                                PhP::AST::Literal.new( :value(10) )
-                            )
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
+                    :body(
+                        PhP::AST::Cond.new(
+                            :condition(
+                                PhP::AST::Apply.new(
+                                    :name('=='),
+                                    :args(
+                                        PhP::AST::Var.new( :name('x') ),
+                                        PhP::AST::Literal.new( :value(10) )
+                                    )
+                                )
+                            ),
+                            :if_true( PhP::AST::Literal.new( :value('YES') ) ),
+                            :if_false( PhP::AST::Literal.new( :value('NO') ) ),
                         )
-                    ),
-                    :if_true( PhP::AST::Literal.new( :value('YES') ) ),
-                    :if_false( PhP::AST::Literal.new( :value('NO') ) ),
-                )
-            ), 
-        ) 
+                    ) 
+                ) 
+            )
+        )
     );
 
     isa_ok $result, PhP::AST::Literal;
@@ -57,24 +61,28 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
-            :body(
-                PhP::AST::Cond.new(
-                    :condition(
-                        PhP::AST::Apply.new(
-                            :name('!='),
-                            :args(
-                                PhP::AST::Var.new( :name('x') ),
-                                PhP::AST::Literal.new( :value(10) )
-                            )
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
+                    :body(
+                        PhP::AST::Cond.new(
+                            :condition(
+                                PhP::AST::Apply.new(
+                                    :name('!='),
+                                    :args(
+                                        PhP::AST::Var.new( :name('x') ),
+                                        PhP::AST::Literal.new( :value(10) )
+                                    )
+                                )
+                            ),
+                            :if_true( PhP::AST::Literal.new( :value('YES') ) ),
+                            :if_false( PhP::AST::Literal.new( :value('NO') ) ),
                         )
-                    ),
-                    :if_true( PhP::AST::Literal.new( :value('YES') ) ),
-                    :if_false( PhP::AST::Literal.new( :value('NO') ) ),
-                )
-            ), 
-        ) 
+                    ) 
+                ) 
+            )
+        )
     );
 
     isa_ok $result, PhP::AST::Literal;
@@ -92,24 +100,28 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
-            :body(
-                PhP::AST::Cond.new(
-                    :condition(
-                        PhP::AST::Apply.new(
-                            :name('<'),
-                            :args(
-                                PhP::AST::Var.new( :name('x') ),
-                                PhP::AST::Literal.new( :value(100) )
-                            )
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
+                    :body(
+                        PhP::AST::Cond.new(
+                            :condition(
+                                PhP::AST::Apply.new(
+                                    :name('<'),
+                                    :args(
+                                        PhP::AST::Var.new( :name('x') ),
+                                        PhP::AST::Literal.new( :value(100) )
+                                    )
+                                )
+                            ),
+                            :if_true( PhP::AST::Literal.new( :value('YES') ) ),
+                            :if_false( PhP::AST::Literal.new( :value('NO') ) ),
                         )
-                    ),
-                    :if_true( PhP::AST::Literal.new( :value('YES') ) ),
-                    :if_false( PhP::AST::Literal.new( :value('NO') ) ),
-                )
-            ), 
-        ) 
+                    ) 
+                ) 
+            )
+        )
     );
 
     isa_ok $result, PhP::AST::Literal;
@@ -127,23 +139,27 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
-            :body(
-                PhP::AST::Cond.new(
-                    :condition(
-                        PhP::AST::Apply.new(
-                            :name('<='),
-                            :args(
-                                PhP::AST::Var.new( :name('x') ),
-                                PhP::AST::Literal.new( :value(100) )
-                            )
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
+                    :body(
+                        PhP::AST::Cond.new(
+                            :condition(
+                                PhP::AST::Apply.new(
+                                    :name('<='),
+                                    :args(
+                                        PhP::AST::Var.new( :name('x') ),
+                                        PhP::AST::Literal.new( :value(100) )
+                                    )
+                                )
+                            ),
+                            :if_true( PhP::AST::Literal.new( :value('YES') ) ),
+                            :if_false( PhP::AST::Literal.new( :value('NO') ) ),
                         )
-                    ),
-                    :if_true( PhP::AST::Literal.new( :value('YES') ) ),
-                    :if_false( PhP::AST::Literal.new( :value('NO') ) ),
+                    )
                 )
-            ), 
+            )
         ) 
     );
 
@@ -162,23 +178,27 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
-            :body(
-                PhP::AST::Cond.new(
-                    :condition(
-                        PhP::AST::Apply.new(
-                            :name('>'),
-                            :args(
-                                PhP::AST::Var.new( :name('x') ),
-                                PhP::AST::Literal.new( :value(100) )
-                            )
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
+                    :body(
+                        PhP::AST::Cond.new(
+                            :condition(
+                                PhP::AST::Apply.new(
+                                    :name('>'),
+                                    :args(
+                                        PhP::AST::Var.new( :name('x') ),
+                                        PhP::AST::Literal.new( :value(100) )
+                                    )
+                                )
+                            ),
+                            :if_true( PhP::AST::Literal.new( :value('YES') ) ),
+                            :if_false( PhP::AST::Literal.new( :value('NO') ) ),
                         )
-                    ),
-                    :if_true( PhP::AST::Literal.new( :value('YES') ) ),
-                    :if_false( PhP::AST::Literal.new( :value('NO') ) ),
+                    )
                 )
-            ), 
+            )
         ) 
     );
 
@@ -197,23 +217,27 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
-            :body(
-                PhP::AST::Cond.new(
-                    :condition(
-                        PhP::AST::Apply.new(
-                            :name('>='),
-                            :args(
-                                PhP::AST::Var.new( :name('x') ),
-                                PhP::AST::Literal.new( :value(100) )
-                            )
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
+                    :body(
+                        PhP::AST::Cond.new(
+                            :condition(
+                                PhP::AST::Apply.new(
+                                    :name('>='),
+                                    :args(
+                                        PhP::AST::Var.new( :name('x') ),
+                                        PhP::AST::Literal.new( :value(100) )
+                                    )
+                                )
+                            ),
+                            :if_true( PhP::AST::Literal.new( :value('YES') ) ),
+                            :if_false( PhP::AST::Literal.new( :value('NO') ) ),
                         )
-                    ),
-                    :if_true( PhP::AST::Literal.new( :value('YES') ) ),
-                    :if_false( PhP::AST::Literal.new( :value('NO') ) ),
+                    )
                 )
-            ), 
+            )
         ) 
     );
 

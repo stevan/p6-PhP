@@ -19,36 +19,40 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions(
-                mul => PhP::AST::Func.new(
-                    :params( 'x', 'y' ),
-                    :body(
-                        PhP::AST::Cond.new(
-                            :condition(
-                                PhP::AST::Apply.new( 
-                                    :name( '==' ),
-                                    :args(
-                                        PhP::AST::Var.new( :name( 'y' ) ),
-                                        PhP::AST::Literal.new( :value(  1  ) ),
-                                    )
-                                )
-                            ),
-                            :if_true( PhP::AST::Var.new( :name( 'x' ) ) ),
-                            :if_false(
-                                PhP::AST::Apply.new(
-                                    :name( '+' ),
-                                    :args(
-                                        PhP::AST::Var.new( :name( 'x' ) ),
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions(
+                        mul => PhP::AST::Func.new(
+                            :params( 'x', 'y' ),
+                            :body(
+                                PhP::AST::Cond.new(
+                                    :condition(
+                                        PhP::AST::Apply.new( 
+                                            :name( '==' ),
+                                            :args(
+                                                PhP::AST::Var.new( :name( 'y' ) ),
+                                                PhP::AST::Literal.new( :value(  1  ) ),
+                                            )
+                                        )
+                                    ),
+                                    :if_true( PhP::AST::Var.new( :name( 'x' ) ) ),
+                                    :if_false(
                                         PhP::AST::Apply.new(
-                                            :name( 'mul' ),
+                                            :name( '+' ),
                                             :args(
                                                 PhP::AST::Var.new( :name( 'x' ) ),
                                                 PhP::AST::Apply.new(
-                                                    :name( '-' ),
+                                                    :name( 'mul' ),
                                                     :args(
-                                                        PhP::AST::Var.new( :name( 'y' ) ),
-                                                        PhP::AST::Literal.new( :value(  1  ) ),
+                                                        PhP::AST::Var.new( :name( 'x' ) ),
+                                                        PhP::AST::Apply.new(
+                                                            :name( '-' ),
+                                                            :args(
+                                                                PhP::AST::Var.new( :name( 'y' ) ),
+                                                                PhP::AST::Literal.new( :value(  1  ) ),
+                                                            )
+                                                        )
                                                     )
                                                 )
                                             )
@@ -57,15 +61,15 @@ subtest {
                                 )
                             )
                         )
-                    )
-                )
-            ),
-            :body(
-                PhP::AST::Apply.new(
-                    :name( 'mul' ),
-                    :args(
-                        PhP::AST::Literal.new( :value( 13 ) ),
-                        PhP::AST::Literal.new( :value( 2 ) ),
+                    ),
+                    :body(
+                        PhP::AST::Apply.new(
+                            :name( 'mul' ),
+                            :args(
+                                PhP::AST::Literal.new( :value( 13 ) ),
+                                PhP::AST::Literal.new( :value( 2 ) ),
+                            )
+                        )
                     )
                 )
             )
@@ -89,35 +93,39 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions(
-                factorial => PhP::AST::Func.new(
-                    :params( 'n' ),
-                    :body(
-                        PhP::AST::Cond.new(
-                            :condition(
-                                PhP::AST::Apply.new( 
-                                    :name( '==' ),
-                                    :args(
-                                        PhP::AST::Var.new( :name( 'n' ) ),
-                                        PhP::AST::Literal.new( :value(  1  ) ),
-                                    )
-                                )
-                            ),
-                            :if_true( PhP::AST::Literal.new( :value(  1  ) ) ),
-                            :if_false(
-                                PhP::AST::Apply.new(
-                                    :name( '*' ),
-                                    :args(
-                                        PhP::AST::Var.new( :name( 'n' ) ),
-                                        PhP::AST::Apply.new(
-                                            :name( 'factorial' ),
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions(
+                        factorial => PhP::AST::Func.new(
+                            :params( 'n' ),
+                            :body(
+                                PhP::AST::Cond.new(
+                                    :condition(
+                                        PhP::AST::Apply.new( 
+                                            :name( '==' ),
                                             :args(
+                                                PhP::AST::Var.new( :name( 'n' ) ),
+                                                PhP::AST::Literal.new( :value(  1  ) ),
+                                            )
+                                        )
+                                    ),
+                                    :if_true( PhP::AST::Literal.new( :value(  1  ) ) ),
+                                    :if_false(
+                                        PhP::AST::Apply.new(
+                                            :name( '*' ),
+                                            :args(
+                                                PhP::AST::Var.new( :name( 'n' ) ),
                                                 PhP::AST::Apply.new(
-                                                    :name( '-' ),
+                                                    :name( 'factorial' ),
                                                     :args(
-                                                        PhP::AST::Var.new( :name( 'n' ) ),
-                                                        PhP::AST::Literal.new( :value(  1  ) ),
+                                                        PhP::AST::Apply.new(
+                                                            :name( '-' ),
+                                                            :args(
+                                                                PhP::AST::Var.new( :name( 'n' ) ),
+                                                                PhP::AST::Literal.new( :value(  1  ) ),
+                                                            )
+                                                        )
                                                     )
                                                 )
                                             )
@@ -126,14 +134,14 @@ subtest {
                                 )
                             )
                         )
-                    )
-                )
-            ),
-            :body(
-                PhP::AST::Apply.new(
-                    :name( 'factorial' ),
-                    :args(
-                        PhP::AST::Literal.new( :value( 5 ) ),
+                    ),
+                    :body(
+                        PhP::AST::Apply.new(
+                            :name( 'factorial' ),
+                            :args(
+                                PhP::AST::Literal.new( :value( 5 ) ),
+                            )
+                        )
                     )
                 )
             )
@@ -222,13 +230,17 @@ subtest {
 
     {
         my $result = PhP::Interpreter::run( 
-            PhP::AST::Let.new(
-                :definitions(@definitions),
-                :body(
-                    PhP::AST::Apply.new(
-                        :name( 'is_even' ),
-                        :args(
-                            PhP::AST::Literal.new( :value( 2 ) ),
+            PhP::Runtime::CompilationUnit.new( 
+                :root(
+                    PhP::AST::Let.new(
+                        :definitions(@definitions),
+                        :body(
+                            PhP::AST::Apply.new(
+                                :name( 'is_even' ),
+                                :args(
+                                    PhP::AST::Literal.new( :value( 2 ) ),
+                                )
+                            )
                         )
                     )
                 )
@@ -243,13 +255,17 @@ subtest {
 
     {
         my $result = PhP::Interpreter::run( 
-            PhP::AST::Let.new(
-                :definitions(@definitions),
-                :body(
-                    PhP::AST::Apply.new(
-                        :name( 'is_even' ),
-                        :args(
-                            PhP::AST::Literal.new( :value( 5 ) ),
+            PhP::Runtime::CompilationUnit.new( 
+                :root(
+                    PhP::AST::Let.new(
+                        :definitions(@definitions),
+                        :body(
+                            PhP::AST::Apply.new(
+                                :name( 'is_even' ),
+                                :args(
+                                    PhP::AST::Literal.new( :value( 5 ) ),
+                                )
+                            )
                         )
                     )
                 )
@@ -264,13 +280,17 @@ subtest {
 
     {
         my $result = PhP::Interpreter::run( 
-            PhP::AST::Let.new(
-                :definitions(@definitions),
-                :body(
-                    PhP::AST::Apply.new(
-                        :name( 'is_odd' ),
-                        :args(
-                            PhP::AST::Literal.new( :value( 2 ) ),
+            PhP::Runtime::CompilationUnit.new( 
+                :root(
+                    PhP::AST::Let.new(
+                        :definitions(@definitions),
+                        :body(
+                            PhP::AST::Apply.new(
+                                :name( 'is_odd' ),
+                                :args(
+                                    PhP::AST::Literal.new( :value( 2 ) ),
+                                )
+                            )
                         )
                     )
                 )
@@ -285,13 +305,17 @@ subtest {
 
     {
         my $result = PhP::Interpreter::run( 
-            PhP::AST::Let.new(
-                :definitions(@definitions),
-                :body(
-                    PhP::AST::Apply.new(
-                        :name( 'is_odd' ),
-                        :args(
-                            PhP::AST::Literal.new( :value( 7 ) ),
+            PhP::Runtime::CompilationUnit.new( 
+                :root(
+                    PhP::AST::Let.new(
+                        :definitions(@definitions),
+                        :body(
+                            PhP::AST::Apply.new(
+                                :name( 'is_odd' ),
+                                :args(
+                                    PhP::AST::Literal.new( :value( 7 ) ),
+                                )
+                            )
                         )
                     )
                 )

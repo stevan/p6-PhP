@@ -15,30 +15,34 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions( 
-                add => PhP::AST::Func.new(
-                    :params( 'x', 'y' ),
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions( 
+                        add => PhP::AST::Func.new(
+                            :params( 'x', 'y' ),
+                            :body(
+                                PhP::AST::Apply.new(
+                                    :name('+'),
+                                    :args(
+                                        PhP::AST::Var.new( :name('x') ), 
+                                        PhP::AST::Var.new( :name('y') ), 
+                                    )
+                                )
+                            )
+                        )
+                    ),
                     :body(
                         PhP::AST::Apply.new(
-                            :name('+'),
+                            :name('add'),
                             :args(
-                                PhP::AST::Var.new( :name('x') ), 
-                                PhP::AST::Var.new( :name('y') ), 
+                                PhP::AST::Literal.new( :value( 10 ) ), 
+                                PhP::AST::Literal.new( :value( 10 ) ), 
                             )
                         )
                     )
                 )
-            ),
-            :body(
-                PhP::AST::Apply.new(
-                    :name('add'),
-                    :args(
-                        PhP::AST::Literal.new( :value( 10 ) ), 
-                        PhP::AST::Literal.new( :value( 10 ) ), 
-                    )
-                )
-            ), 
+            )
         ) 
     );
 
@@ -57,38 +61,42 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions( 
-                add => PhP::AST::Func.new(
-                    :params( 'x', 'y' ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name('+'),
-                            :args(
-                                PhP::AST::Var.new( :name('x') ), 
-                                PhP::AST::Var.new( :name('y') ), 
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions( 
+                        add => PhP::AST::Func.new(
+                            :params( 'x', 'y' ),
+                            :body(
+                                PhP::AST::Apply.new(
+                                    :name('+'),
+                                    :args(
+                                        PhP::AST::Var.new( :name('x') ), 
+                                        PhP::AST::Var.new( :name('y') ), 
+                                    )
+                                )
+                            )
+                        ),
+                        add2 => PhP::AST::Func.new(
+                            :params( 'x' ),
+                            :body(
+                                PhP::AST::Apply.new(
+                                    :name('add'),
+                                    :args(
+                                        PhP::AST::Var.new( :name('x') ), 
+                                        PhP::AST::Literal.new( :value( 2 ) ), 
+                                    )
+                                )
                             )
                         )
-                    )
-                ),
-                add2 => PhP::AST::Func.new(
-                    :params( 'x' ),
+                    ),
                     :body(
                         PhP::AST::Apply.new(
-                            :name('add'),
+                            :name('add2'),
                             :args(
-                                PhP::AST::Var.new( :name('x') ), 
-                                PhP::AST::Literal.new( :value( 2 ) ), 
+                                PhP::AST::Literal.new( :value( 10 ) ), 
                             )
                         )
-                    )
-                )
-            ),
-            :body(
-                PhP::AST::Apply.new(
-                    :name('add2'),
-                    :args(
-                        PhP::AST::Literal.new( :value( 10 ) ), 
                     )
                 )
             )
@@ -111,66 +119,70 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions(
-                add => PhP::AST::Func.new(
-                    :params( 'x', 'y' ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name('+'),
-                            :args(
-                                PhP::AST::Var.new( :name('x') ), 
-                                PhP::AST::Var.new( :name('y') ), 
-                            )
-                        )
-                    )
-                ),
-                sub => PhP::AST::Func.new(
-                    :params( 'x', 'y' ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name('-'),
-                            :args(
-                                PhP::AST::Var.new( :name('x') ), 
-                                PhP::AST::Var.new( :name('y') ), 
-                            )
-                        )
-                    )
-                ),
-                mul => PhP::AST::Func.new(
-                    :params( 'x', 'y' ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name('*'),
-                            :args(
-                                PhP::AST::Var.new( :name('x') ), 
-                                PhP::AST::Var.new( :name('y') ), 
-                            )
-                        )
-                    )
-                )
-            ),
-            :body(
-                PhP::AST::Apply.new(
-                    :name('add'),
-                    :args(
-                        PhP::AST::Literal.new( :value(10) ),
-                        PhP::AST::Apply.new(
-                            :name('mul'),
-                            :args(
-                                PhP::AST::Literal.new( :value(10) ),
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions(
+                        add => PhP::AST::Func.new(
+                            :params( 'x', 'y' ),
+                            :body(
                                 PhP::AST::Apply.new(
-                                    :name('sub'),
+                                    :name('+'),
                                     :args(
-                                        PhP::AST::Literal.new( :value(10) ),
-                                        PhP::AST::Literal.new( :value(5) ),
+                                        PhP::AST::Var.new( :name('x') ), 
+                                        PhP::AST::Var.new( :name('y') ), 
                                     )
                                 )
                             )
-                        ) 
-                    )
+                        ),
+                        sub => PhP::AST::Func.new(
+                            :params( 'x', 'y' ),
+                            :body(
+                                PhP::AST::Apply.new(
+                                    :name('-'),
+                                    :args(
+                                        PhP::AST::Var.new( :name('x') ), 
+                                        PhP::AST::Var.new( :name('y') ), 
+                                    )
+                                )
+                            )
+                        ),
+                        mul => PhP::AST::Func.new(
+                            :params( 'x', 'y' ),
+                            :body(
+                                PhP::AST::Apply.new(
+                                    :name('*'),
+                                    :args(
+                                        PhP::AST::Var.new( :name('x') ), 
+                                        PhP::AST::Var.new( :name('y') ), 
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    :body(
+                        PhP::AST::Apply.new(
+                            :name('add'),
+                            :args(
+                                PhP::AST::Literal.new( :value(10) ),
+                                PhP::AST::Apply.new(
+                                    :name('mul'),
+                                    :args(
+                                        PhP::AST::Literal.new( :value(10) ),
+                                        PhP::AST::Apply.new(
+                                            :name('sub'),
+                                            :args(
+                                                PhP::AST::Literal.new( :value(10) ),
+                                                PhP::AST::Literal.new( :value(5) ),
+                                            )
+                                        )
+                                    )
+                                ) 
+                            )
+                        )
+                    ) 
                 )
-            ) 
+            )
         ) 
     );
 

@@ -15,20 +15,24 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions(
-                x => PhP::AST::Apply.new(
-                    :name('::'),
-                    :args(
-                        PhP::AST::Literal.new( :value( 1 ) ),
-                        PhP::AST::Var.new( :name('#NIL') ),
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions(
+                        x => PhP::AST::Apply.new(
+                            :name('::'),
+                            :args(
+                                PhP::AST::Literal.new( :value( 1 ) ),
+                                PhP::AST::Var.new( :name('#NIL') ),
+                            )
+                        )
+                    ),
+                    :body(
+                        PhP::AST::Apply.new(
+                            :name('head'),
+                            :args( PhP::AST::Var.new( :name( 'x' ) ) )
+                        )
                     )
-                )
-            ),
-            :body(
-                PhP::AST::Apply.new(
-                    :name('head'),
-                    :args( PhP::AST::Var.new( :name( 'x' ) ) )
                 )
             )
         )
@@ -47,20 +51,24 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions(
-                x => PhP::AST::Apply.new(
-                    :name('::'),
-                    :args(
-                        PhP::AST::Literal.new( :value( 1 ) ),
-                        PhP::AST::Var.new( :name('#NIL') ),
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions(
+                        x => PhP::AST::Apply.new(
+                            :name('::'),
+                            :args(
+                                PhP::AST::Literal.new( :value( 1 ) ),
+                                PhP::AST::Var.new( :name('#NIL') ),
+                            )
+                        )
+                    ),
+                    :body(
+                        PhP::AST::Apply.new(
+                            :name('tail'),
+                            :args( PhP::AST::Var.new( :name( 'x' ) ) )
+                        )
                     )
-                )
-            ),
-            :body(
-                PhP::AST::Apply.new(
-                    :name('tail'),
-                    :args( PhP::AST::Var.new( :name( 'x' ) ) )
                 )
             )
         )
@@ -79,23 +87,27 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions(
-                x => PhP::AST::Apply.new(
-                    :name('::'),
-                    :args(
-                        PhP::AST::Literal.new( :value( 1 ) ),
-                        PhP::AST::Var.new( :name('#NIL') ),
-                    )
-                )
-            ),
-            :body(
-                PhP::AST::Apply.new(
-                    :name('is_nil'),
-                    :args(
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions(
+                        x => PhP::AST::Apply.new(
+                            :name('::'),
+                            :args(
+                                PhP::AST::Literal.new( :value( 1 ) ),
+                                PhP::AST::Var.new( :name('#NIL') ),
+                            )
+                        )
+                    ),
+                    :body(
                         PhP::AST::Apply.new(
-                            :name('tail'),
-                            :args( PhP::AST::Var.new( :name( 'x' ) ) )
+                            :name('is_nil'),
+                            :args(
+                                PhP::AST::Apply.new(
+                                    :name('tail'),
+                                    :args( PhP::AST::Var.new( :name( 'x' ) ) )
+                                )
+                            )
                         )
                     )
                 )
@@ -116,35 +128,39 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions(
-                x => PhP::AST::Apply.new(
-                    :name('::'),
-                    :args(
-                        PhP::AST::Literal.new( :value( 1 ) ),
-                        PhP::AST::Apply.new(
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions(
+                        x => PhP::AST::Apply.new(
                             :name('::'),
                             :args(
-                                PhP::AST::Literal.new( :value( 2 ) ),
+                                PhP::AST::Literal.new( :value( 1 ) ),
                                 PhP::AST::Apply.new(
                                     :name('::'),
                                     :args(
-                                        PhP::AST::Literal.new( :value( 3 ) ),
-                                        PhP::AST::Var.new( :name('#NIL') ),
+                                        PhP::AST::Literal.new( :value( 2 ) ),
+                                        PhP::AST::Apply.new(
+                                            :name('::'),
+                                            :args(
+                                                PhP::AST::Literal.new( :value( 3 ) ),
+                                                PhP::AST::Var.new( :name('#NIL') ),
+                                            )
+                                        )
                                     )
                                 )
                             )
                         )
-                    )
-                )
-            ),
-            :body(
-                PhP::AST::Apply.new(
-                    :name('head'),
-                    :args( 
-                       PhP::AST::Apply.new(
-                            :name('tail'),
-                            :args( PhP::AST::Var.new( :name( 'x' ) ) )
+                    ),
+                    :body(
+                        PhP::AST::Apply.new(
+                            :name('head'),
+                            :args( 
+                               PhP::AST::Apply.new(
+                                    :name('tail'),
+                                    :args( PhP::AST::Var.new( :name( 'x' ) ) )
+                                )
+                            )
                         )
                     )
                 )

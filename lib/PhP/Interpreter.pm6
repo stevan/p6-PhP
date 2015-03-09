@@ -5,8 +5,8 @@ package PhP::Interpreter {
     use PhP::AST;
     use PhP::Runtime;
 
-    our sub run ( PhP::AST::Ast $exp ) {
-        evaluate( $exp, PhP::Runtime::RootEnv.new.bootstrap );
+    our sub run ( PhP::Runtime::CompilationUnit $unit ) {
+        evaluate( $unit.root, $unit.env );
     }
 
     # private ...

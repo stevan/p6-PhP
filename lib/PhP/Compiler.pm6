@@ -3,8 +3,9 @@ use v6;
 package PhP::Compiler {
 
     use PhP::AST;
+    use PhP::Runtime;
 
-    our sub compile ( PhP::AST::Ast $exp ) { ... }
+    our sub compile ( PhP::Runtime::CompilationUnit $unit ) { ... }
 
     # private ...
 

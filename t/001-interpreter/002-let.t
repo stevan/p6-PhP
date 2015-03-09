@@ -13,9 +13,13 @@ subtest {
     # let x = 10 in x ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
-            :body( PhP::AST::Var.new( :name('x') ) ), 
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
+                    :body( PhP::AST::Var.new( :name('x') ) ), 
+                )
+            )
         ) 
     );
 
@@ -30,18 +34,22 @@ subtest {
     # let x = 2 + 2 in x ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions( 
-                x => PhP::AST::Apply.new(
-                    :name('+'),
-                    :args(
-                        PhP::AST::Literal.new( :value(2) ), 
-                        PhP::AST::Literal.new( :value(2) ),
-                    )
-                )
-            ),
-            :body( PhP::AST::Var.new( :name('x') ) ), 
-        ) 
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions( 
+                        x => PhP::AST::Apply.new(
+                            :name('+'),
+                            :args(
+                                PhP::AST::Literal.new( :value(2) ), 
+                                PhP::AST::Literal.new( :value(2) ),
+                            )
+                        )
+                    ),
+                    :body( PhP::AST::Var.new( :name('x') ) ), 
+                ) 
+            )
+        )
     );
 
     isa_ok $result, PhP::AST::Literal;
@@ -57,17 +65,21 @@ subtest {
     # ;;
 
     my $result = PhP::Interpreter::run( 
-        PhP::AST::Let.new(
-            :definitions( 
-                x => PhP::AST::Literal.new( :value(5) ),
-                y => PhP::AST::Literal.new( :value(5) ) 
-            ),
-            :body(
-                PhP::AST::Apply.new(
-                    :name('+'),
-                    :args(
-                        PhP::AST::Var.new( :name('x') ), 
-                        PhP::AST::Var.new( :name('y') ),
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions( 
+                        x => PhP::AST::Literal.new( :value(5) ),
+                        y => PhP::AST::Literal.new( :value(5) ) 
+                    ),
+                    :body(
+                        PhP::AST::Apply.new(
+                            :name('+'),
+                            :args(
+                                PhP::AST::Var.new( :name('x') ), 
+                                PhP::AST::Var.new( :name('y') ),
+                            )
+                        )
                     )
                 )
             )

@@ -12,8 +12,10 @@ subtest {
     # CODE:
     # 2
 
-    my $result = PhP::Interpreter::run( 
-        PhP::AST::Literal.new( :value( 2 ) ) 
+    my $result = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new( 
+            :root( PhP::AST::Literal.new( :value( 2 ) ) )
+        )
     );
 
     isa_ok $result, PhP::AST::Literal;
