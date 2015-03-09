@@ -9,11 +9,10 @@ package PhP {
 
     our sub run ( Str $source, %opts? ) {
         PhP::Runtime::bootstrap;
-        my $ast = PhP::Parser::parse( $source, %opts );
         PhP::Interpreter::run(
             PhP::Runtime::CompilationUnit.new(
                 :options( %opts ),
-                :root( $ast ),
+                :root( PhP::Parser::parse( $source, %opts ) ),
                 :env( 
                     PhP::Runtime::Env.new( 
                         :parent( PhP::Runtime::root_env ) 
