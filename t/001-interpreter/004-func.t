@@ -209,4 +209,111 @@ subtest {
     is $unit.result.value, 60, '... got the value we expected';
 }, '... testing nested let function definitions';
 
+
+subtest {
+    # CODE:
+    # let x   = 10,
+    #     add = func (y) { x + y } in
+    #     add( 10 )
+    # ;;
+
+    my $unit = PhP::Interpreter::run( 
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions( 
+                        x   => PhP::AST::Literal.new( :value( 10 ) ),
+                        add => PhP::AST::Func.new(
+                            :params( 'y' ),
+                            :body(
+                                PhP::AST::Apply.new(
+                                    :name('+'),
+                                    :args(
+                                        PhP::AST::Var.new( :name('x') ), 
+                                        PhP::AST::Var.new( :name('y') ), 
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    :body(
+                        PhP::AST::Apply.new(
+                            :name('add'),
+                            :args(
+                                PhP::AST::Literal.new( :value( 10 ) )
+                            )
+                        )
+                    )
+                )
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
+            )
+        ) 
+    );
+
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
+
+    is $unit.result.value, 20, '... got the value we expected';
+}, '... testing simple closure';
+
+subtest {
+    # CODE:
+    # let x = 10 in
+    #     let add = func (y) { x + y } in
+    #        add( 10 )
+    # ;;
+
+    my $unit = PhP::Interpreter::run( 
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions( 
+                        x => PhP::AST::Literal.new( :value( 10 ) ),
+                    ),
+                    :body(
+                        PhP::AST::Let.new(
+                            :definitions( 
+                                add => PhP::AST::Func.new(
+                                    :params( 'y' ),
+                                    :body(
+                                        PhP::AST::Apply.new(
+                                            :name('+'),
+                                            :args(
+                                                PhP::AST::Var.new( :name('x') ), 
+                                                PhP::AST::Var.new( :name('y') ), 
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
+                            :body(
+                                PhP::AST::Apply.new(
+                                    :name('add'),
+                                    :args(
+                                        PhP::AST::Literal.new( :value( 10 ) )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
+            )
+        ) 
+    );
+
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
+
+    is $unit.result.value, 20, '... got the value we expected';
+}, '... testing simple closure defined in two envs';
+
 done;

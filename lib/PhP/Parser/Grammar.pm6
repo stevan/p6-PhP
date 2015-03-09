@@ -14,7 +14,7 @@ grammar PhP::Parser::Grammar {
     # let blocks ...
 
     rule let-statement {
-        "let" <.ws>? <let-value>+ <.ws>? "in" <.ws>? <let-body=expression> <.ws>? ";;"
+        "let" <.ws>? <let-value>+ <.ws>? "in" <.ws>? <let-body=statement> <.ws>? ";;"
     }    
 
     rule let-value {
