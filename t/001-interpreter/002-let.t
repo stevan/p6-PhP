@@ -34,6 +34,8 @@ subtest {
     isa_ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 10, '... got the value we expected';
+
+    ok ?( $unit.env.children[0].get('x') === $unit.result ), '... and the value is what we expected from the env';
 }, '... testing simple let';
 
 subtest {
@@ -68,6 +70,8 @@ subtest {
     isa_ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 4, '... got the value we expected';
+
+    ok ?( $unit.env.children[0].get('x') === $unit.result ), '... and the value is what we expected from the env';
 }, '... testing let with an expression as a value';
 
 subtest {
@@ -107,6 +111,16 @@ subtest {
     isa_ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 10, '... got the value we expected';
+
+    my $x = $unit.env.children[0].get('x');
+    my $y = $unit.env.children[0].get('y');
+
+    isa_ok $x, PhP::AST::Literal;
+    isa_ok $y, PhP::AST::Literal;
+
+    is $x.value, 5, '... got the value we expected from x in the env';
+    is $y.value, 5, '... got the value we expected from y in the env';
+
 }, '... testing nested let statements';
 
 done;
