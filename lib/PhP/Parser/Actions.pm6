@@ -119,7 +119,19 @@ class PhP::Parser::Actions {
     }
 
     method literal ($/) {
-        $/.make( PhP::AST::Literal.new( :value( ~$/ ) ) );
+        my $value = ~$/;
+        if ( $value eq 'true' ) {
+            $/.make( PhP::AST::Var.new( :name("#TRUE") ) );
+        }
+        elsif ( $value eq 'false' ) {
+            $/.make( PhP::AST::Var.new( :name("#FALSE") ) );
+        }
+        elsif ( $value eq 'nil' ) {
+            $/.make( PhP::AST::Var.new( :name("#NIL") ) );
+        }
+        else {
+            $/.make( PhP::AST::Literal.new( :value( $/ ) ) );
+        }
     }
 
     method identifier ($/) {
