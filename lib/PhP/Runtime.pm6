@@ -6,7 +6,15 @@ package PhP::Runtime {
 
     class Env {
         has Env           $.parent;
+        has Env           @.children;        
         has PhP::AST::Ast %.pad;
+
+        submethod BUILD ( :$parent ) {
+            if $parent.defined {
+                $parent.children.push: self;
+                $!parent = $parent;
+            }
+        }
 
         method get ( Str  $key  ) { %.pad{ $key } // $.parent.?get( $key ) }
         method set ( Pair $pair ) { %.pad{ $pair.key } = $pair.value       }
