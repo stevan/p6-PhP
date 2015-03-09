@@ -52,7 +52,8 @@ grammar PhP::Parser::Grammar {
         | <binary-expression>
         | <literal>        
         | <identifier>  
-        | "(" <expression> ")"            
+        | "(" <expression> ")"
+        | "("    <.ws>?    ")"
         ]
     }
 

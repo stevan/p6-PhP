@@ -8,6 +8,8 @@ package PhP::AST {
 
     # Terminals
 
+    class Unit is Terminal {}
+
     class Literal is Terminal {
         has Any $.value;
     }

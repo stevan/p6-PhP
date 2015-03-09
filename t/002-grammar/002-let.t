@@ -9,6 +9,14 @@ use PhP;
 plan *;
 
 subtest {
+    my $unit = PhP::run(q[let x = 10 in () ;;]);
+
+    isa_ok $unit.result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Unit;
+
+}, '... testing unit return';
+
+subtest {
     my $unit = PhP::run(q[let x = 10 in 10 ;;]);
 
     isa_ok $unit.result, PhP::AST::Ast;

@@ -57,6 +57,8 @@ class PhP::Parser::Actions {
             $/.<literal>.made 
                 //
             $/.<expression>.made
+                //
+            PhP::AST::Unit.new
         );
     }
 
