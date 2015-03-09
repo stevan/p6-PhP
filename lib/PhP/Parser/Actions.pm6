@@ -1,7 +1,6 @@
 use v6;
 
 use PhP::AST;
-use PhP::Runtime;
 
 class PhP::Parser::Actions {
 
