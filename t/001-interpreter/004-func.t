@@ -316,4 +316,68 @@ subtest {
     is $unit.result.value, 20, '... got the value we expected';
 }, '... testing simple closure defined in two envs';
 
+subtest {
+    # CODE:
+    # let add   = func (x, y) { x + y } 
+    #     binop = func (f, x, y) { f(x, y) } 
+    # in
+    #     binop( add, 10, 10 )
+    # ;;
+
+    my $unit = PhP::Interpreter::run( 
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions( 
+                        add => PhP::AST::Func.new(
+                            :params( 'x', 'y' ),
+                            :body(
+                                PhP::AST::Apply.new(
+                                    :name('+'),
+                                    :args(
+                                        PhP::AST::Var.new( :name('x') ), 
+                                        PhP::AST::Var.new( :name('y') ), 
+                                    )
+                                )
+                            )
+                        ),
+                        binop => PhP::AST::Func.new(
+                            :params( 'f', 'x', 'y' ),
+                            :body(
+                                PhP::AST::Apply.new(
+                                    :name('f'),
+                                    :args(
+                                        PhP::AST::Var.new( :name('x') ), 
+                                        PhP::AST::Var.new( :name('y') ), 
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    :body(
+                        PhP::AST::Apply.new(
+                            :name('binop'),
+                            :args(
+                                PhP::AST::Var.new( :name('add') ),
+                                PhP::AST::Literal.new( :value( 10 ) ), 
+                                PhP::AST::Literal.new( :value( 10 ) ), 
+                            )
+                        )
+                    )
+                )
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
+            )
+        ) 
+    );
+
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
+
+    is $unit.result.value, 20, '... got the value we expected';
+}, '... testing first class functions';
+
 done;
