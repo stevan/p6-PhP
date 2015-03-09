@@ -6,11 +6,7 @@ use PhP::Runtime;
 class PhP::Parser::Actions {
 
     method TOP ($/) { 
-        $/.make( 
-            PhP::Runtime::CompilationUnit.new(
-                :root( $/.<statement>.made )
-            )
-        );
+        $/.make( $/.<statement>.made );
     }
 
     method statement ($/) {

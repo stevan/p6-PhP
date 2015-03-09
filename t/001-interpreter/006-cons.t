@@ -8,13 +8,15 @@ use PhP;
 
 plan *;
 
+PhP::Runtime::bootstrap;
+
 subtest {
     # CODE:
     # let x = 1 :: NIL in 
     #     head(x)
     # ;;
 
-    my $result = PhP::Interpreter::run( 
+    my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
@@ -34,14 +36,19 @@ subtest {
                         )
                     )
                 )
-            )
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
+            ) 
         )
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, 1, '... got the value we expected';
+    is $unit.result.value, 1, '... got the value we expected';
 }, '... testing simple list w/ head function';
 
 subtest {
@@ -50,7 +57,7 @@ subtest {
     #     head(x)
     # ;;
 
-    my $result = PhP::Interpreter::run( 
+    my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
@@ -70,14 +77,19 @@ subtest {
                         )
                     )
                 )
-            )
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
+            ) 
         )
     );
 
-    isa_ok $result, PhP::AST::ConsCell;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::ConsCell;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    ok $( $result === $PhP::Runtime::NIL ), '... got the value we expected';
+    ok $( $unit.result === PhP::Runtime::root_env.get('#NIL') ), '... got the value we expected';
 }, '... testing simple list w/ tail function';
 
 subtest {
@@ -86,7 +98,7 @@ subtest {
     #     is_nil(tail(x))
     # ;;
 
-    my $result = PhP::Interpreter::run( 
+    my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
@@ -111,14 +123,19 @@ subtest {
                         )
                     )
                 )
-            )
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
+            ) 
         )
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    ok $( $result === $PhP::Runtime::TRUE ), '... got the value we expected';
+    ok $( $unit.result === PhP::Runtime::root_env.get('#TRUE') ), '... got the value we expected';
 }, '... testing simple list w/ is_nil(tail()) function';
 
 subtest {
@@ -127,7 +144,7 @@ subtest {
     #     head(tail(x))
     # ;;
 
-    my $result = PhP::Interpreter::run( 
+    my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
@@ -164,14 +181,19 @@ subtest {
                         )
                     )
                 )
-            )
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
+            ) 
         )
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, 2, '... got the value we expected';
+    is $unit.result.value, 2, '... got the value we expected';
 }, '... testing longer list w/ head(tail()) function';
 
 

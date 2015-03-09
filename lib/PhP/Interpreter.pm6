@@ -6,7 +6,9 @@ package PhP::Interpreter {
     use PhP::Runtime;
 
     our sub run ( PhP::Runtime::CompilationUnit $unit ) {
-        evaluate( $unit.root, $unit.env );
+        my $result = evaluate( $unit.root, $unit.env );
+        $unit.set_result( $result );
+        $unit;
     }
 
     # private ...

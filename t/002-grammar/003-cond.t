@@ -10,7 +10,7 @@ plan *;
 
 subtest {
 
-    my $result = PhP::run( 
+    my $unit = PhP::run( 
        q[
             let x = 10 in
                 if x == 10 
@@ -20,15 +20,15 @@ subtest {
        ] 
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, '"YES"', '... got the value we expected';
+    is $unit.result.value, '"YES"', '... got the value we expected';
 }, '... testing ==';
 
 subtest {
 
-    my $result = PhP::run( 
+    my $unit = PhP::run( 
        q[
             let x = 10 in
                 if x != 10 
@@ -38,15 +38,15 @@ subtest {
        ] 
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, '"NO"', '... got the value we expected';
+    is $unit.result.value, '"NO"', '... got the value we expected';
 }, '... testing !=';
 
 subtest {
 
-    my $result = PhP::run( 
+    my $unit = PhP::run( 
          q[
             let x = 10 in
                 if x < 100 
@@ -56,15 +56,15 @@ subtest {
          ]
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, '"YES"', '... got the value we expected';
+    is $unit.result.value, '"YES"', '... got the value we expected';
 }, '... testing <';
 
 subtest {
 
-    my $result = PhP::run( 
+    my $unit = PhP::run( 
          q[
             let x = 10 in
                 if x <= 100 
@@ -74,15 +74,15 @@ subtest {
          ]
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, '"YES"', '... got the value we expected';
+    is $unit.result.value, '"YES"', '... got the value we expected';
 }, '... testing <=';
 
 subtest {
 
-    my $result = PhP::run( 
+    my $unit = PhP::run( 
          q[
             let x = 10 in
                 if x > 100 
@@ -92,15 +92,15 @@ subtest {
          ]
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, '"NO"', '... got the value we expected';
+    is $unit.result.value, '"NO"', '... got the value we expected';
 }, '... testing >';
 
 subtest {
 
-    my $result = PhP::run( 
+    my $unit = PhP::run( 
          q[
             let x = 10 in
                 if x >= 100 
@@ -110,16 +110,16 @@ subtest {
          ]
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, '"NO"', '... got the value we expected';
+    is $unit.result.value, '"NO"', '... got the value we expected';
 }, '... testing >=';
 
 
 subtest {
 
-    my $result = PhP::run( 
+    my $unit = PhP::run( 
          q[
             let x = 10,
                 y = if x == 10 then 2 else 4,
@@ -130,15 +130,15 @@ subtest {
          ]
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, 17, '... got the value we expected';
+    is $unit.result.value, 17, '... got the value we expected';
 }, '... testing cond inside let assignment';
 
 subtest {
 
-    my $result = PhP::run( 
+    my $unit = PhP::run( 
          q[
             let x = 11,
                 y = if x == 10 then 2 else 4,
@@ -149,10 +149,10 @@ subtest {
          ]
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, 25, '... got the value we expected';
+    is $unit.result.value, 25, '... got the value we expected';
 }, '... testing cond inside let assignment (part deux)';
 
 

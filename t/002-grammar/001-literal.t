@@ -9,21 +9,21 @@ use PhP;
 plan *;
 
 subtest {
-    my $result = PhP::run(q[1]);
+    my $unit = PhP::run(q[1]);
 
-    isa_ok $result, PhP::AST::Ast;
-    isa_ok $result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
 
-    is $result.value, 1, '... got the expected value';
+    is $unit.result.value, 1, '... got the expected value';
 }, '... testing simple Int values';
 
 subtest {
-    my $result = PhP::run(q["Foo"]);
+    my $unit = PhP::run(q["Foo"]);
 
-    isa_ok $result, PhP::AST::Ast;
-    isa_ok $result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
 
-    is $result.value, '"Foo"', '... got the expected value';
+    is $unit.result.value, '"Foo"', '... got the expected value';
 }, '... testing simple Str values';
 
 done;

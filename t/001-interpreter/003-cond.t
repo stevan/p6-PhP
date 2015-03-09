@@ -8,6 +8,8 @@ use PhP;
 
 plan *;
 
+PhP::Runtime::bootstrap;
+
 # NOTE:
 # This will test all the comparison operators we 
 # currently support through the PhP::Runtime
@@ -21,7 +23,7 @@ subtest {
     #         else 'NO'
     # ;;
 
-    my $result = PhP::Interpreter::run( 
+    my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
@@ -42,14 +44,19 @@ subtest {
                         )
                     ) 
                 ) 
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
             )
         )
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, 'YES', '... got the value we expected';
+    is $unit.result.value, 'YES', '... got the value we expected';
 }, '... testing ==';
 
 subtest {
@@ -60,7 +67,7 @@ subtest {
     #         else 'NO'
     # ;;
 
-    my $result = PhP::Interpreter::run( 
+    my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
@@ -81,14 +88,19 @@ subtest {
                         )
                     ) 
                 ) 
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
             )
         )
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, 'NO', '... got the value we expected';
+    is $unit.result.value, 'NO', '... got the value we expected';
 }, '... testing !=';
 
 subtest {
@@ -99,7 +111,7 @@ subtest {
     #         else 'NO'
     # ;;
 
-    my $result = PhP::Interpreter::run( 
+    my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
@@ -120,14 +132,19 @@ subtest {
                         )
                     ) 
                 ) 
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
             )
         )
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, 'YES', '... got the value we expected';
+    is $unit.result.value, 'YES', '... got the value we expected';
 }, '... testing <';
 
 subtest {
@@ -138,7 +155,7 @@ subtest {
     #         else 'NO'
     # ;;
 
-    my $result = PhP::Interpreter::run( 
+    my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
@@ -159,14 +176,19 @@ subtest {
                         )
                     )
                 )
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
             )
         ) 
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, 'YES', '... got the value we expected';
+    is $unit.result.value, 'YES', '... got the value we expected';
 }, '... testing <=';
 
 subtest {
@@ -177,7 +199,7 @@ subtest {
     #         else 'NO'
     # ;;
 
-    my $result = PhP::Interpreter::run( 
+    my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
@@ -198,14 +220,19 @@ subtest {
                         )
                     )
                 )
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
             )
         ) 
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, 'NO', '... got the value we expected';
+    is $unit.result.value, 'NO', '... got the value we expected';
 }, '... testing >';
 
 subtest {
@@ -216,7 +243,7 @@ subtest {
     #         else 'NO'
     # ;;
 
-    my $result = PhP::Interpreter::run( 
+    my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
@@ -237,14 +264,19 @@ subtest {
                         )
                     )
                 )
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
             )
         ) 
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, 'NO', '... got the value we expected';
+    is $unit.result.value, 'NO', '... got the value we expected';
 }, '... testing >=';
 
 done;

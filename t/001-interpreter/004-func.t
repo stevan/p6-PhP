@@ -8,13 +8,15 @@ use PhP;
 
 plan *;
 
+PhP::Runtime::bootstrap;
+
 subtest {
     # CODE:
     # let add = func (x, y) { x + y } in
     #     add( 10, 10 )
     # ;;
 
-    my $result = PhP::Interpreter::run( 
+    my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
@@ -42,14 +44,19 @@ subtest {
                         )
                     )
                 )
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
             )
         ) 
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, 20, '... got the value we expected';
+    is $unit.result.value, 20, '... got the value we expected';
 }, '... testing simple function';
 
 
@@ -60,7 +67,7 @@ subtest {
     #     add2( 10 )
     # ;;
 
-    my $result = PhP::Interpreter::run( 
+    my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
@@ -99,14 +106,19 @@ subtest {
                         )
                     )
                 )
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
             )
         ) 
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, 12, '... got the value we expected';
+    is $unit.result.value, 12, '... got the value we expected';
 }, '... testing nested let function definitions';
 
 
@@ -118,7 +130,7 @@ subtest {
     #     add( 10, mul( 10, sub( 10 - 5 ) ) )
     # ;;
 
-    my $result = PhP::Interpreter::run( 
+    my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
@@ -182,14 +194,19 @@ subtest {
                         )
                     ) 
                 )
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
             )
         ) 
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, 60, '... got the value we expected';
+    is $unit.result.value, 60, '... got the value we expected';
 }, '... testing nested let function definitions';
 
 done;

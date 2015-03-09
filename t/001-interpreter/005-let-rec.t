@@ -8,6 +8,8 @@ use PhP;
 
 plan *;
 
+PhP::Runtime::bootstrap;
+
 subtest {
     # CODE:
     # let mul = func (x, y) { 
@@ -18,7 +20,7 @@ subtest {
     #     mul(13, 2)
     # ;;
 
-    my $result = PhP::Interpreter::run( 
+    my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
@@ -72,14 +74,19 @@ subtest {
                         )
                     )
                 )
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
             )
         )
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, 26, '... got the value we expected';
+    is $unit.result.value, 26, '... got the value we expected';
 }, '... testing recursive multiplation';
 
 subtest {
@@ -92,7 +99,7 @@ subtest {
     #     factorial( 5 )
     # ;;
 
-    my $result = PhP::Interpreter::run( 
+    my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
@@ -144,14 +151,19 @@ subtest {
                         )
                     )
                 )
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
             )
         )
     );
 
-    isa_ok $result, PhP::AST::Literal;
-    isa_ok $result, PhP::AST::Ast;
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
 
-    is $result.value, 120, '... got the value we expected';
+    is $unit.result.value, 120, '... got the value we expected';
 }, '... testing factorial';
 
 subtest {
@@ -229,7 +241,7 @@ subtest {
     );
 
     {
-        my $result = PhP::Interpreter::run( 
+        my $unit = PhP::Interpreter::run( 
             PhP::Runtime::CompilationUnit.new( 
                 :root(
                     PhP::AST::Let.new(
@@ -243,18 +255,23 @@ subtest {
                             )
                         )
                     )
+                ),
+                :env( 
+                    PhP::Runtime::Env.new( 
+                        :parent( PhP::Runtime::root_env ) 
+                    ) 
                 )
             )
         );
 
-        isa_ok $result, PhP::AST::Literal;
-        isa_ok $result, PhP::AST::Ast;
+        isa_ok $unit.result, PhP::AST::Literal;
+        isa_ok $unit.result, PhP::AST::Ast;
 
-        ok ?( $result === $PhP::Runtime::TRUE ), '... got the value we expected';
+        ok ?( $unit.result === PhP::Runtime::root_env.get('#TRUE') ), '... got the value we expected';
     }
 
     {
-        my $result = PhP::Interpreter::run( 
+        my $unit = PhP::Interpreter::run( 
             PhP::Runtime::CompilationUnit.new( 
                 :root(
                     PhP::AST::Let.new(
@@ -268,18 +285,23 @@ subtest {
                             )
                         )
                     )
+                ),
+                :env( 
+                    PhP::Runtime::Env.new( 
+                        :parent( PhP::Runtime::root_env ) 
+                    ) 
                 )
             )
         );
 
-        isa_ok $result, PhP::AST::Literal;
-        isa_ok $result, PhP::AST::Ast;
+        isa_ok $unit.result, PhP::AST::Literal;
+        isa_ok $unit.result, PhP::AST::Ast;
 
-        ok ?( $result === $PhP::Runtime::FALSE ), '... got the value we expected';
+        ok ?( $unit.result === PhP::Runtime::root_env.get('#FALSE') ), '... got the value we expected';
     }
 
     {
-        my $result = PhP::Interpreter::run( 
+        my $unit = PhP::Interpreter::run( 
             PhP::Runtime::CompilationUnit.new( 
                 :root(
                     PhP::AST::Let.new(
@@ -293,18 +315,23 @@ subtest {
                             )
                         )
                     )
+                ),
+                :env( 
+                    PhP::Runtime::Env.new( 
+                        :parent( PhP::Runtime::root_env ) 
+                    ) 
                 )
             )
         );
 
-        isa_ok $result, PhP::AST::Literal;
-        isa_ok $result, PhP::AST::Ast;
+        isa_ok $unit.result, PhP::AST::Literal;
+        isa_ok $unit.result, PhP::AST::Ast;
 
-        ok ?( $result === $PhP::Runtime::FALSE ), '... got the value we expected';
+        ok ?( $unit.result === PhP::Runtime::root_env.get('#FALSE') ), '... got the value we expected';
     }
 
     {
-        my $result = PhP::Interpreter::run( 
+        my $unit = PhP::Interpreter::run( 
             PhP::Runtime::CompilationUnit.new( 
                 :root(
                     PhP::AST::Let.new(
@@ -318,14 +345,19 @@ subtest {
                             )
                         )
                     )
-                )
+                ),
+                :env( 
+                    PhP::Runtime::Env.new( 
+                        :parent( PhP::Runtime::root_env ) 
+                    ) 
+                )                
             )
         );
 
-        isa_ok $result, PhP::AST::Literal;
-        isa_ok $result, PhP::AST::Ast;
+        isa_ok $unit.result, PhP::AST::Literal;
+        isa_ok $unit.result, PhP::AST::Ast;
 
-        ok ?( $result === $PhP::Runtime::TRUE ), '... got the value we expected';
+        ok ?( $unit.result === PhP::Runtime::root_env.get('#TRUE') ), '... got the value we expected';
     }
 
 }, '... testing multually recursive even/odd predicate';
