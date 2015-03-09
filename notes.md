@@ -35,6 +35,9 @@
         - once you get used to them, you recognize the pattern 
     - they can be completely useless
         - some type errors can get down right esoteric
+    - examples:
+        - 'Cannot look up attributes in a type object'
+            - this is similar to the "Cannot find method blah on (Any)", not helpful
 
 # Syntax
 
