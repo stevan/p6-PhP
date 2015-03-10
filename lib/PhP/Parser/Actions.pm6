@@ -21,7 +21,7 @@ class PhP::Parser::Actions {
     method let-statement ($/) {
         $/.make(
             PhP::AST::Let.new(
-                :definitions( $/.<let-value>.map: { $_.made } ),
+                :definitions( $/.<let-value>>>.made ),
                 :body( $/.<let-body>.made )
             )
         );
@@ -47,7 +47,7 @@ class PhP::Parser::Actions {
     method func-statement ($/) {
         $/.make(
             PhP::AST::Func.new(
-                :params( $/.<func-param>.map: { $_.made } ),
+                :params( $/.<func-param>>>.made ),
                 :body( $/.<func-body>.made )
             )
         );
@@ -86,7 +86,7 @@ class PhP::Parser::Actions {
             PhP::AST::Apply.new(
                 :name( ~ $/.<identifier> ),
                 :args(
-                    $/.<apply-argument>.map: { $_.made }
+                    $/.<apply-argument>>>.made
                 )
             )
         );
