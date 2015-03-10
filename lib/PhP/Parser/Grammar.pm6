@@ -8,6 +8,7 @@ grammar PhP::Parser::Grammar {
         [
         | <let-statement> 
         | <expression>
+        | { die "I was expecting either a `let` block or a bare expression, I got neither."}
         ]
     }
 
@@ -25,6 +26,7 @@ grammar PhP::Parser::Grammar {
         [
         | <func-statement>  
         | <expression>
+        | { die "I was expecting either a `func` definition or a bare expression, I got neither."}
         ]
     } 
 
@@ -52,8 +54,8 @@ grammar PhP::Parser::Grammar {
         | <binary-expression>
         | <literal>        
         | <identifier>  
+        | "("    <.ws>?    ")"        
         | "(" <expression> ")"
-        | "("    <.ws>?    ")"
         ]
     }
 
