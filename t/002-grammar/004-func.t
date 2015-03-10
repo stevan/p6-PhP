@@ -12,6 +12,22 @@ subtest {
 
     my $unit = PhP::run( 
        q[
+            let ten = func () { 10 } in
+                ten()
+            ;;
+       ]
+    );
+
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
+
+    is $unit.result.value, 10, '... got the value we expected';
+}, '... testing very simple func';
+
+subtest {
+
+    my $unit = PhP::run( 
+       q[
             let add = func (x, y) { x + y } in
                 add( 10, 10 )
             ;;

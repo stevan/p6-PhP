@@ -12,6 +12,40 @@ PhP::Runtime::bootstrap;
 
 subtest {
     # CODE:
+    # let ten = func () { 10 } in
+    #     ten()
+    # ;;
+
+    my $unit = PhP::Interpreter::run( 
+        PhP::Runtime::CompilationUnit.new( 
+            :root(
+                PhP::AST::Let.new(
+                    :definitions( 
+                        ten => PhP::AST::Func.new(
+                            :body( PhP::AST::Literal.new( :value( 10 ) ) )
+                        )
+                    ),
+                    :body(
+                        PhP::AST::Apply.new( :name('ten') )
+                    )
+                )
+            ),
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( PhP::Runtime::root_env ) 
+                ) 
+            )
+        ) 
+    );
+
+    isa_ok $unit.result, PhP::AST::Literal;
+    isa_ok $unit.result, PhP::AST::Ast;
+
+    is $unit.result.value, 10, '... got the value we expected';
+}, '... testing simple function';
+
+subtest {
+    # CODE:
     # let add = func (x, y) { x + y } in
     #     add( 10, 10 )
     # ;;

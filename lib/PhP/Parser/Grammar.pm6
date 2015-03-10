@@ -33,7 +33,7 @@ grammar PhP::Parser::Grammar {
     # functions ...
 
     rule func-statement {
-        "func" <.ws>? "(" <func-param>+ ")" <.ws>? "\{" <.ws>? <func-body> <.ws>? "\}"
+        "func" <.ws>? "(" <func-param>* ")" <.ws>? "\{" <.ws>? <func-body> <.ws>? "\}"
     }    
 
     rule func-param {
@@ -59,7 +59,7 @@ grammar PhP::Parser::Grammar {
     }
 
     rule apply-expression {
-        <identifier> <.ws>? "(" <.ws>? <apply-argument>+ <.ws>? ")"
+        <identifier> <.ws>? "(" <.ws>? <apply-argument>* <.ws>? ")"
     }
 
     rule apply-argument {
