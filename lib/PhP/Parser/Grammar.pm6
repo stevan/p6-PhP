@@ -60,11 +60,7 @@ grammar PhP::Parser::Grammar {
     }
 
     rule cons-cell-expression {
-        "[" <.ws>? <cons-cell-expression-head> <.ws>? <cons-cell-expression-tail>+ <.ws>? "]"
-    }
-
-    rule cons-cell-expression-head {
-        <expression>
+        "[" <.ws>? <cons-cell-expression-head=.expression> <.ws>? <cons-cell-expression-tail>+ <.ws>? "]"
     }
 
     rule cons-cell-expression-tail {
