@@ -48,7 +48,6 @@ grammar PhP::Parser::Grammar {
 
     rule expression {
         [    
-        | <cons-cell-expression>
         | <apply-expression>
         | <cond-expression>
         | <binary-expression>
@@ -57,14 +56,6 @@ grammar PhP::Parser::Grammar {
         | "("    <.ws>?    ")"        
         | "(" <expression> ")"
         ]
-    }
-
-    rule cons-cell-expression {
-        "[" <.ws>? <cons-cell-expression-head=.expression> <.ws>? <cons-cell-expression-tail>+ <.ws>? "]"
-    }
-
-    rule cons-cell-expression-tail {
-        "::" <.ws>? <expression>
     }
 
     rule apply-expression {
@@ -93,12 +84,13 @@ grammar PhP::Parser::Grammar {
         | "+"  | "-"  | "*" | "/" 
         | "==" | "!=" 
         | "<"  | "<=" | ">=" | ">"
+        | '::'
         ]
     }
 
     token literal {
         [
-        | "true" | "false" | "nil"
+        | "true" | "false" | "[]"
         | <quoted-text>
         | \d+  # FIXME - this is wildly insufficient
         ]
