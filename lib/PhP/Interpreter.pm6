@@ -41,6 +41,9 @@ package PhP::Interpreter {
         my $code    = $env.get( $exp.name ) // die "Unable to find function to apply: " ~ $exp.name;
         my $new_env = PhP::Runtime::Env.new( :parent( $env ) );
 
+        die "Incorrect number of arguments, got : " ~ $exp.args.elems ~ " expected: " ~ $code.params.elems
+            unless $exp.args.elems == $code.params.elems;
+
         loop (my $i = 0; $i < $exp.args.elems; $i++ ) {
             $new_env.set: $code.params[ $i ] => evaluate( $exp.args[ $i ], $new_env );
         }
