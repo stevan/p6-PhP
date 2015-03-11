@@ -465,7 +465,11 @@ subtest {
                     )
                 )
             ),
-            :env( $orig.env.children[0] )
+            :env( 
+                PhP::Runtime::Env.new( 
+                    :parent( $orig.env.children[0] ) 
+                )
+            )
         ) 
     );
 
