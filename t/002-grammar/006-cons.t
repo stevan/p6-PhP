@@ -8,8 +8,6 @@ use PhP;
 
 plan *;
 
-PhP::Runtime::bootstrap;
-
 subtest {
 
     my $unit = PhP::run( 
