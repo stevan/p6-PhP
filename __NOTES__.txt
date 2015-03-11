@@ -86,10 +86,6 @@ In order to create tests for code.
 Other stuff
 ---------------------------------------------------------------------------------------------------------
 
-That would be awesome.
-
 Add record types
-
-Add tuples
 
 
