@@ -136,9 +136,6 @@ class PhP::Parser::Actions {
         elsif ( $value eq 'false' ) {
             $/.make( PhP::AST::Var.new( :name("#FALSE") ) );
         }
-        elsif ( $value eq '[]' ) {
-            $/.make( PhP::AST::Var.new( :name("#NIL") ) );
-        }
         else {
             $/.make( PhP::AST::Literal.new( :value( $/ ) ) );
         }

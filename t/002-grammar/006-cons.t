@@ -34,10 +34,10 @@ subtest {
        ]
     );
 
-    isa_ok $unit.result, PhP::AST::ConsCell;
+    isa_ok $unit.result, PhP::AST::Tuple;
     isa_ok $unit.result, PhP::AST::Ast;
 
-    ok $( $unit.result === PhP::Runtime::root_env.get('#NIL') ), '... got the value we expected';
+    ok $unit.result.is_empty, '... got the value we expected';
 }, '... testing simple list w/ tail function';
 
 subtest {

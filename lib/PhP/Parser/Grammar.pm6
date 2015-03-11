@@ -99,7 +99,7 @@ grammar PhP::Parser::Grammar {
 
     token literal {
         [
-        | "true" | "false" | "[]"
+        | "true" | "false"
         | <quoted-text>
         | \d+  # FIXME - this is wildly insufficient
         ]

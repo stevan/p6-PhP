@@ -13,9 +13,7 @@ package PhP::Compiler {
 
     multi emit ( PhP::AST::Literal $exp ) { ... }
 
-    multi emit ( PhP::AST::Var $exp ) { ... }
-
-    multi emit ( PhP::AST::ConsCell $exp ) { ... }    
+    multi emit ( PhP::AST::Var $exp ) { ... }   
 
     multi emit ( PhP::AST::Let $exp ) { ... }
 

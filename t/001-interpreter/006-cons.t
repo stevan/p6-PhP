@@ -25,7 +25,7 @@ subtest {
                             :name('::'),
                             :args(
                                 PhP::AST::Literal.new( :value( 1 ) ),
-                                PhP::AST::Var.new( :name('#NIL') ),
+                                PhP::AST::Tuple.new,
                             )
                         )
                     ),
@@ -66,7 +66,7 @@ subtest {
                             :name('::'),
                             :args(
                                 PhP::AST::Literal.new( :value( 1 ) ),
-                                PhP::AST::Var.new( :name('#NIL') ),
+                                PhP::AST::Tuple.new,
                             )
                         )
                     ),
@@ -86,10 +86,10 @@ subtest {
         )
     );
 
-    isa_ok $unit.result, PhP::AST::ConsCell;
+    isa_ok $unit.result, PhP::AST::Tuple;
     isa_ok $unit.result, PhP::AST::Ast;
 
-    ok $( $unit.result === PhP::Runtime::root_env.get('#NIL') ), '... got the value we expected';
+    ok $unit.result.is_empty, '... got the value we expected';
 }, '... testing simple list w/ tail function';
 
 subtest {
@@ -107,7 +107,7 @@ subtest {
                             :name('::'),
                             :args(
                                 PhP::AST::Literal.new( :value( 1 ) ),
-                                PhP::AST::Var.new( :name('#NIL') ),
+                                PhP::AST::Tuple.new,
                             )
                         )
                     ),
@@ -161,7 +161,7 @@ subtest {
                                             :name('::'),
                                             :args(
                                                 PhP::AST::Literal.new( :value( 3 ) ),
-                                                PhP::AST::Var.new( :name('#NIL') ),
+                                                PhP::AST::Tuple.new,
                                             )
                                         )
                                     )
@@ -214,7 +214,7 @@ subtest {
                             :name('::'),
                             :args(
                                 PhP::AST::Literal.new( :value( 3 ) ),
-                                PhP::AST::Var.new( :name('#NIL') ),
+                                PhP::AST::Tuple.new,
                             )
                         ),
                         y => PhP::AST::Apply.new(

@@ -27,21 +27,9 @@ package PhP::AST {
             @.items[ $idx ];
         }
 
-        method length { @.items.elems }
+        method is_empty { @.items.elems == 0 }
 
         method Str { '[ ' ~ @.items.join(', ') ~ ' ]' }
-    }
-
-    class ConsCell is Terminal {
-        has Ast      $.head;
-        has ConsCell $.tail;
-
-        method is_nil { !$.head and !$.tail  }
-
-        method Str { 
-            return '[]' unless $.head;
-            return $.head ~ ' :: ' ~ $.tail; 
-        }
     }
 
     class Func is Terminal {
