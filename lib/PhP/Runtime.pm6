@@ -16,7 +16,7 @@ package PhP::Runtime {
             }
         }
 
-        method get ( Str  $key  ) { %.pad{ $key } // ($.parent && $.parent.?get( $key )) }
+        method get ( Str  $key  ) { %.pad{ $key } // $.parent.?get( $key ) }
         method set ( Pair $pair ) { %.pad{ $pair.key } = $pair.value       }
     }
 
