@@ -13,6 +13,10 @@ package PhP::Compiler {
 
     multi emit ( PhP::AST::Literal $exp ) { ... }
 
+    multi emit ( PhP::AST::Tuple $exp ) { ... }
+
+    multi emit ( PhP::AST::Unit $exp ) { ... }
+
     multi emit ( PhP::AST::Var $exp ) { ... }   
 
     multi emit ( PhP::AST::Let $exp ) { ... }
