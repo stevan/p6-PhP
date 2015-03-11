@@ -18,6 +18,20 @@ package PhP::AST {
         method Str { ~ $.value }
     }
 
+    class Tuple is Terminal {
+        has Ast @.items;
+
+        method get_item_at ($idx) { 
+            die "Cannot access tuple item at (zero-based) index: $idx, tuple only has " ~ @.items.elems ~ " items(s)"
+                if $idx >= @.items.elems;
+            @.items[ $idx ];
+        }
+
+        method length { @.items.elems }
+
+        method Str { '[ ' ~ @.items.join(', ') ~ ' ]' }
+    }
+
     class ConsCell is Terminal {
         has Ast      $.head;
         has ConsCell $.tail;

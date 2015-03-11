@@ -48,6 +48,7 @@ grammar PhP::Parser::Grammar {
 
     rule expression {
         [    
+        | <tuple-expression>
         | <apply-expression>
         | <cond-expression>
         | <binary-expression>
@@ -68,6 +69,14 @@ grammar PhP::Parser::Grammar {
 
     rule cond-expression {
         "if" <.ws>? <condition=.expression> <.ws>? "then" <.ws>? <if_true=.expression> <.ws>? "else" <.ws>? <if_false=.expression>
+    }
+
+    rule tuple-expression {
+        "[" <.ws>? <tuple-expression-item>* <.ws>? "]"
+    }
+
+    rule tuple-expression-item {
+        <expression> (",")?
     }
 
     rule binary-expression {

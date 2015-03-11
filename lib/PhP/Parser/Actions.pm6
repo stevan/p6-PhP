@@ -65,6 +65,8 @@ class PhP::Parser::Actions {
 
     method expression ($/) {
         $/.make( 
+            $/.<tuple-expression>.made
+                //
             $/.<apply-expression>.made
                 //
             $/.<cond-expression>.made
@@ -116,6 +118,14 @@ class PhP::Parser::Actions {
                 )
             ) 
         );
+    }
+
+    method tuple-expression ($/) {
+        $/.make( PhP::AST::Tuple.new( :items( $/.<tuple-expression-item>>>.made ) ) );
+    }
+
+    method tuple-expression-item ($/) {
+        $/.make( $/.<expression>.made );
     }
 
     method literal ($/) {

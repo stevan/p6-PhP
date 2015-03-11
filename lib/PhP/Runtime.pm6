@@ -55,6 +55,10 @@ package PhP::Runtime {
         $ROOT_ENV.set: 'tail'   => PhP::AST::NativeFunc.new( :params( 'x' ) :extern( sub ($env) { $env.get('x').is_nil ?? die "Cannot call `tail` on #NIL" !! $env.get('x').tail } ) );
         $ROOT_ENV.set: 'is_nil' => PhP::AST::NativeFunc.new( :params( 'x' ) :extern( sub ($env) { $env.get('x').is_nil ?? $TRUE !! $FALSE } ) );
 
+        $ROOT_ENV.set: 'first'   => PhP::AST::NativeFunc.new( :params( 't' ) :extern( sub ($env) { $env.get('t').get_item_at(0) } ) );
+        $ROOT_ENV.set: 'second'  => PhP::AST::NativeFunc.new( :params( 't' ) :extern( sub ($env) { $env.get('t').get_item_at(1) } ) );
+        $ROOT_ENV.set: 'item_at' => PhP::AST::NativeFunc.new( :params( 't', 'i' ) :extern( sub ($env) { $env.get('t').get_item_at( $env.get('i').value ) } ) );
+
         $IS_BOOTSTRAPPED = True;
     }
 
