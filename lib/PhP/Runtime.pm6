@@ -60,12 +60,10 @@ package PhP::Runtime {
     }
 
     class CompilationUnit {
-        has PhP::AST::Ast $.root;   # the root node of the AST 
-        has PhP::AST::Ast $.result; # the result of compiling the AST
-        has Env           $.env;    # the environment everything will be compiled into 
-
-        has %.directives;
-        has %.options;
+        has               %.options; # the set of options this was compiled
+        has PhP::AST::Ast $.root;    # the root node of the AST 
+        has PhP::AST::Ast $.result;  # the result of compiling the AST
+        has Env           $.env;     # the environment everything will be compiled into 
 
         method has_root                       { $!root.defined }
         method set_root (PhP::AST::Ast $root) { $!root = $root }
