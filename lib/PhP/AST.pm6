@@ -1,27 +1,14 @@
 use v6;
 
 package PhP::AST {
-
-    our enum TypeMarker <
-        STRING
-        NUMBER
-        BOOLEAN
-        TUPLE
-        FUNCTION
-        UNIT
-    >;
     
-    class Ast {
-        has TypeMarker $.type;
-    }
+    class Ast {}
 
     class Terminal is Ast {}
 
     # Terminals
 
     class Unit is Terminal {
-        has TypeMarker $.type = UNIT;
-
         method Str { '()' }
     }
 
@@ -31,21 +18,12 @@ package PhP::AST {
         method Str { ~ $.value }
     }
 
-    class StringLiteral is Literal {
-        has TypeMarker $.type = STRING;
-    }
-
-    class NumberLiteral is Literal {
-        has TypeMarker $.type = NUMBER;
-    }
-
-    class BooleanLiteral is Literal {
-        has TypeMarker $.type = BOOLEAN;
-    }
+    class StringLiteral  is Literal {}
+    class NumberLiteral  is Literal {}
+    class BooleanLiteral is Literal {}
 
     class Tuple is Terminal {
-        has TypeMarker $.type = TUPLE;
-        has Ast        @.items;
+        has Ast @.items;
 
         method get_item_at ($idx) { 
             die "Cannot access tuple item at (zero-based) index: $idx, tuple only has " ~ @.items.elems ~ " items(s)"
@@ -66,9 +44,8 @@ package PhP::AST {
     }
 
     class Func is Terminal is HasDeclarationEnv {
-        has TypeMarker $.type = FUNCTION;
-        has Str        @.params;
-        has Ast        $.body;
+        has Str @.params;
+        has Ast $.body;
 
         method arity { @.params.elems }
 
@@ -76,9 +53,8 @@ package PhP::AST {
     }
 
     class NativeFunc is Terminal is HasDeclarationEnv {
-        has TypeMarker $.type = FUNCTION;
-        has Str        @.params;
-        has Block      $.extern;
+        has Str   @.params;
+        has Block $.extern;
 
         method arity { @.params.elems }
 
