@@ -129,15 +129,22 @@ class PhP::Parser::Actions {
     }
 
     method literal ($/) {
-        my $value = ~$/;
-        if ( $value eq 'true' ) {
-            $/.make( PhP::AST::Var.new( :name("#TRUE") ) );
+        if ( my $bool = $/.<literal-boolean> ) {
+            if ( ~$bool eq 'true' ) {
+                $/.make( PhP::AST::Var.new( :name("#TRUE") ) );
+            }
+            elsif ( ~$bool eq 'false' ) {
+                $/.make( PhP::AST::Var.new( :name("#FALSE") ) );
+            }
         }
-        elsif ( $value eq 'false' ) {
-            $/.make( PhP::AST::Var.new( :name("#FALSE") ) );
+        elsif ( my $string = $/.<literal-string> ) {
+            $/.make( PhP::AST::StringLiteral.new( :value( ~$string ) ) );
+        }
+        elsif ( my $number = $/.<literal-number> ) {
+            $/.make( PhP::AST::NumberLiteral.new( :value( 0+ $number ) ) );
         }
         else {
-            $/.make( PhP::AST::Literal.new( :value( $/ ) ) );
+            die "I have no idea what kind of literal this is: $/"; 
         }
     }
 

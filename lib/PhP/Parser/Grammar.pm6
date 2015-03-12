@@ -99,13 +99,24 @@ grammar PhP::Parser::Grammar {
 
     token literal {
         [
-        | "true" | "false"
-        | <quoted-text>
-        | \d+  # FIXME - this is wildly insufficient
+        | <literal-boolean>
+        | <literal-string>
+        | <literal-number>
         ]
     }
 
-    token quoted-text {
+    token literal-number {
+        \d+  # FIXME - this is wildly insufficient
+    }
+
+    token literal-boolean {
+        [
+        | "true" 
+        | "false" 
+        ]
+    }
+
+    token literal-string {
         \"
         [
         | <-["\\]> # Anything not a " or \
