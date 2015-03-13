@@ -25,7 +25,7 @@ subtest {
             :root(
                 PhP::AST::Let.new(
                     :bindings(
-                        PhP::AST::SimpleBinding.new(
+                        PhP::AST::SimpleBind.new(
                             :var( PhP::AST::Var.new( :name('mul') ) ),
                             :value( 
                                 PhP::AST::Func.new(
@@ -109,7 +109,7 @@ subtest {
             :root(
                 PhP::AST::Let.new(
                     :bindings(
-                        PhP::AST::SimpleBinding.new(
+                        PhP::AST::SimpleBind.new(
                             :var( PhP::AST::Var.new( :name('factorial') ) ),
                             :value( 
                                 PhP::AST::Func.new(
@@ -186,7 +186,7 @@ subtest {
     # ;;
 
     my @bindings = (
-        PhP::AST::SimpleBinding.new(
+        PhP::AST::SimpleBind.new(
             :var( PhP::AST::Var.new( :name('is_even') ) ),
             :value( 
                 PhP::AST::Func.new(
@@ -222,7 +222,7 @@ subtest {
                 )
             )
         ),
-        PhP::AST::SimpleBinding.new(
+        PhP::AST::SimpleBind.new(
             :var( PhP::AST::Var.new( :name('is_odd') ) ),
             :value( 
                 PhP::AST::Func.new(

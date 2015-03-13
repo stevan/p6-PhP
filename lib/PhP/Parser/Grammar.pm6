@@ -19,7 +19,22 @@ grammar PhP::Parser::Grammar {
     }    
 
     rule let-binding {
+        [
+        | <let-simple-bind>
+        | <let-destructuring-bind>
+        ]
+    }
+
+    rule let-simple-bind {
         <identifier> <.ws>? "=" <.ws>? <let-statement-value> (",")?
+    }
+
+    rule let-destructuring-bind {
+        "[" <.ws>? <let-destructuring-pattern>+ <.ws>? <splat>? <.ws>? "]" <.ws>? "=" <.ws>? <tuple-expression> (",")?
+    }
+
+    rule let-destructuring-pattern {
+        <identifier> (",")?
     }
 
     rule let-statement-value {
@@ -81,12 +96,17 @@ grammar PhP::Parser::Grammar {
 
     rule binary-expression {
         [
-        | <literal>    <.ws>? <binary-op> <.ws>? <expression> 
-        | <identifier> <.ws>? <binary-op> <.ws>? <expression> 
+        | <literal>          <.ws>? <binary-op> <.ws>? <expression> 
+        | <identifier>       <.ws>? <binary-op> <.ws>? <expression> 
+        | <apply-expression> <.ws>? <binary-op> <.ws>? <expression> 
         ]
     }
 
     # tokens ....
+
+    token splat {
+        "*"
+    }
 
     token binary-op {
         [

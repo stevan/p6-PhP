@@ -21,7 +21,7 @@ subtest {
             :root(
                 PhP::AST::Let.new(
                     :bindings(
-                        PhP::AST::SimpleBinding.new(
+                        PhP::AST::SimpleBind.new(
                             :var( PhP::AST::Var.new( :name('x') ) ),
                             :value(
                                 PhP::AST::Apply.new(
@@ -67,7 +67,7 @@ subtest {
             :root(
                 PhP::AST::Let.new(
                     :bindings(
-                        PhP::AST::SimpleBinding.new(
+                        PhP::AST::SimpleBind.new(
                             :var( PhP::AST::Var.new( :name('x') ) ),
                             :value(
                                 PhP::AST::Apply.new(
@@ -113,7 +113,7 @@ subtest {
             :root(
                 PhP::AST::Let.new(
                     :bindings(
-                        PhP::AST::SimpleBinding.new(
+                        PhP::AST::SimpleBind.new(
                             :var( PhP::AST::Var.new( :name('x') ) ),
                             :value(
                                 PhP::AST::Apply.new(
@@ -164,7 +164,7 @@ subtest {
             :root(
                 PhP::AST::Let.new(
                     :bindings(
-                        PhP::AST::SimpleBinding.new(
+                        PhP::AST::SimpleBind.new(
                             :var( PhP::AST::Var.new( :name('x') ) ),
                             :value(
                                 PhP::AST::Apply.new(
@@ -230,7 +230,7 @@ subtest {
             :root(
                 PhP::AST::Let.new(
                     :bindings(
-                        PhP::AST::SimpleBinding.new(
+                        PhP::AST::SimpleBind.new(
                             :var( PhP::AST::Var.new( :name('z') ) ),
                             :value(
                                 PhP::AST::Apply.new(
@@ -242,7 +242,7 @@ subtest {
                                 )
                             )
                         ),
-                        PhP::AST::SimpleBinding.new(
+                        PhP::AST::SimpleBind.new(
                             :var( PhP::AST::Var.new( :name('y') ) ),
                             :value(
                                 PhP::AST::Apply.new(
@@ -254,7 +254,7 @@ subtest {
                                 )
                             )
                         ),
-                        PhP::AST::SimpleBinding.new(
+                        PhP::AST::SimpleBind.new(
                             :var( PhP::AST::Var.new( :name('x') ) ),
                             :value(
                                 PhP::AST::Apply.new(

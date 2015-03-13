@@ -28,15 +28,41 @@ class PhP::Parser::Actions {
     }
 
     method let-binding ($/) {    
+        $/.make(
+            $/.<let-simple-bind>.made
+                //
+            $/.<let-destructuring-bind>.made
+        );
+    }
+
+    method let-simple-bind ($/) {    
         my $ident = ~ $/.<identifier>;
         my $value = $/.<let-statement-value>.made;
 
         $/.make( 
-            PhP::AST::SimpleBinding.new(
+            PhP::AST::SimpleBind.new(
                 :var( PhP::AST::Var.new( :name( $ident ) ) ),
                 :value( $value )
             )
         );
+    }
+
+    method let-destructuring-bind ($/) {    
+        $/.make( 
+            PhP::AST::DestructuringBind.new(
+                :is_slurpy( $/.<splat>.defined )
+                :pattern( 
+                    $/.<let-destructuring-pattern>.map: -> $v { 
+                        PhP::AST::Var.new( :name( $v.made ) )
+                    } 
+                ),
+                :value( $/.<tuple-expression>.made; )
+            )
+        );
+    }
+
+    method let-destructuring-pattern ($/) {
+        $/.make( ~ $/.<identifier> )
     }
 
     method let-statement-value ($/) {
@@ -118,7 +144,7 @@ class PhP::Parser::Actions {
             PhP::AST::Apply.new( 
                 :name( ~ $/.<binary-op> ),
                 :args( 
-                    ($/.<literal> // $/.<identifier>).made,
+                    ($/.<literal> // $/.<identifier> // $/.<apply-expression>).made,
                     $/.<expression>.made 
                 )
             ) 

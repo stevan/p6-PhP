@@ -34,9 +34,40 @@ package PhP::Interpreter {
         return $env.get( $exp.name ) // die "Unable to find the variable: " ~ $exp.name;
     } 
 
-    multi evaluate ( PhP::AST::SimpleBinding $exp, PhP::Runtime::Env $env ) returns PhP::AST::Ast {
+    # NOTE:
+    # the return values of the binds 
+    # are actually ignored, they would
+    # be captured down in the Let evaluate
+    # method, inside the for loop, if we 
+    # did capture them. Right now, I don't 
+    # think we care.
+    # - SL
+
+    multi evaluate ( PhP::AST::SimpleBind $exp, PhP::Runtime::Env $env ) returns PhP::AST::Ast {
         my $value = evaluate( $exp.value, $env );
         $env.set: $exp.var.name => $value;
+        return $value;
+    }
+
+    multi evaluate ( PhP::AST::DestructuringBind $exp, PhP::Runtime::Env $env ) returns PhP::AST::Ast {
+        my $value = evaluate( $exp.value, $env );
+        if ( $exp.is_slurpy ) {
+            my $num_patterns = $exp.pattern.elems - 1;
+            loop (my $i = 0; $i < $num_patterns; $i++ ) {
+                $env.set: $exp.pattern[$i].name => $value.get_item_at($i);
+            }
+            $env.set: $exp.pattern[ $num_patterns ].name => PhP::AST::Tuple.new(
+                :items( $value.items[ $num_patterns .. ($value.items.elems - 1) ] )
+            );
+        }
+        else {
+            die "Incorrect number of elements in the destructing bind pattern, got : " ~ $exp.pattern.elems ~ " expected: " ~ $value.items.elems
+                unless $exp.pattern.elems == $value.items.elems;
+
+            loop (my $i = 0; $i < $exp.pattern.elems; $i++ ) {
+                $env.set: $exp.pattern[$i].name => $value.get_item_at($i);
+            }
+        }
         return $value;
     }
 
@@ -51,7 +82,7 @@ package PhP::Interpreter {
     multi evaluate ( PhP::AST::Apply $exp, PhP::Runtime::Env $env ) returns PhP::AST::Ast {
         my $code = $env.get( $exp.name ) // die "Unable to find function to apply: " ~ $exp.name;
         
-        die "Incorrect number of arguments, got : " ~ $exp.args.elems ~ " expected: " ~ $code.params.elems
+        die "Incorrect number of arguments for " ~ $exp.name ~ ", got : " ~ $exp.args.elems ~ " expected: " ~ $code.params.elems
             unless $exp.args.elems == $code.params.elems;
 
         # NOTE:

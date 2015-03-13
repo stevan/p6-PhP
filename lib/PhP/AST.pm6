@@ -74,18 +74,26 @@ package PhP::AST {
         method Str { $.name }
     }
 
-    class Binding is Ast {}
+    class Bind is Ast {}
 
-    class SimpleBinding is Binding {
+    class SimpleBind is Bind {
         has Ast $.var;
         has Ast $.value;
 
         method Str { $.var ~ " = " ~ $.value }
     }    
 
+    class DestructuringBind is Bind {
+        has Ast   @.pattern;
+        has Tuple $.value;
+        has Bool  $.is_slurpy;
+
+        method Str { @.pattern.join(", ") ~ ($.is_slurpy ?? "*" !! "") ~ " = " ~ $.value }
+    }    
+
     class Let is Ast {
-        has Binding @.bindings;
-        has Ast     $.body;
+        has Bind @.bindings;
+        has Ast  $.body;
 
         method Str { 'let ' ~ @.bindings.join(', ') ~ ' in ' ~ $.body }
     }

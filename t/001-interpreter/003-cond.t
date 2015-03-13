@@ -28,7 +28,7 @@ subtest {
             :root(
                 PhP::AST::Let.new(
                     :bindings(
-                        PhP::AST::SimpleBinding.new(
+                        PhP::AST::SimpleBind.new(
                             :var( PhP::AST::Var.new( :name('x') ) ),
                             :value( PhP::AST::Literal.new( :value(10) ) )
                         )
@@ -77,7 +77,7 @@ subtest {
             :root(
                 PhP::AST::Let.new(
                     :bindings(
-                        PhP::AST::SimpleBinding.new(
+                        PhP::AST::SimpleBind.new(
                             :var( PhP::AST::Var.new( :name('x') ) ),
                             :value( PhP::AST::Literal.new( :value(10) ) )
                         )
@@ -126,7 +126,7 @@ subtest {
             :root(
                 PhP::AST::Let.new(
                     :bindings(
-                        PhP::AST::SimpleBinding.new(
+                        PhP::AST::SimpleBind.new(
                             :var( PhP::AST::Var.new( :name('x') ) ),
                             :value( PhP::AST::Literal.new( :value(10) ) )
                         )
@@ -175,7 +175,7 @@ subtest {
             :root(
                 PhP::AST::Let.new(
                     :bindings(
-                        PhP::AST::SimpleBinding.new(
+                        PhP::AST::SimpleBind.new(
                             :var( PhP::AST::Var.new( :name('x') ) ),
                             :value( PhP::AST::Literal.new( :value(10) ) )
                         )
@@ -224,7 +224,7 @@ subtest {
             :root(
                 PhP::AST::Let.new(
                     :bindings(
-                        PhP::AST::SimpleBinding.new(
+                        PhP::AST::SimpleBind.new(
                             :var( PhP::AST::Var.new( :name('x') ) ),
                             :value( PhP::AST::Literal.new( :value(10) ) )
                         )
@@ -273,7 +273,7 @@ subtest {
             :root(
                 PhP::AST::Let.new(
                     :bindings(
-                        PhP::AST::SimpleBinding.new(
+                        PhP::AST::SimpleBind.new(
                             :var( PhP::AST::Var.new( :name('x') ) ),
                             :value( PhP::AST::Literal.new( :value(10) ) )
                         )
