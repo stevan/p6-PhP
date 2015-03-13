@@ -27,7 +27,12 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
+                    :bindings(
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value( PhP::AST::Literal.new( :value(10) ) )
+                        )
+                    ),
                     :body(
                         PhP::AST::Cond.new(
                             :condition(
@@ -71,7 +76,12 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
+                    :bindings(
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value( PhP::AST::Literal.new( :value(10) ) )
+                        )
+                    ),
                     :body(
                         PhP::AST::Cond.new(
                             :condition(
@@ -115,7 +125,12 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
+                    :bindings(
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value( PhP::AST::Literal.new( :value(10) ) )
+                        )
+                    ),
                     :body(
                         PhP::AST::Cond.new(
                             :condition(
@@ -159,7 +174,12 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
+                    :bindings(
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value( PhP::AST::Literal.new( :value(10) ) )
+                        )
+                    ),
                     :body(
                         PhP::AST::Cond.new(
                             :condition(
@@ -203,7 +223,12 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
+                    :bindings(
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value( PhP::AST::Literal.new( :value(10) ) )
+                        )
+                    ),
                     :body(
                         PhP::AST::Cond.new(
                             :condition(
@@ -247,7 +272,12 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
+                    :bindings(
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value( PhP::AST::Literal.new( :value(10) ) )
+                        )
+                    ),
                     :body(
                         PhP::AST::Cond.new(
                             :condition(

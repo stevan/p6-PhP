@@ -18,7 +18,12 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( x => PhP::AST::Literal.new( :value(10) ) ),
+                    :bindings( 
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value( PhP::AST::Literal.new( :value(10) ) )
+                        )
+                    ),
                     :body( PhP::AST::Var.new( :name('x') ) ), 
                 )
             ),
@@ -46,12 +51,17 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( 
-                        x => PhP::AST::Apply.new(
-                            :name('+'),
-                            :args(
-                                PhP::AST::Literal.new( :value(2) ), 
-                                PhP::AST::Literal.new( :value(2) ),
+                    :bindings( 
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value(
+                                PhP::AST::Apply.new(
+                                    :name('+'),
+                                    :args(
+                                        PhP::AST::Literal.new( :value(2) ), 
+                                        PhP::AST::Literal.new( :value(2) ),
+                                    )
+                                )
                             )
                         )
                     ),
@@ -84,9 +94,15 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( 
-                        x => PhP::AST::Literal.new( :value(5) ),
-                        y => PhP::AST::Literal.new( :value(5) ) 
+                    :bindings( 
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value( PhP::AST::Literal.new( :value(5) ) )
+                        ),
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('y') ) ),
+                            :value( PhP::AST::Literal.new( :value(5) ) )
+                        )
                     ),
                     :body(
                         PhP::AST::Apply.new(

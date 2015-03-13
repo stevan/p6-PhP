@@ -20,12 +20,17 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions(
-                        x => PhP::AST::Apply.new(
-                            :name('::'),
-                            :args(
-                                PhP::AST::Literal.new( :value( 1 ) ),
-                                PhP::AST::Tuple.new,
+                    :bindings(
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value(
+                                PhP::AST::Apply.new(
+                                    :name('::'),
+                                    :args(
+                                        PhP::AST::Literal.new( :value( 1 ) ),
+                                        PhP::AST::Tuple.new,
+                                    )
+                                )
                             )
                         )
                     ),
@@ -61,12 +66,17 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions(
-                        x => PhP::AST::Apply.new(
-                            :name('::'),
-                            :args(
-                                PhP::AST::Literal.new( :value( 1 ) ),
-                                PhP::AST::Tuple.new,
+                    :bindings(
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value(
+                                PhP::AST::Apply.new(
+                                    :name('::'),
+                                    :args(
+                                        PhP::AST::Literal.new( :value( 1 ) ),
+                                        PhP::AST::Tuple.new,
+                                    )
+                                )
                             )
                         )
                     ),
@@ -102,12 +112,17 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions(
-                        x => PhP::AST::Apply.new(
-                            :name('::'),
-                            :args(
-                                PhP::AST::Literal.new( :value( 1 ) ),
-                                PhP::AST::Tuple.new,
+                    :bindings(
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value(
+                                PhP::AST::Apply.new(
+                                    :name('::'),
+                                    :args(
+                                        PhP::AST::Literal.new( :value( 1 ) ),
+                                        PhP::AST::Tuple.new,
+                                    )
+                                )
                             )
                         )
                     ),
@@ -148,26 +163,31 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions(
-                        x => PhP::AST::Apply.new(
-                            :name('::'),
-                            :args(
-                                PhP::AST::Literal.new( :value( 1 ) ),
+                    :bindings(
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value(
                                 PhP::AST::Apply.new(
                                     :name('::'),
                                     :args(
-                                        PhP::AST::Literal.new( :value( 2 ) ),
+                                        PhP::AST::Literal.new( :value( 1 ) ),
                                         PhP::AST::Apply.new(
                                             :name('::'),
                                             :args(
-                                                PhP::AST::Literal.new( :value( 3 ) ),
-                                                PhP::AST::Tuple.new,
+                                                PhP::AST::Literal.new( :value( 2 ) ),
+                                                PhP::AST::Apply.new(
+                                                    :name('::'),
+                                                    :args(
+                                                        PhP::AST::Literal.new( :value( 3 ) ),
+                                                        PhP::AST::Tuple.new,
+                                                    )
+                                                )
                                             )
                                         )
                                     )
                                 )
                             )
-                        )
+                        ) 
                     ),
                     :body(
                         PhP::AST::Apply.new(
@@ -209,26 +229,41 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions(
-                        z => PhP::AST::Apply.new(
-                            :name('::'),
-                            :args(
-                                PhP::AST::Literal.new( :value( 3 ) ),
-                                PhP::AST::Tuple.new,
+                    :bindings(
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('z') ) ),
+                            :value(
+                                PhP::AST::Apply.new(
+                                    :name('::'),
+                                    :args(
+                                        PhP::AST::Literal.new( :value( 3 ) ),
+                                        PhP::AST::Tuple.new,
+                                    )
+                                )
                             )
                         ),
-                        y => PhP::AST::Apply.new(
-                            :name('::'),
-                            :args(
-                                PhP::AST::Literal.new( :value( 2 ) ),
-                                PhP::AST::Var.new( :name('z') ),
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('y') ) ),
+                            :value(
+                                PhP::AST::Apply.new(
+                                    :name('::'),
+                                    :args(
+                                        PhP::AST::Literal.new( :value( 2 ) ),
+                                        PhP::AST::Var.new( :name('z') ),
+                                    )
+                                )
                             )
                         ),
-                        x => PhP::AST::Apply.new(
-                            :name('::'),
-                            :args(
-                                PhP::AST::Literal.new( :value( 1 ) ),
-                                PhP::AST::Var.new( :name('y') ),
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value(
+                                PhP::AST::Apply.new(
+                                    :name('::'),
+                                    :args(
+                                        PhP::AST::Literal.new( :value( 1 ) ),
+                                        PhP::AST::Var.new( :name('y') ),
+                                    )
+                                )
                             )
                         )
                     ),

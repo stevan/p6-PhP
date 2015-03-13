@@ -21,17 +21,22 @@ class PhP::Parser::Actions {
     method let-statement ($/) {
         $/.make(
             PhP::AST::Let.new(
-                :definitions( $/.<let-value>>>.made ),
+                :bindings( $/.<let-binding>>>.made ),
                 :body( $/.<let-body>.made )
             )
         );
     }
 
-    method let-value ($/) {    
+    method let-binding ($/) {    
         my $ident = ~ $/.<identifier>;
         my $value = $/.<let-statement-value>.made;
 
-        $/.make( $ident => $value );
+        $/.make( 
+            PhP::AST::SimpleBinding.new(
+                :var( PhP::AST::Var.new( :name( $ident ) ) ),
+                :value( $value )
+            )
+        );
     }
 
     method let-statement-value ($/) {

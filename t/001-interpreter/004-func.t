@@ -20,9 +20,14 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( 
-                        ten => PhP::AST::Func.new(
-                            :body( PhP::AST::Literal.new( :value( 10 ) ) )
+                    :bindings( 
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('ten') ) ),
+                            :value(
+                                PhP::AST::Func.new(
+                                    :body( PhP::AST::Literal.new( :value( 10 ) ) )
+                                )
+                            )
                         )
                     ),
                     :body(
@@ -54,15 +59,20 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( 
-                        add => PhP::AST::Func.new(
-                            :params( 'x', 'y' ),
-                            :body(
-                                PhP::AST::Apply.new(
-                                    :name('+'),
-                                    :args(
-                                        PhP::AST::Var.new( :name('x') ), 
-                                        PhP::AST::Var.new( :name('y') ), 
+                    :bindings( 
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('add') ) ),
+                            :value(
+                                PhP::AST::Func.new(
+                                    :params( 'x', 'y' ),
+                                    :body(
+                                        PhP::AST::Apply.new(
+                                            :name('+'),
+                                            :args(
+                                                PhP::AST::Var.new( :name('x') ), 
+                                                PhP::AST::Var.new( :name('y') ), 
+                                            )
+                                        )
                                     )
                                 )
                             )
@@ -105,27 +115,37 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( 
-                        add => PhP::AST::Func.new(
-                            :params( 'x', 'y' ),
-                            :body(
-                                PhP::AST::Apply.new(
-                                    :name('+'),
-                                    :args(
-                                        PhP::AST::Var.new( :name('x') ), 
-                                        PhP::AST::Var.new( :name('y') ), 
+                    :bindings( 
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('add') ) ),
+                            :value(
+                                PhP::AST::Func.new(
+                                    :params( 'x', 'y' ),
+                                    :body(
+                                        PhP::AST::Apply.new(
+                                            :name('+'),
+                                            :args(
+                                                PhP::AST::Var.new( :name('x') ), 
+                                                PhP::AST::Var.new( :name('y') ), 
+                                            )
+                                        )
                                     )
                                 )
                             )
                         ),
-                        add2 => PhP::AST::Func.new(
-                            :params( 'x' ),
-                            :body(
-                                PhP::AST::Apply.new(
-                                    :name('add'),
-                                    :args(
-                                        PhP::AST::Var.new( :name('x') ), 
-                                        PhP::AST::Literal.new( :value( 2 ) ), 
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('add2') ) ),
+                            :value( 
+                                PhP::AST::Func.new(
+                                    :params( 'x' ),
+                                    :body(
+                                        PhP::AST::Apply.new(
+                                            :name('add'),
+                                            :args(
+                                                PhP::AST::Var.new( :name('x') ), 
+                                                PhP::AST::Literal.new( :value( 2 ) ), 
+                                            )
+                                        )
                                     )
                                 )
                             )
@@ -153,7 +173,7 @@ subtest {
     isa_ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 12, '... got the value we expected';
-}, '... testing nested let function definitions';
+}, '... testing nested let function bindings';
 
 
 subtest {
@@ -168,43 +188,58 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions(
-                        add => PhP::AST::Func.new(
-                            :params( 'x', 'y' ),
-                            :body(
-                                PhP::AST::Apply.new(
-                                    :name('+'),
-                                    :args(
-                                        PhP::AST::Var.new( :name('x') ), 
-                                        PhP::AST::Var.new( :name('y') ), 
+                    :bindings(
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('add') ) ),
+                            :value(
+                                PhP::AST::Func.new(
+                                    :params( 'x', 'y' ),
+                                    :body(
+                                        PhP::AST::Apply.new(
+                                            :name('+'),
+                                            :args(
+                                                PhP::AST::Var.new( :name('x') ), 
+                                                PhP::AST::Var.new( :name('y') ), 
+                                            )
+                                        )
                                     )
                                 )
                             )
                         ),
-                        sub => PhP::AST::Func.new(
-                            :params( 'x', 'y' ),
-                            :body(
-                                PhP::AST::Apply.new(
-                                    :name('-'),
-                                    :args(
-                                        PhP::AST::Var.new( :name('x') ), 
-                                        PhP::AST::Var.new( :name('y') ), 
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('sub') ) ),
+                            :value(
+                                PhP::AST::Func.new(
+                                    :params( 'x', 'y' ),
+                                    :body(
+                                        PhP::AST::Apply.new(
+                                            :name('-'),
+                                            :args(
+                                                PhP::AST::Var.new( :name('x') ), 
+                                                PhP::AST::Var.new( :name('y') ), 
+                                            )
+                                        )
                                     )
                                 )
                             )
                         ),
-                        mul => PhP::AST::Func.new(
-                            :params( 'x', 'y' ),
-                            :body(
-                                PhP::AST::Apply.new(
-                                    :name('*'),
-                                    :args(
-                                        PhP::AST::Var.new( :name('x') ), 
-                                        PhP::AST::Var.new( :name('y') ), 
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('mul') ) ),
+                            :value(
+                                PhP::AST::Func.new(
+                                    :params( 'x', 'y' ),
+                                    :body(
+                                        PhP::AST::Apply.new(
+                                            :name('*'),
+                                            :args(
+                                                PhP::AST::Var.new( :name('x') ), 
+                                                PhP::AST::Var.new( :name('y') ), 
+                                            )
+                                        )
                                     )
                                 )
                             )
-                        )
+                        ),
                     ),
                     :body(
                         PhP::AST::Apply.new(
@@ -241,7 +276,7 @@ subtest {
     isa_ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 60, '... got the value we expected';
-}, '... testing nested let function definitions';
+}, '... testing nested let function bindings';
 
 
 subtest {
@@ -255,20 +290,28 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( 
-                        x   => PhP::AST::Literal.new( :value( 10 ) ),
-                        add => PhP::AST::Func.new(
-                            :params( 'y' ),
-                            :body(
-                                PhP::AST::Apply.new(
-                                    :name('+'),
-                                    :args(
-                                        PhP::AST::Var.new( :name('x') ), 
-                                        PhP::AST::Var.new( :name('y') ), 
+                    :bindings( 
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) )
+                            :value( PhP::AST::Literal.new( :value( 10 ) ) )
+                        ),
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('add') ) ),
+                            :value(
+                                PhP::AST::Func.new(
+                                    :params( 'y' ),
+                                    :body(
+                                        PhP::AST::Apply.new(
+                                            :name('+'),
+                                            :args(
+                                                PhP::AST::Var.new( :name('x') ), 
+                                                PhP::AST::Var.new( :name('y') ), 
+                                            )
+                                        )
                                     )
                                 )
                             )
-                        )
+                        ),
                     ),
                     :body(
                         PhP::AST::Apply.new(
@@ -305,24 +348,32 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( 
-                        x => PhP::AST::Literal.new( :value( 10 ) ),
+                    :bindings( 
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) )
+                            :value( PhP::AST::Literal.new( :value( 10 ) ) )
+                        )
                     ),
                     :body(
                         PhP::AST::Let.new(
-                            :definitions( 
-                                add => PhP::AST::Func.new(
-                                    :params( 'y' ),
-                                    :body(
-                                        PhP::AST::Apply.new(
-                                            :name('+'),
-                                            :args(
-                                                PhP::AST::Var.new( :name('x') ), 
-                                                PhP::AST::Var.new( :name('y') ), 
+                            :bindings( 
+                                PhP::AST::SimpleBinding.new(
+                                    :var( PhP::AST::Var.new( :name('add') ) ),
+                                    :value(
+                                        PhP::AST::Func.new(
+                                            :params( 'y' ),
+                                            :body(
+                                                PhP::AST::Apply.new(
+                                                    :name('+'),
+                                                    :args(
+                                                        PhP::AST::Var.new( :name('x') ), 
+                                                        PhP::AST::Var.new( :name('y') ), 
+                                                    )
+                                                )
                                             )
                                         )
                                     )
-                                )
+                                ),
                             ),
                             :body(
                                 PhP::AST::Apply.new(
@@ -362,31 +413,41 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( 
-                        add => PhP::AST::Func.new(
-                            :params( 'x', 'y' ),
-                            :body(
-                                PhP::AST::Apply.new(
-                                    :name('+'),
-                                    :args(
-                                        PhP::AST::Var.new( :name('x') ), 
-                                        PhP::AST::Var.new( :name('y') ), 
+                    :bindings( 
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('add') ) ),
+                            :value(
+                                PhP::AST::Func.new(
+                                    :params( 'x', 'y' ),
+                                    :body(
+                                        PhP::AST::Apply.new(
+                                            :name('+'),
+                                            :args(
+                                                PhP::AST::Var.new( :name('x') ), 
+                                                PhP::AST::Var.new( :name('y') ), 
+                                            )
+                                        )
                                     )
                                 )
                             )
                         ),
-                        binop => PhP::AST::Func.new(
-                            :params( 'f', 'x', 'y' ),
-                            :body(
-                                PhP::AST::Apply.new(
-                                    :name('f'),
-                                    :args(
-                                        PhP::AST::Var.new( :name('x') ), 
-                                        PhP::AST::Var.new( :name('y') ), 
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('binop') ) ),
+                            :value(
+                                PhP::AST::Func.new(
+                                    :params( 'f', 'x', 'y' ),
+                                    :body(
+                                        PhP::AST::Apply.new(
+                                            :name('f'),
+                                            :args(
+                                                PhP::AST::Var.new( :name('x') ), 
+                                                PhP::AST::Var.new( :name('y') ), 
+                                            )
+                                        )
                                     )
                                 )
                             )
-                        )
+                        ),
                     ),
                     :body(
                         PhP::AST::Apply.new(
@@ -420,16 +481,24 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( 
-                        x   => PhP::AST::Literal.new( :value( 10 ) ),
-                        add => PhP::AST::Func.new(
-                            :params( 'y' ),
-                            :body(
-                                PhP::AST::Apply.new(
-                                    :name('+'),
-                                    :args(
-                                        PhP::AST::Var.new( :name('x') ), 
-                                        PhP::AST::Var.new( :name('y') ), 
+                    :bindings( 
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) )
+                            :value( PhP::AST::Literal.new( :value( 10 ) ) )
+                        ),
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('add') ) ),
+                            :value(
+                                PhP::AST::Func.new(
+                                    :params( 'y' ),
+                                    :body(
+                                        PhP::AST::Apply.new(
+                                            :name('+'),
+                                            :args(
+                                                PhP::AST::Var.new( :name('x') ), 
+                                                PhP::AST::Var.new( :name('y') ), 
+                                            )
+                                        )
                                     )
                                 )
                             )
@@ -452,8 +521,11 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions( 
-                        x => PhP::AST::Literal.new( :value( 5 ) ),
+                    :bindings( 
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) )
+                            :value( PhP::AST::Literal.new( :value( 5 ) ) )
+                        ),
                     ),
                     :body(
                         PhP::AST::Apply.new(

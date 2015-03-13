@@ -15,10 +15,10 @@ grammar PhP::Parser::Grammar {
     # let blocks ...
 
     rule let-statement {
-        "let" <.ws>? <let-value>+ <.ws>? "in" <.ws>? <let-body=statement> <.ws>? ";;"?
+        "let" <.ws>? <let-binding>+ <.ws>? "in" <.ws>? <let-body=statement> <.ws>? ";;"?
     }    
 
-    rule let-value {
+    rule let-binding {
         <identifier> <.ws>? "=" <.ws>? <let-statement-value> (",")?
     }
 

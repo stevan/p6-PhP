@@ -34,10 +34,16 @@ package PhP::Interpreter {
         return $env.get( $exp.name ) // die "Unable to find the variable: " ~ $exp.name;
     } 
 
+    multi evaluate ( PhP::AST::SimpleBinding $exp, PhP::Runtime::Env $env ) returns PhP::AST::Ast {
+        my $value = evaluate( $exp.value, $env );
+        $env.set: $exp.var.name => $value;
+        return $value;
+    }
+
     multi evaluate ( PhP::AST::Let $exp, PhP::Runtime::Env $env ) returns PhP::AST::Ast {
         my $new_env = PhP::Runtime::Env.new( :parent( $env ) );
-        for $exp.definitions -> $def { 
-            $new_env.set: $def.key => evaluate( $def.value, $new_env ) 
+        for $exp.bindings -> $binding { 
+            evaluate( $binding, $new_env );
         }
         evaluate( $exp.body, $new_env );
     }

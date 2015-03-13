@@ -20,10 +20,15 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions(
-                        x => PhP::AST::Tuple.new(
-                            :items(
-                                PhP::AST::Literal.new( :value( 1 ) )
+                    :bindings(
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value(
+                                PhP::AST::Tuple.new(
+                                    :items(
+                                        PhP::AST::Literal.new( :value( 1 ) )
+                                    )
+                                )
                             )
                         )
                     ),
@@ -59,12 +64,17 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions(
-                        x => PhP::AST::Tuple.new(
-                            :items(
-                                PhP::AST::Literal.new( :value( 1 ) ),
-                                PhP::AST::Literal.new( :value( 2 ) ),
-                                PhP::AST::Literal.new( :value( 3 ) )
+                    :bindings(
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value(
+                                PhP::AST::Tuple.new(
+                                    :items(
+                                        PhP::AST::Literal.new( :value( 1 ) ),
+                                        PhP::AST::Literal.new( :value( 2 ) ),
+                                        PhP::AST::Literal.new( :value( 3 ) )
+                                    )
+                                )
                             )
                         )
                     ),
@@ -100,12 +110,17 @@ subtest {
         PhP::Runtime::CompilationUnit.new( 
             :root(
                 PhP::AST::Let.new(
-                    :definitions(
-                        x => PhP::AST::Tuple.new(
-                            :items(
-                                PhP::AST::Literal.new( :value( 1 ) ),
-                                PhP::AST::Literal.new( :value( 2 ) ),
-                                PhP::AST::Literal.new( :value( 3 ) )
+                    :bindings(
+                        PhP::AST::SimpleBinding.new(
+                            :var( PhP::AST::Var.new( :name('x') ) ),
+                            :value(
+                                PhP::AST::Tuple.new(
+                                    :items(
+                                        PhP::AST::Literal.new( :value( 1 ) ),
+                                        PhP::AST::Literal.new( :value( 2 ) ),
+                                        PhP::AST::Literal.new( :value( 3 ) )
+                                    )
+                                )
                             )
                         )
                     ),

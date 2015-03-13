@@ -2,8 +2,7 @@ use v6;
 
 package PhP::AST {
     
-    class Ast {}
-
+    class Ast             {}
     class Terminal is Ast {}
 
     # Terminals
@@ -11,6 +10,8 @@ package PhP::AST {
     class Unit is Terminal {
         method Str { '()' }
     }
+
+    ## Literals
 
     class Literal is Terminal {
         has Any $.value;
@@ -21,6 +22,8 @@ package PhP::AST {
     class StringLiteral  is Literal {}
     class NumberLiteral  is Literal {}
     class BooleanLiteral is Literal {}
+ 
+    ## Compound Literals
 
     class Tuple is Terminal {
         has Ast @.items;
@@ -35,6 +38,8 @@ package PhP::AST {
 
         method Str { '[ ' ~ @.items.join(', ') ~ ' ]' }
     }
+
+    ## Functions
 
     role HasDeclarationEnv {
         has $!decl_env;
@@ -69,11 +74,20 @@ package PhP::AST {
         method Str { $.name }
     }
 
-    class Let is Ast {
-        has Pair @.definitions;
-        has Ast  $.body;
+    class Binding is Ast {}
 
-        method Str { 'let ' ~ @.definitions.map({ $_.key ~ ' = ' ~ $_.value }).join(', ') ~ ' in ' ~ $.body }
+    class SimpleBinding is Binding {
+        has Ast $.var;
+        has Ast $.value;
+
+        method Str { $.var ~ " = " ~ $.value }
+    }    
+
+    class Let is Ast {
+        has Binding @.bindings;
+        has Ast     $.body;
+
+        method Str { 'let ' ~ @.bindings.join(', ') ~ ' in ' ~ $.body }
     }
 
     class Cond is Ast { 
