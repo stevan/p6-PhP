@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------------
+Todo
+---------------------------------------------------------------------------------------------------------
+
+[x] add Binding AST node (see below)
+[ ] add MultiBinding AST node
+[ ] CLI front-end (this is needed so that we can load files)
+[ ] implement the modules idea below
+[ ] add record types
+
+---------------------------------------------------------------------------------------------------------
 Modules ...
 ---------------------------------------------------------------------------------------------------------
 
@@ -43,49 +53,4 @@ https://github.com/rakudo/rakudo/blob/2cd96450af5ee9836b449882ab080fe3b9ca7d49/s
 [ ] We can also have a compiler pragma that takes the list of things to export and only let that be imported.
 
 [ ] Namespacing can be done by name mangling, we can track details inside the interpreter if we need to.
-
----------------------------------------------------------------------------------------------------------
-
-Once we try to make use of a function that was defined in another compilation unit, things start to break
-in terms of delcaration environment vs. execution environment.
-
-In theory, if you define a "closure" like this:
-
-let x     = 10,
-    add_x = func (y) { x + y }
-in
-    add_x( 20 )
-;;
-
-Then things will work, because `add_x` and `x` are both defined in the same environment. 
-And even this will work
-
-let x = 10 in
-    let add_x = func (y) { x + y } in
-        add_x( 20 )
-;;
-
-But once you have a different compilation unit, and are loading code within that and sharing it, then 
-it will start to break down and we will need instead to capture the declaration environment instead of 
-just using the execution environment.
-
----------------------------------------------------------------------------------------------------------
-REPL Idea
----------------------------------------------------------------------------------------------------------
-
-if you could do this:
-
-> start-test;
-> let x = ... in ... ;;
-> end-test;
-> commit-test;
-
-In order to create tests for code.
-
----------------------------------------------------------------------------------------------------------
-Other stuff
----------------------------------------------------------------------------------------------------------
-
-Add record types
-
 
