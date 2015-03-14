@@ -41,14 +41,15 @@ package PhP::AST {
 
     ## Functions
 
-    role HasDeclarationEnv {
+    class FunCallable is Terminal {
         has $!decl_env;
+
         method has_declaration_env          { $!decl_env.defined }
         method get_declaration_env          { $!decl_env         }
         method set_declaration_env ( $env ) { $!decl_env = $env  }
     }
 
-    class Func is Terminal is HasDeclarationEnv {
+    class Func is FunCallable {
         has Str @.params;
         has Ast $.body;
 
@@ -57,7 +58,7 @@ package PhP::AST {
         method Str { 'func (' ~ @.params.join(', ') ~ ') { ' ~ $.body ~ ' }' }
     }
 
-    class NativeFunc is Terminal is HasDeclarationEnv {
+    class NativeFunc is FunCallable {
         has Str   @.params;
         has Block $.extern;
 
