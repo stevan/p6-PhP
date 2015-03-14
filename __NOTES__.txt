@@ -7,6 +7,7 @@ Todo
 [ ] CLI front-end (this is needed so that we can load files)
 [ ] implement the modules idea below
 [ ] add record types
+[ ] are we destroying old Envs after they are no longer needed?
 
 ---------------------------------------------------------------------------------------------------------
 Modules ...
