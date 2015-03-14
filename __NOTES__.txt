@@ -3,7 +3,7 @@ Todo
 ---------------------------------------------------------------------------------------------------------
 
 [x] add Binding AST node (see below)
-[ ] add MultiBinding AST node
+[x] add MultiBinding AST node
 [ ] CLI front-end (this is needed so that we can load files)
 [ ] implement the modules idea below
 [ ] add record types
