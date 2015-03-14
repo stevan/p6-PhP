@@ -51,11 +51,7 @@ class PhP::Parser::Actions {
         $/.make( 
             PhP::AST::DestructuringBind.new(
                 :is_slurpy( $/.<splat>.defined )
-                :pattern( 
-                    $/.<let-destructuring-pattern>.map: -> $v { 
-                        PhP::AST::Var.new( :name( $v.made ) )
-                    } 
-                ),
+                :pattern( $/.<let-destructuring-pattern>>>.made ),
                 :value( $/.<tuple-expression>.made; )
             )
         );
@@ -78,15 +74,11 @@ class PhP::Parser::Actions {
     method func-statement ($/) {
         $/.make(
             PhP::AST::Func.new(
-                :params( $/.<func-param>>>.made ),
+                :params( $/.<func-param>>>.made.map:{ $_.name }),
                 :body( $/.<func-body>.made )
             )
         );
     }    
-
-    method func-param ($/) {
-        $/.make( ~ $/.<identifier> )
-    }
 
     method func-body ($/) {
         $/.make( $/.<expression>.made )
@@ -114,6 +106,16 @@ class PhP::Parser::Actions {
         );
     }
 
+    method cond-expression ($/) {
+        $/.make(
+            PhP::AST::Cond.new(
+                :condition( $/.<condition>.made ),
+                :if_true(   $/.<if_true>.made   ),
+                :if_false(  $/.<if_false>.made  ),
+            )
+        );
+    }
+
     method apply-expression ($/) {
         $/.make(
             PhP::AST::Apply.new(
@@ -125,19 +127,9 @@ class PhP::Parser::Actions {
         );
     }
 
-    method apply-argument ($/) {
-        $/.make( $/.<expression>.made );
-    }
-
-    method cond-expression ($/) {
-        $/.make(
-            PhP::AST::Cond.new(
-                :condition( $/.<condition>.made ),
-                :if_true(   $/.<if_true>.made   ),
-                :if_false(  $/.<if_false>.made  ),
-            )
-        );
-    }
+    method tuple-expression ($/) {
+        $/.make( PhP::AST::Tuple.new( :items( $/.<tuple-expression-item>>>.made ) ) );
+    }    
 
     method binary-expression ($/) {
         $/.make( 
@@ -151,12 +143,12 @@ class PhP::Parser::Actions {
         );
     }
 
-    method tuple-expression ($/) {
-        $/.make( PhP::AST::Tuple.new( :items( $/.<tuple-expression-item>>>.made ) ) );
+    method list-of-expressions ($/) {
+        $/.make( $/.<expression>.made );
     }
 
-    method tuple-expression-item ($/) {
-        $/.make( $/.<expression>.made );
+    method list-of-identifiers ($/) {
+        $/.make( $/.<identifier>.made );
     }
 
     method literal ($/) {

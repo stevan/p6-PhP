@@ -30,11 +30,7 @@ grammar PhP::Parser::Grammar {
     }
 
     rule let-destructuring-bind {
-        "[" <.ws>? <let-destructuring-pattern>+ <.ws>? <splat>? <.ws>? "]" <.ws>? "=" <.ws>? <tuple-expression> (",")?
-    }
-
-    rule let-destructuring-pattern {
-        <identifier> (",")?
+        "[" <.ws>? <let-destructuring-pattern=.list-of-identifiers>+ <.ws>? <splat>? <.ws>? "]" <.ws>? "=" <.ws>? <tuple-expression> (",")?
     }
 
     rule let-statement-value {
@@ -48,16 +44,8 @@ grammar PhP::Parser::Grammar {
     # functions ...
 
     rule func-statement {
-        "func" <.ws>? "(" <func-param>* ")" <.ws>? "\{" <.ws>? <func-body> <.ws>? "\}"
+        "func" <.ws>? "(" <func-param=.list-of-identifiers>* ")" <.ws>? "\{" <.ws>? <func-body=.expression> <.ws>? "\}"
     }    
-
-    rule func-param {
-        <identifier> (",")?
-    }
-
-    rule func-body {
-        <expression>
-    }
 
     # expressions ...
 
@@ -75,11 +63,7 @@ grammar PhP::Parser::Grammar {
     }
 
     rule apply-expression {
-        <identifier> <.ws>? "(" <.ws>? <apply-argument>* <.ws>? ")"
-    }
-
-    rule apply-argument {
-        <expression> (",")?
+        <identifier> <.ws>? "(" <.ws>? <apply-argument=.list-of-expressions>* <.ws>? ")"
     }
 
     rule cond-expression {
@@ -87,11 +71,7 @@ grammar PhP::Parser::Grammar {
     }
 
     rule tuple-expression {
-        "[" <.ws>? <tuple-expression-item>* <.ws>? "]"
-    }
-
-    rule tuple-expression-item {
-        <expression> (",")?
+        "[" <.ws>? <tuple-expression-item=.list-of-expressions>* <.ws>? "]"
     }
 
     rule binary-expression {
@@ -100,6 +80,14 @@ grammar PhP::Parser::Grammar {
         | <identifier>       <.ws>? <binary-op> <.ws>? <expression> 
         | <apply-expression> <.ws>? <binary-op> <.ws>? <expression> 
         ]
+    }
+
+    rule list-of-expressions {
+        <expression> (",")?
+    }
+
+    rule list-of-identifiers {
+        <identifier> (",")?
     }
 
     # tokens ....
