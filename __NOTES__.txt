@@ -4,9 +4,15 @@ Todo
 
 [x] add Binding AST node (see below)
 [x] add MultiBinding AST node
+[ ] add support for comments
 [ ] CLI front-end (this is needed so that we can load files)
 [ ] implement the modules idea below
 [ ] add record types
+
+---------------------------------------------------------------------------------------------------------
+Bugs (maybe)
+---------------------------------------------------------------------------------------------------------
+
 [ ] are we destroying old Envs after they are no longer needed?
 
 ---------------------------------------------------------------------------------------------------------

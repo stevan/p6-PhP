@@ -2,11 +2,18 @@
 
 use v6;
 use lib 'lib';
+
 use PhP;
 
-sub MAIN ($file?, Bool :$c?, Bool :$d?, :$e?, Bool :$v?) {
+sub MAIN (
+        $file?,           # <file> evaluate the code in a file and print the result
+        :$e?,             # -e evaluate a string of code and print the result
+        Bool :$c = False, # -c Just compile the source
+        Bool :$d = False, # -d turn on debugging (just dumping extra info for now) 
+        Bool :$v = False, # -v print out version information        
+    ) {
 
-    if $v.defined {
+    if $v {
         say PhP::VERSION;
         exit;
     }
@@ -14,21 +21,23 @@ sub MAIN ($file?, Bool :$c?, Bool :$d?, :$e?, Bool :$v?) {
     my Str $source;
 
     if $e.defined {
-        $source = $e;
+        $source = ~ $e;
     }
     else {
         die "You must specify a file to execute" if ! $file.defined;
         $source = slurp $file;
     }
 
-    if $c.defined {
+    if $c {
         my $ast = PhP::parse( $source );
-        say ~ $ast if $d.defined;
-        say "Syntax OK" if $ast;        
+        say ~ $ast if $d;
+        say "Syntax OK" if $ast;  
+        exit( $ast ?? 1 !! 0 );      
     }
     else {
         my $unit = PhP::run( $source );
-        say ~ $unit.root if $d.defined;
+        say ~ $unit.root if $d;
         say ~ $unit.result;
+        exit;
     }
 }
