@@ -5,7 +5,7 @@ package PhP::Interpreter {
     use PhP::AST;
     use PhP::Runtime;
 
-    our sub run ( PhP::Runtime::CompilationUnit $unit ) {
+    our sub run ( PhP::Runtime::CompilationUnit $unit ) returns PhP::Runtime::CompilationUnit {
         my $result = evaluate( $unit.root, $unit.env );
         $unit.set_result( $result );
         return $unit;

@@ -5,7 +5,7 @@ package PhP::Compiler {
     use PhP::AST;
     use PhP::Runtime;
 
-    our sub compile ( PhP::Runtime::CompilationUnit $unit ) { ... }
+    our sub compile ( PhP::Runtime::CompilationUnit $unit ) returns PhP::Runtime::CompilationUnit { ... }
 
     # private ...
 
