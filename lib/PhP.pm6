@@ -7,12 +7,14 @@ package PhP {
     use PhP::Interpreter;
     use PhP::Compiler;
 
-    our sub run ( Str $source, %opts? ) {
+    our constant VERSION = '0.0.0';
+
+    our sub run ( Str $source, %opts? ) returns PhP::Runtime::CompilationUnit {
         PhP::Runtime::bootstrap;
-        PhP::Interpreter::run(
+        return PhP::Interpreter::run(
             PhP::Runtime::CompilationUnit.new(
                 :options( %opts ),
-                :root( PhP::Parser::parse( $source, %opts ) ),
+                :root( parse( $source, %opts ) ),
                 :env( 
                     PhP::Runtime::Env.new( 
                         :parent( PhP::Runtime::root_env ) 
@@ -22,12 +24,16 @@ package PhP {
         );        
     }
 
-    our sub compile ( Str $source, %opts? ) {
-        PhP::Compiler::compile( 
+    our sub compile ( Str $source, %opts? ) returns PhP::Runtime::CompilationUnit {
+        return PhP::Compiler::compile( 
             PhP::Runtime::CompilationUnit.new(
                 :options( %opts ),
-                :root( PhP::Parser::parse( $source, %opts ) ),
+                :root( parse( $source, %opts ) ),
             )
         );
+    }
+
+    our sub parse ( Str $source, %opts? ) returns PhP::AST::Ast {
+        return PhP::Parser::parse( $source, %opts );
     }
 }
