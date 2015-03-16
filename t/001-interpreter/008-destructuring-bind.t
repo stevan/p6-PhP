@@ -18,39 +18,28 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings(
-                        PhP::AST::DestructuringBind.new(
-                            :pattern( 
-                                PhP::AST::Var.new( :name('h') ),
-                                PhP::AST::Var.new( :name('t') ), 
-                            ),
-                            :value(
-                                PhP::AST::Tuple.new(
-                                    :items(
-                                        PhP::AST::Literal.new( :value( 1 ) ),
-                                        PhP::AST::Literal.new( :value( 2 ) )
-                                    )
-                                )
-                            )
-                        )
-                    ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name('+'),
-                            :args( 
-                                PhP::AST::Var.new( :name( 'h' ) ),
-                                PhP::AST::Var.new( :name( 't' ) ),
-                            )
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::DestructuringBind.new(
+                        pattern => [ 
+                            PhP::AST::Var.new( name => 'h' ),
+                            PhP::AST::Var.new( name => 't' ), 
+                        ],
+                        value => PhP::AST::Tuple.new(
+                            items => [
+                                PhP::AST::Literal.new( value => 1 ),
+                                PhP::AST::Literal.new( value => 2 ),
+                            ]
                         )
                     )
+                ],
+                body => PhP::AST::Apply.new(
+                    name => '+',
+                    args => [ 
+                        PhP::AST::Var.new( name =>  'h' ),
+                        PhP::AST::Var.new( name =>  't' ),
+                    ]
                 )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
             ) 
         )
     );
@@ -69,55 +58,44 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings(
-                        PhP::AST::DestructuringBind.new(
-                            :pattern( 
-                                PhP::AST::Var.new( :name('a') ),
-                                PhP::AST::Var.new( :name('b') ), 
-                                PhP::AST::Var.new( :name('c') ), 
-                                PhP::AST::Var.new( :name('d') ), 
-                            ),
-                            :value(
-                                PhP::AST::Tuple.new(
-                                    :items(
-                                        PhP::AST::Literal.new( :value( 1 ) ),
-                                        PhP::AST::Literal.new( :value( 2 ) ),
-                                        PhP::AST::Literal.new( :value( 3 ) ),
-                                        PhP::AST::Literal.new( :value( 4 ) ),
-                                    )
-                                )
-                            )
-                        )
-                    ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name('+'),
-                            :args( 
-                                PhP::AST::Var.new( :name( 'a' ) ),
-                                PhP::AST::Apply.new(
-                                    :name('+'),
-                                    :args( 
-                                        PhP::AST::Var.new( :name( 'b' ) ),
-                                        PhP::AST::Apply.new(
-                                            :name('+'),
-                                            :args( 
-                                                PhP::AST::Var.new( :name( 'c' ) ),
-                                                PhP::AST::Var.new( :name( 'd' ) ),
-                                            )
-                                        )
-                                    )
-                                )
-                            )
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::DestructuringBind.new(
+                        pattern => [ 
+                            PhP::AST::Var.new( name => 'a' ),
+                            PhP::AST::Var.new( name => 'b' ), 
+                            PhP::AST::Var.new( name => 'c' ), 
+                            PhP::AST::Var.new( name => 'd' ), 
+                        ],
+                        value => PhP::AST::Tuple.new(
+                            items => [
+                                PhP::AST::Literal.new( value => 1 ),
+                                PhP::AST::Literal.new( value => 2 ),
+                                PhP::AST::Literal.new( value => 3 ),
+                                PhP::AST::Literal.new( value => 4 ),
+                            ]
                         )
                     )
+                ],
+                body => PhP::AST::Apply.new(
+                    name => '+',
+                    args => [ 
+                        PhP::AST::Var.new( name => 'a' ),
+                        PhP::AST::Apply.new(
+                            name => '+',
+                            args => [ 
+                                PhP::AST::Var.new( name => 'b' ),
+                                PhP::AST::Apply.new(
+                                    name => '+',
+                                    args => [ 
+                                        PhP::AST::Var.new( name => 'c' ),
+                                        PhP::AST::Var.new( name => 'd' ),
+                                    ]
+                                )
+                            ]
+                        )
+                    ]
                 )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
             ) 
         )
     );
@@ -137,61 +115,50 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings(
-                        PhP::AST::DestructuringBind.new(
-                            :is_slurpy(True),                            
-                            :pattern( 
-                                PhP::AST::Var.new( :name('a') ),
-                                PhP::AST::Var.new( :name('b') ), 
-                                PhP::AST::Var.new( :name('c') ),  
-                            ),
-                            :value(
-                                PhP::AST::Tuple.new(
-                                    :items(
-                                        PhP::AST::Literal.new( :value( 1 ) ),
-                                        PhP::AST::Literal.new( :value( 2 ) ),
-                                        PhP::AST::Literal.new( :value( 3 ) ),
-                                        PhP::AST::Literal.new( :value( 4 ) ),
-                                    )
-                                )
-                            )
-                        )
-                    ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name('+'),
-                            :args( 
-                                PhP::AST::Var.new( :name( 'a' ) ),
-                                PhP::AST::Apply.new(
-                                    :name('+'),
-                                    :args( 
-                                        PhP::AST::Var.new( :name( 'b' ) ),
-                                        PhP::AST::Apply.new(
-                                            :name('+'),
-                                            :args( 
-                                                PhP::AST::Apply.new(
-                                                    :name('first'),
-                                                    :args( PhP::AST::Var.new( :name( 'c' ) ) )
-                                                ),
-                                                PhP::AST::Apply.new(
-                                                    :name('second'),
-                                                    :args( PhP::AST::Var.new( :name( 'c' ) ) )
-                                                ),
-                                            )
-                                        )
-                                    )
-                                )
-                            )
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::DestructuringBind.new(
+                        is_slurpy => True,                            
+                        pattern   => [ 
+                            PhP::AST::Var.new( name =>'a' ),
+                            PhP::AST::Var.new( name =>'b' ), 
+                            PhP::AST::Var.new( name =>'c' ),  
+                        ],
+                        value => PhP::AST::Tuple.new(
+                            items => [
+                                PhP::AST::Literal.new( value => 1 ),
+                                PhP::AST::Literal.new( value => 2 ),
+                                PhP::AST::Literal.new( value => 3 ),
+                                PhP::AST::Literal.new( value => 4 ),
+                            ]
                         )
                     )
+                ],
+                body => PhP::AST::Apply.new(
+                    name =>'+',
+                    args => [ 
+                        PhP::AST::Var.new( name => 'a' ),
+                        PhP::AST::Apply.new(
+                            name =>'+',
+                            args => [ 
+                                PhP::AST::Var.new( name => 'b' ),
+                                PhP::AST::Apply.new(
+                                    name =>'+',
+                                    args => [ 
+                                        PhP::AST::Apply.new(
+                                            name =>'first',
+                                            args => [ PhP::AST::Var.new( name => 'c' ) ]
+                                        ),
+                                        PhP::AST::Apply.new(
+                                            name =>'second',
+                                            args => [ PhP::AST::Var.new( name => 'c' ) ]
+                                        ),
+                                    ]
+                                )
+                            ]
+                        )
+                    ]
                 )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
             ) 
         )
     );

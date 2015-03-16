@@ -15,7 +15,6 @@ package PhP {
             PhP::Runtime::CompilationUnit.new(
                 options => %opts,
                 root    => parse( $source, %opts ),
-                env     => PhP::Runtime::Env.new( parent => PhP::Runtime::root_env ),
             )
         );        
     }

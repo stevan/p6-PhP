@@ -18,27 +18,16 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings( 
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('ten') ) ),
-                            :value(
-                                PhP::AST::Func.new(
-                                    :body( PhP::AST::Literal.new( :value( 10 ) ) )
-                                )
-                            )
+            root => PhP::AST::Let.new(
+                bindings => [ 
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'ten' ),
+                        value => PhP::AST::Func.new(
+                            body => PhP::AST::Literal.new( value => 10 )
                         )
-                    ),
-                    :body(
-                        PhP::AST::Apply.new( :name('ten') )
                     )
-                )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
+                ],
+                body => PhP::AST::Apply.new( name => 'ten' )
             )
         ) 
     );
@@ -57,42 +46,29 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings( 
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('add') ) ),
-                            :value(
-                                PhP::AST::Func.new(
-                                    :params( 'x', 'y' ),
-                                    :body(
-                                        PhP::AST::Apply.new(
-                                            :name('+'),
-                                            :args(
-                                                PhP::AST::Var.new( :name('x') ), 
-                                                PhP::AST::Var.new( :name('y') ), 
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name('add'),
-                            :args(
-                                PhP::AST::Literal.new( :value( 10 ) ), 
-                                PhP::AST::Literal.new( :value( 10 ) ), 
+            root => PhP::AST::Let.new(
+                bindings => [ 
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'add' ),
+                        value => PhP::AST::Func.new(
+                            params => [ 'x', 'y' ],
+                            body   => PhP::AST::Apply.new(
+                                name => '+',
+                                args => [
+                                    PhP::AST::Var.new( name => 'x' ), 
+                                    PhP::AST::Var.new( name => 'y' ), 
+                                ]
                             )
                         )
                     )
+                ],
+                body => PhP::AST::Apply.new(
+                    name => 'add',
+                    args => [
+                        PhP::AST::Literal.new( value => 10 ), 
+                        PhP::AST::Literal.new( value => 10 ), 
+                    ]
                 )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
             )
         ) 
     );
@@ -113,58 +89,41 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings( 
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('add') ) ),
-                            :value(
-                                PhP::AST::Func.new(
-                                    :params( 'x', 'y' ),
-                                    :body(
-                                        PhP::AST::Apply.new(
-                                            :name('+'),
-                                            :args(
-                                                PhP::AST::Var.new( :name('x') ), 
-                                                PhP::AST::Var.new( :name('y') ), 
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        ),
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('add2') ) ),
-                            :value( 
-                                PhP::AST::Func.new(
-                                    :params( 'x' ),
-                                    :body(
-                                        PhP::AST::Apply.new(
-                                            :name('add'),
-                                            :args(
-                                                PhP::AST::Var.new( :name('x') ), 
-                                                PhP::AST::Literal.new( :value( 2 ) ), 
-                                            )
-                                        )
-                                    )
-                                )
+            root => PhP::AST::Let.new(
+                bindings => [ 
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'add' ),
+                        value => PhP::AST::Func.new(
+                            params => [ 'x', 'y' ],
+                            body   => PhP::AST::Apply.new(
+                                name => '+',
+                                args => [
+                                    PhP::AST::Var.new( name => 'x' ), 
+                                    PhP::AST::Var.new( name => 'y' ), 
+                                ]
                             )
                         )
                     ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name('add2'),
-                            :args(
-                                PhP::AST::Literal.new( :value( 10 ) ), 
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'add2' ),
+                        value => PhP::AST::Func.new(
+                            params => [ 'x' ],
+                            body => PhP::AST::Apply.new(
+                                name => 'add',
+                                args => [
+                                    PhP::AST::Var.new( name => 'x' ), 
+                                    PhP::AST::Literal.new( value => 2 ), 
+                                ]
                             )
                         )
                     )
+                ],
+                body => PhP::AST::Apply.new(
+                    name => 'add2',
+                    args => [
+                        PhP::AST::Literal.new( value => 10 ), 
+                    ]
                 )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
             )
         ) 
     );
@@ -186,87 +145,66 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings(
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('add') ) ),
-                            :value(
-                                PhP::AST::Func.new(
-                                    :params( 'x', 'y' ),
-                                    :body(
-                                        PhP::AST::Apply.new(
-                                            :name('+'),
-                                            :args(
-                                                PhP::AST::Var.new( :name('x') ), 
-                                                PhP::AST::Var.new( :name('y') ), 
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        ),
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('sub') ) ),
-                            :value(
-                                PhP::AST::Func.new(
-                                    :params( 'x', 'y' ),
-                                    :body(
-                                        PhP::AST::Apply.new(
-                                            :name('-'),
-                                            :args(
-                                                PhP::AST::Var.new( :name('x') ), 
-                                                PhP::AST::Var.new( :name('y') ), 
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        ),
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('mul') ) ),
-                            :value(
-                                PhP::AST::Func.new(
-                                    :params( 'x', 'y' ),
-                                    :body(
-                                        PhP::AST::Apply.new(
-                                            :name('*'),
-                                            :args(
-                                                PhP::AST::Var.new( :name('x') ), 
-                                                PhP::AST::Var.new( :name('y') ), 
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        ),
-                    ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name('add'),
-                            :args(
-                                PhP::AST::Literal.new( :value(10) ),
-                                PhP::AST::Apply.new(
-                                    :name('mul'),
-                                    :args(
-                                        PhP::AST::Literal.new( :value(10) ),
-                                        PhP::AST::Apply.new(
-                                            :name('sub'),
-                                            :args(
-                                                PhP::AST::Literal.new( :value(10) ),
-                                                PhP::AST::Literal.new( :value(5) ),
-                                            )
-                                        )
-                                    )
-                                ) 
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'add' ),
+                        value => PhP::AST::Func.new(
+                            params => [ 'x', 'y' ],
+                            body   => PhP::AST::Apply.new(
+                                name => '+',
+                                args => [                                            
+                                    PhP::AST::Var.new( name => 'x' ), 
+                                    PhP::AST::Var.new( name => 'y' ), 
+                                ]
                             )
                         )
-                    ) 
-                )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
+                    ),
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'sub' ),
+                        value => PhP::AST::Func.new(
+                            params => [ 'x', 'y' ],
+                            body   => PhP::AST::Apply.new(
+                                name => '-',
+                                args => [
+                                    PhP::AST::Var.new( name => 'x' ), 
+                                    PhP::AST::Var.new( name => 'y' ), 
+                                ]
+                            )
+                        )
+                    ),
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'mul' ),
+                        value => PhP::AST::Func.new(
+                            params => [ 'x', 'y' ],
+                            body   => PhP::AST::Apply.new(
+                                name => '*',
+                                args => [
+                                    PhP::AST::Var.new( name => 'x' ), 
+                                    PhP::AST::Var.new( name => 'y' ), 
+                                ]
+                            )
+                        )
+                    ),
+                ],
+                body => PhP::AST::Apply.new(
+                    name => 'add',
+                    args => [
+                        PhP::AST::Literal.new( value => 10 ),
+                        PhP::AST::Apply.new(
+                            name => 'mul',
+                            args => [
+                                PhP::AST::Literal.new( value => 10 ),
+                                PhP::AST::Apply.new(
+                                    name => 'sub',
+                                    args => [
+                                        PhP::AST::Literal.new( value => 10 ),
+                                        PhP::AST::Literal.new( value => 5  ),
+                                    ]
+                                )
+                            ]
+                        ) 
+                    ]
                 ) 
             )
         ) 
@@ -288,45 +226,32 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings( 
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('x') ) )
-                            :value( PhP::AST::Literal.new( :value( 10 ) ) )
-                        ),
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('add') ) ),
-                            :value(
-                                PhP::AST::Func.new(
-                                    :params( 'y' ),
-                                    :body(
-                                        PhP::AST::Apply.new(
-                                            :name('+'),
-                                            :args(
-                                                PhP::AST::Var.new( :name('x') ), 
-                                                PhP::AST::Var.new( :name('y') ), 
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        ),
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'x' ),
+                        value => PhP::AST::Literal.new( value => 10 ),
                     ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name('add'),
-                            :args(
-                                PhP::AST::Literal.new( :value( 10 ) )
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'add' ),
+                        value => PhP::AST::Func.new(
+                            params => [ 'y' ],
+                            body => PhP::AST::Apply.new(
+                                name => '+',
+                                args => [
+                                    PhP::AST::Var.new( name => 'x' ), 
+                                    PhP::AST::Var.new( name => 'y' ), 
+                                ]
                             )
                         )
-                    )
+                    ),
+                ],
+                body => PhP::AST::Apply.new(
+                    name => 'add',
+                    args => [
+                        PhP::AST::Literal.new( value => 10 )
+                    ]
                 )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
             )
         ) 
     );
@@ -346,51 +271,36 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings( 
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'x' ),
+                        value => PhP::AST::Literal.new( value => 10 ),
+                    )
+                ],
+                body => PhP::AST::Let.new(
+                    bindings => [
                         PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('x') ) )
-                            :value( PhP::AST::Literal.new( :value( 10 ) ) )
-                        )
-                    ),
-                    :body(
-                        PhP::AST::Let.new(
-                            :bindings( 
-                                PhP::AST::SimpleBind.new(
-                                    :var( PhP::AST::Var.new( :name('add') ) ),
-                                    :value(
-                                        PhP::AST::Func.new(
-                                            :params( 'y' ),
-                                            :body(
-                                                PhP::AST::Apply.new(
-                                                    :name('+'),
-                                                    :args(
-                                                        PhP::AST::Var.new( :name('x') ), 
-                                                        PhP::AST::Var.new( :name('y') ), 
-                                                    )
-                                                )
-                                            )
-                                        )
-                                    )
-                                ),
-                            ),
-                            :body(
-                                PhP::AST::Apply.new(
-                                    :name('add'),
-                                    :args(
-                                        PhP::AST::Literal.new( :value( 10 ) )
-                                    )
+                            var   => PhP::AST::Var.new( name => 'add' ),
+                            value => PhP::AST::Func.new(
+                                params => [ 'y' ],
+                                body   => PhP::AST::Apply.new(
+                                    name => '+',
+                                    args => [
+                                        PhP::AST::Var.new( name => 'x' ), 
+                                        PhP::AST::Var.new( name => 'y' ), 
+                                    ]
                                 )
                             )
-                        )
+                        ),
+                    ],
+                    body => PhP::AST::Apply.new(
+                        name => 'add',
+                        args => [
+                            PhP::AST::Literal.new( value => 10 )
+                        ]
                     )
                 )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
             )
         ) 
     );
@@ -411,60 +321,43 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings( 
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('add') ) ),
-                            :value(
-                                PhP::AST::Func.new(
-                                    :params( 'x', 'y' ),
-                                    :body(
-                                        PhP::AST::Apply.new(
-                                            :name('+'),
-                                            :args(
-                                                PhP::AST::Var.new( :name('x') ), 
-                                                PhP::AST::Var.new( :name('y') ), 
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        ),
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('binop') ) ),
-                            :value(
-                                PhP::AST::Func.new(
-                                    :params( 'f', 'x', 'y' ),
-                                    :body(
-                                        PhP::AST::Apply.new(
-                                            :name('f'),
-                                            :args(
-                                                PhP::AST::Var.new( :name('x') ), 
-                                                PhP::AST::Var.new( :name('y') ), 
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        ),
-                    ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name('binop'),
-                            :args(
-                                PhP::AST::Var.new( :name('add') ),
-                                PhP::AST::Literal.new( :value( 10 ) ), 
-                                PhP::AST::Literal.new( :value( 10 ) ), 
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'add' ),
+                        value => PhP::AST::Func.new(
+                            params => [ 'x', 'y' ],
+                            body => PhP::AST::Apply.new(
+                                name => '+',
+                                args => [
+                                    PhP::AST::Var.new( name => 'x' ), 
+                                    PhP::AST::Var.new( name => 'y' ), 
+                                ]
                             )
                         )
-                    )
+                    ),
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'binop' ),
+                        value => PhP::AST::Func.new(
+                            params => [ 'f', 'x', 'y' ],
+                            body => PhP::AST::Apply.new(
+                                name => 'f',
+                                args => [
+                                    PhP::AST::Var.new( name => 'x' ), 
+                                    PhP::AST::Var.new( name => 'y' ), 
+                                ]
+                            )
+                        )
+                    ),
+                ],
+                body => PhP::AST::Apply.new(
+                    name => 'binop',
+                    args => [
+                        PhP::AST::Var.new( name => 'add' ),
+                        PhP::AST::Literal.new( value => 10 ), 
+                        PhP::AST::Literal.new( value => 10 ), 
+                    ]
                 )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
             )
         ) 
     );
@@ -479,69 +372,48 @@ subtest {
 
     my $orig = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings( 
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('x') ) )
-                            :value( PhP::AST::Literal.new( :value( 10 ) ) )
-                        ),
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('add') ) ),
-                            :value(
-                                PhP::AST::Func.new(
-                                    :params( 'y' ),
-                                    :body(
-                                        PhP::AST::Apply.new(
-                                            :name('+'),
-                                            :args(
-                                                PhP::AST::Var.new( :name('x') ), 
-                                                PhP::AST::Var.new( :name('y') ), 
-                                            )
-                                        )
-                                    )
-                                )
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'x' ),
+                        value => PhP::AST::Literal.new( value => 10 ),
+                    ),
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'add' ),
+                        value => PhP::AST::Func.new(
+                            params => [ 'y' ],
+                            body   => PhP::AST::Apply.new(
+                                name => '+',
+                                args => [
+                                    PhP::AST::Var.new( name => 'x' ), 
+                                    PhP::AST::Var.new( name => 'y' ), 
+                                ]
                             )
                         )
-                    ),
-                    :body(
-                        PhP::AST::Unit.new
                     )
-                )
-            ),
-            :env(
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                )
+                ],
+                body => PhP::AST::Unit.new
             )
         ) 
     );
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings( 
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('x') ) )
-                            :value( PhP::AST::Literal.new( :value( 5 ) ) )
-                        ),
+            root => PhP::AST::Let.new(
+                bindings => [ 
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'x' ),
+                        value => PhP::AST::Literal.new( value => 5 ),
                     ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name('add'),
-                            :args(
-                                PhP::AST::Literal.new( :value( 10 ) )
-                            )
-                        )
-                    )
+                ],
+                body => PhP::AST::Apply.new(
+                    name => 'add',
+                    args => [
+                        PhP::AST::Literal.new( value => 10 )
+                    ]
                 )
             ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( $orig.env.children[0] ) 
-                )
-            )
+            env => PhP::Runtime::Env.new( parent => $orig.env.children[0] )
         ) 
     );
 

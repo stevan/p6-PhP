@@ -25,36 +25,25 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings(
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('x') ) ),
-                            :value( PhP::AST::Literal.new( :value(10) ) )
-                        )
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'x' ),
+                        value => PhP::AST::Literal.new( value => 10 )
+                    )
+                ],
+                body => PhP::AST::Cond.new(
+                    condition => PhP::AST::Apply.new(
+                        name => '==',
+                        args => [
+                            PhP::AST::Var.new( name => 'x' ),
+                            PhP::AST::Literal.new( :value(10) )
+                        ]
                     ),
-                    :body(
-                        PhP::AST::Cond.new(
-                            :condition(
-                                PhP::AST::Apply.new(
-                                    :name('=='),
-                                    :args(
-                                        PhP::AST::Var.new( :name('x') ),
-                                        PhP::AST::Literal.new( :value(10) )
-                                    )
-                                )
-                            ),
-                            :if_true( PhP::AST::Literal.new( :value('YES') ) ),
-                            :if_false( PhP::AST::Literal.new( :value('NO') ) ),
-                        )
-                    ) 
-                ) 
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
-            )
+                    if_true  => PhP::AST::Literal.new( value => 'YES' ),
+                    if_false => PhP::AST::Literal.new( value => 'NO' ),
+                )
+            ) 
         )
     );
 
@@ -74,36 +63,25 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings(
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('x') ) ),
-                            :value( PhP::AST::Literal.new( :value(10) ) )
-                        )
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'x' ),
+                        value => PhP::AST::Literal.new( value => 10 )
+                    )
+                ],
+                body => PhP::AST::Cond.new(
+                    condition => PhP::AST::Apply.new(
+                        name => '!=',
+                        args => [
+                            PhP::AST::Var.new( name => 'x' ),
+                            PhP::AST::Literal.new( :value(10) )
+                        ]
                     ),
-                    :body(
-                        PhP::AST::Cond.new(
-                            :condition(
-                                PhP::AST::Apply.new(
-                                    :name('!='),
-                                    :args(
-                                        PhP::AST::Var.new( :name('x') ),
-                                        PhP::AST::Literal.new( :value(10) )
-                                    )
-                                )
-                            ),
-                            :if_true( PhP::AST::Literal.new( :value('YES') ) ),
-                            :if_false( PhP::AST::Literal.new( :value('NO') ) ),
-                        )
-                    ) 
-                ) 
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
-            )
+                    if_true  => PhP::AST::Literal.new( value => 'YES' ),
+                    if_false => PhP::AST::Literal.new( value => 'NO' ),
+                )
+            ) 
         )
     );
 
@@ -123,34 +101,23 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings(
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('x') ) ),
-                            :value( PhP::AST::Literal.new( :value(10) ) )
-                        )
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'x' ),
+                        value => PhP::AST::Literal.new( value => 10 )
+                    )
+                ],
+                body => PhP::AST::Cond.new(
+                    condition => PhP::AST::Apply.new(
+                        name => '<',
+                        args => [
+                            PhP::AST::Var.new( name => 'x' ),
+                            PhP::AST::Literal.new( value => 100 )
+                        ]
                     ),
-                    :body(
-                        PhP::AST::Cond.new(
-                            :condition(
-                                PhP::AST::Apply.new(
-                                    :name('<'),
-                                    :args(
-                                        PhP::AST::Var.new( :name('x') ),
-                                        PhP::AST::Literal.new( :value(100) )
-                                    )
-                                )
-                            ),
-                            :if_true( PhP::AST::Literal.new( :value('YES') ) ),
-                            :if_false( PhP::AST::Literal.new( :value('NO') ) ),
-                        )
-                    ) 
-                ) 
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
+                    if_true  => PhP::AST::Literal.new( value => 'YES' ),
+                    if_false => PhP::AST::Literal.new( value => 'NO' ),
                 ) 
             )
         )
@@ -172,35 +139,24 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings(
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('x') ) ),
-                            :value( PhP::AST::Literal.new( :value(10) ) )
-                        )
-                    ),
-                    :body(
-                        PhP::AST::Cond.new(
-                            :condition(
-                                PhP::AST::Apply.new(
-                                    :name('<='),
-                                    :args(
-                                        PhP::AST::Var.new( :name('x') ),
-                                        PhP::AST::Literal.new( :value(100) )
-                                    )
-                                )
-                            ),
-                            :if_true( PhP::AST::Literal.new( :value('YES') ) ),
-                            :if_false( PhP::AST::Literal.new( :value('NO') ) ),
-                        )
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'x' ),
+                        value => PhP::AST::Literal.new( value => 10 )
                     )
+                ],
+                body => PhP::AST::Cond.new(
+                    condition => PhP::AST::Apply.new(
+                        name => '<=',
+                        args => [
+                            PhP::AST::Var.new( name => 'x' ),
+                            PhP::AST::Literal.new( value => 100 )
+                        ]
+                    ),
+                    if_true  => PhP::AST::Literal.new( value => 'YES' ),
+                    if_false => PhP::AST::Literal.new( value => 'NO' ),
                 )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
             )
         ) 
     );
@@ -221,35 +177,24 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings(
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('x') ) ),
-                            :value( PhP::AST::Literal.new( :value(10) ) )
-                        )
-                    ),
-                    :body(
-                        PhP::AST::Cond.new(
-                            :condition(
-                                PhP::AST::Apply.new(
-                                    :name('>'),
-                                    :args(
-                                        PhP::AST::Var.new( :name('x') ),
-                                        PhP::AST::Literal.new( :value(100) )
-                                    )
-                                )
-                            ),
-                            :if_true( PhP::AST::Literal.new( :value('YES') ) ),
-                            :if_false( PhP::AST::Literal.new( :value('NO') ) ),
-                        )
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'x' ),
+                        value => PhP::AST::Literal.new( value => 10 )
                     )
+                ],
+                body => PhP::AST::Cond.new(
+                    condition => PhP::AST::Apply.new(
+                        name => '>',
+                        args => [
+                            PhP::AST::Var.new( name => 'x' ),
+                            PhP::AST::Literal.new( value => 100 )
+                        ]
+                    ),
+                    if_true  => PhP::AST::Literal.new( value => 'YES' ),
+                    if_false => PhP::AST::Literal.new( value => 'NO' ),
                 )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
             )
         ) 
     );
@@ -270,37 +215,26 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings(
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('x') ) ),
-                            :value( PhP::AST::Literal.new( :value(10) ) )
-                        )
-                    ),
-                    :body(
-                        PhP::AST::Cond.new(
-                            :condition(
-                                PhP::AST::Apply.new(
-                                    :name('>='),
-                                    :args(
-                                        PhP::AST::Var.new( :name('x') ),
-                                        PhP::AST::Literal.new( :value(100) )
-                                    )
-                                )
-                            ),
-                            :if_true( PhP::AST::Literal.new( :value('YES') ) ),
-                            :if_false( PhP::AST::Literal.new( :value('NO') ) ),
-                        )
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'x' ),
+                        value => PhP::AST::Literal.new( value => 10 )
                     )
+                ],
+                body => PhP::AST::Cond.new(
+                    condition => PhP::AST::Apply.new(
+                        name => '>=',
+                        args => [
+                            PhP::AST::Var.new( name => 'x' ),
+                            PhP::AST::Literal.new( value => 100 )
+                        ]
+                    ),
+                    if_true  => PhP::AST::Literal.new( value => 'YES' ),
+                    if_false => PhP::AST::Literal.new( value => 'NO' ),
                 )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
             )
-        ) 
+        )
     );
 
     isa_ok $unit.result, PhP::AST::Literal;

@@ -22,68 +22,51 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings(
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('mul') ) ),
-                            :value( 
-                                PhP::AST::Func.new(
-                                    :params( 'x', 'y' ),
-                                    :body(
-                                        PhP::AST::Cond.new(
-                                            :condition(
-                                                PhP::AST::Apply.new( 
-                                                    :name( '==' ),
-                                                    :args(
-                                                        PhP::AST::Var.new( :name( 'y' ) ),
-                                                        PhP::AST::Literal.new( :value(  1  ) ),
-                                                    )
-                                                )
-                                            ),
-                                            :if_true( PhP::AST::Var.new( :name( 'x' ) ) ),
-                                            :if_false(
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'mul' ),
+                        value =>  PhP::AST::Func.new(
+                            params => [ 'x', 'y' ],
+                            body   => PhP::AST::Cond.new(
+                                condition => PhP::AST::Apply.new( 
+                                    name => '==',
+                                    args => [
+                                        PhP::AST::Var.new( name => 'y' ),
+                                        PhP::AST::Literal.new( value => 1 ),
+                                    ]
+                                ),
+                                if_true  => PhP::AST::Var.new( name => 'x' ),
+                                if_false => PhP::AST::Apply.new(
+                                    name => '+',
+                                    args => [
+                                        PhP::AST::Var.new( name => 'x' ),
+                                        PhP::AST::Apply.new(
+                                            name => 'mul',
+                                            args => [
+                                                PhP::AST::Var.new( name => 'x' ),
                                                 PhP::AST::Apply.new(
-                                                    :name( '+' ),
-                                                    :args(
-                                                        PhP::AST::Var.new( :name( 'x' ) ),
-                                                        PhP::AST::Apply.new(
-                                                            :name( 'mul' ),
-                                                            :args(
-                                                                PhP::AST::Var.new( :name( 'x' ) ),
-                                                                PhP::AST::Apply.new(
-                                                                    :name( '-' ),
-                                                                    :args(
-                                                                        PhP::AST::Var.new( :name( 'y' ) ),
-                                                                        PhP::AST::Literal.new( :value(  1  ) ),
-                                                                    )
-                                                                )
-                                                            )
-                                                        )
-                                                    )
+                                                    name => '-',
+                                                    args => [
+                                                        PhP::AST::Var.new( name => 'y' ),
+                                                        PhP::AST::Literal.new( value => 1 ),
+                                                    ]
                                                 )
-                                            )
+                                            ]
                                         )
-                                    )
+                                    ]
                                 )
                             )
                         )
-                    ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name( 'mul' ),
-                            :args(
-                                PhP::AST::Literal.new( :value( 13 ) ),
-                                PhP::AST::Literal.new( :value( 2 ) ),
-                            )
-                        )
                     )
+                ],
+                body => PhP::AST::Apply.new(
+                    name => 'mul',
+                    args => [
+                        PhP::AST::Literal.new( :value( 13 ) ),
+                        PhP::AST::Literal.new( :value( 2 ) ),
+                    ]
                 )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
             )
         )
     );
@@ -106,66 +89,49 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings(
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('factorial') ) ),
-                            :value( 
-                                PhP::AST::Func.new(
-                                    :params( 'n' ),
-                                    :body(
-                                        PhP::AST::Cond.new(
-                                            :condition(
-                                                PhP::AST::Apply.new( 
-                                                    :name( '==' ),
-                                                    :args(
-                                                        PhP::AST::Var.new( :name( 'n' ) ),
-                                                        PhP::AST::Literal.new( :value(  1  ) ),
-                                                    )
-                                                )
-                                            ),
-                                            :if_true( PhP::AST::Literal.new( :value(  1  ) ) ),
-                                            :if_false(
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'factorial' ),
+                        value => PhP::AST::Func.new(
+                            params => [ 'n' ],
+                            body   => PhP::AST::Cond.new(
+                                condition => PhP::AST::Apply.new( 
+                                    name => '==',
+                                    args => [
+                                        PhP::AST::Var.new( name => 'n' ),
+                                        PhP::AST::Literal.new( value => 1 ),
+                                    ]
+                                ),
+                                if_true  => PhP::AST::Literal.new( value => 1 ),
+                                if_false => PhP::AST::Apply.new(
+                                    name => '*',
+                                    args => [
+                                        PhP::AST::Var.new( name => 'n' ),
+                                        PhP::AST::Apply.new(
+                                            name => 'factorial',
+                                            args => [
                                                 PhP::AST::Apply.new(
-                                                    :name( '*' ),
-                                                    :args(
-                                                        PhP::AST::Var.new( :name( 'n' ) ),
-                                                        PhP::AST::Apply.new(
-                                                            :name( 'factorial' ),
-                                                            :args(
-                                                                PhP::AST::Apply.new(
-                                                                    :name( '-' ),
-                                                                    :args(
-                                                                        PhP::AST::Var.new( :name( 'n' ) ),
-                                                                        PhP::AST::Literal.new( :value(  1  ) ),
-                                                                    )
-                                                                )
-                                                            )
-                                                        )
-                                                    )
+                                                    name => '-',
+                                                    args => [
+                                                        PhP::AST::Var.new( name => 'n' ),
+                                                        PhP::AST::Literal.new( value => 1 ),
+                                                    ]
                                                 )
-                                            )
+                                            ]
                                         )
-                                    )
+                                    ]
                                 )
                             )
                         )
-                    ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name( 'factorial' ),
-                            :args(
-                                PhP::AST::Literal.new( :value( 5 ) ),
-                            )
-                        )
                     )
+                ],
+                body => PhP::AST::Apply.new(
+                    name => 'factorial',
+                    args => [
+                        PhP::AST::Literal.new( :value( 5 ) ),
+                    ]
                 )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
             )
         )
     );
@@ -187,73 +153,57 @@ subtest {
 
     my @bindings = (
         PhP::AST::SimpleBind.new(
-            :var( PhP::AST::Var.new( :name('is_even') ) ),
-            :value( 
-                PhP::AST::Func.new(
-                    :params( 'n' ),
-                    :body(
-                        PhP::AST::Cond.new(
-                            :condition(
-                                PhP::AST::Apply.new( 
-                                    :name( '==' ),
-                                    :args(
-                                        PhP::AST::Var.new( :name( 'n' ) ),
-                                        PhP::AST::Literal.new( :value(  0  ) ),
-                                    )
-                                )
-                            ),
-                            :if_true( PhP::AST::Var.new( :name('#TRUE') ) ),
-                            :if_false(
-                                PhP::AST::Apply.new(
-                                    :name( 'is_odd' ),
-                                    :args(
-                                        PhP::AST::Apply.new(
-                                            :name( '-' ),
-                                            :args(
-                                                PhP::AST::Var.new( :name( 'n' ) ),
-                                                PhP::AST::Literal.new( :value(  1  ) ),
-                                            )
-                                        )
-                                    )
+            var   => PhP::AST::Var.new( name => 'is_even' ),
+            value => PhP::AST::Func.new(
+                params => [ 'n' ],
+                body   => PhP::AST::Cond.new(
+                    condition => PhP::AST::Apply.new( 
+                        name => '==',
+                        args => [
+                            PhP::AST::Var.new( name => 'n' ),
+                            PhP::AST::Literal.new( value => 0 ),
+                        ]
+                    ),
+                    if_true  => PhP::AST::Var.new( name => '#TRUE' ),
+                    if_false => PhP::AST::Apply.new(
+                        name => 'is_odd',
+                        args => [
+                            PhP::AST::Apply.new(
+                                :name( '-' ),
+                                :args(
+                                    PhP::AST::Var.new( name => 'n' ),
+                                    PhP::AST::Literal.new( value => 1 ),
                                 )
                             )
-                        )
+                        ]
                     )
                 )
             )
         ),
         PhP::AST::SimpleBind.new(
-            :var( PhP::AST::Var.new( :name('is_odd') ) ),
-            :value( 
-                PhP::AST::Func.new(
-                    :params( 'n' ),
-                    :body(
-                        PhP::AST::Cond.new(
-                            :condition(
-                                PhP::AST::Apply.new( 
-                                    :name( '==' ),
-                                    :args(
-                                        PhP::AST::Var.new( :name( 'n' ) ),
-                                        PhP::AST::Literal.new( :value(  0  ) ),
-                                    )
-                                )
-                            ),
-                            :if_true( PhP::AST::Var.new( :name('#FALSE') ) ),
-                            :if_false(
-                                PhP::AST::Apply.new(
-                                    :name( 'is_even' ),
-                                    :args(
-                                        PhP::AST::Apply.new(
-                                            :name( '-' ),
-                                            :args(
-                                                PhP::AST::Var.new( :name( 'n' ) ),
-                                                PhP::AST::Literal.new( :value(  1  ) ),
-                                            )
-                                        )
-                                    )
-                                )
+            var   => PhP::AST::Var.new( name => 'is_odd' ),
+            value =>  PhP::AST::Func.new(
+                params => [ 'n' ],
+                body   => PhP::AST::Cond.new(
+                    condition => PhP::AST::Apply.new( 
+                        name => '==',
+                        args => [
+                            PhP::AST::Var.new( name => 'n' ),
+                            PhP::AST::Literal.new( value => 0  ),
+                        ]
+                    ),
+                    if_true  => PhP::AST::Var.new( name => '#FALSE' ),
+                    if_false => PhP::AST::Apply.new(
+                        name => 'is_even',
+                        args => [
+                            PhP::AST::Apply.new(
+                                name => '-',
+                                args => [
+                                    PhP::AST::Var.new( name => 'n' ),
+                                    PhP::AST::Literal.new( value => 1 ),
+                                ]
                             )
-                        )
+                        ]
                     )
                 )
             )
@@ -263,23 +213,14 @@ subtest {
     {
         my $unit = PhP::Interpreter::run( 
             PhP::Runtime::CompilationUnit.new( 
-                :root(
-                    PhP::AST::Let.new(
-                        :bindings(@bindings),
-                        :body(
-                            PhP::AST::Apply.new(
-                                :name( 'is_even' ),
-                                :args(
-                                    PhP::AST::Literal.new( :value( 2 ) ),
-                                )
-                            )
-                        )
+                root => PhP::AST::Let.new(
+                    bindings => @bindings,
+                    body => PhP::AST::Apply.new(
+                        name => 'is_even',
+                        args => [
+                            PhP::AST::Literal.new( :value( 2 ) ),
+                        ]
                     )
-                ),
-                :env( 
-                    PhP::Runtime::Env.new( 
-                        :parent( PhP::Runtime::root_env ) 
-                    ) 
                 )
             )
         );
@@ -293,23 +234,14 @@ subtest {
     {
         my $unit = PhP::Interpreter::run( 
             PhP::Runtime::CompilationUnit.new( 
-                :root(
-                    PhP::AST::Let.new(
-                        :bindings(@bindings),
-                        :body(
-                            PhP::AST::Apply.new(
-                                :name( 'is_even' ),
-                                :args(
-                                    PhP::AST::Literal.new( :value( 5 ) ),
-                                )
-                            )
-                        )
+                root => PhP::AST::Let.new(
+                    bindings => @bindings,
+                    body => PhP::AST::Apply.new(
+                        name => 'is_even',
+                        args => [
+                            PhP::AST::Literal.new( :value( 5 ) ),
+                        ]
                     )
-                ),
-                :env( 
-                    PhP::Runtime::Env.new( 
-                        :parent( PhP::Runtime::root_env ) 
-                    ) 
                 )
             )
         );
@@ -323,23 +255,14 @@ subtest {
     {
         my $unit = PhP::Interpreter::run( 
             PhP::Runtime::CompilationUnit.new( 
-                :root(
-                    PhP::AST::Let.new(
-                        :bindings(@bindings),
-                        :body(
-                            PhP::AST::Apply.new(
-                                :name( 'is_odd' ),
-                                :args(
-                                    PhP::AST::Literal.new( :value( 2 ) ),
-                                )
-                            )
-                        )
+                root => PhP::AST::Let.new(
+                    bindings => @bindings,
+                    body => PhP::AST::Apply.new(
+                        name => 'is_odd',
+                        args => [
+                            PhP::AST::Literal.new( :value( 2 ) ),
+                        ]
                     )
-                ),
-                :env( 
-                    PhP::Runtime::Env.new( 
-                        :parent( PhP::Runtime::root_env ) 
-                    ) 
                 )
             )
         );
@@ -353,24 +276,15 @@ subtest {
     {
         my $unit = PhP::Interpreter::run( 
             PhP::Runtime::CompilationUnit.new( 
-                :root(
-                    PhP::AST::Let.new(
-                        :bindings(@bindings),
-                        :body(
-                            PhP::AST::Apply.new(
-                                :name( 'is_odd' ),
-                                :args(
-                                    PhP::AST::Literal.new( :value( 7 ) ),
-                                )
-                            )
-                        )
+                root => PhP::AST::Let.new(
+                    bindings => @bindings,
+                    body => PhP::AST::Apply.new(
+                        name => 'is_odd',
+                        args => [
+                            PhP::AST::Literal.new( :value( 7 ) ),
+                        ]
                     )
-                ),
-                :env( 
-                    PhP::Runtime::Env.new( 
-                        :parent( PhP::Runtime::root_env ) 
-                    ) 
-                )                
+                )
             )
         );
 

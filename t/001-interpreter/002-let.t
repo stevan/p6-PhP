@@ -16,7 +16,6 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            env  => PhP::Runtime::Env.new( parent => PhP::Runtime::root_env ),
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -43,30 +42,21 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings( 
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('x') ) ),
-                            :value(
-                                PhP::AST::Apply.new(
-                                    :name('+'),
-                                    :args(
-                                        PhP::AST::Literal.new( :value(2) ), 
-                                        PhP::AST::Literal.new( :value(2) ),
-                                    )
-                                )
-                            )
+            root => PhP::AST::Let.new(
+                bindings => [ 
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'x' ),
+                        value => PhP::AST::Apply.new(
+                            name => '+',
+                            args => [
+                                PhP::AST::Literal.new( value => 2 ), 
+                                PhP::AST::Literal.new( value => 2 ),
+                            ]
                         )
-                    ),
-                    :body( PhP::AST::Var.new( :name('x') ) ), 
-                ) 
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
-            )
+                    )
+                ],
+                body => PhP::AST::Var.new( name => 'x' ), 
+            ) 
         )
     );
 
@@ -86,33 +76,24 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings( 
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('x') ) ),
-                            :value( PhP::AST::Literal.new( :value(5) ) )
-                        ),
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('y') ) ),
-                            :value( PhP::AST::Literal.new( :value(5) ) )
-                        )
+            root => PhP::AST::Let.new(
+                bindings => [ 
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'x' ),
+                        value => PhP::AST::Literal.new( value => 5 )
                     ),
-                    :body(
-                        PhP::AST::Apply.new(
-                            :name('+'),
-                            :args(
-                                PhP::AST::Var.new( :name('x') ), 
-                                PhP::AST::Var.new( :name('y') ),
-                            )
-                        )
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'y' ),
+                        value => PhP::AST::Literal.new( value => 5 )
                     )
+                ],
+                body => PhP::AST::Apply.new(
+                    name => '+',
+                    args => [
+                        PhP::AST::Var.new( name => 'x' ), 
+                        PhP::AST::Var.new( name => 'y' ),
+                    ]
                 )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
             )
         ) 
     );

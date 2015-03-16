@@ -63,7 +63,13 @@ package PhP::Runtime {
         has               %.options; # the set of options this was compiled
         has PhP::AST::Ast $.root;    # the root node of the AST 
         has PhP::AST::Ast $.result;  # the result of compiling the AST
-        has Env           $.env;     # the environment everything will be compiled into 
+        has Env           $.env;     # the environment everything will be compiled into                                         
+
+        submethod BUILD (:%options, :$root, :$env) {
+            %!options = %options;
+            $!root    = $root;
+            $!env     = $env // PhP::Runtime::Env.new( parent => $ROOT_ENV );
+        }
 
         method has_root                       { $!root.defined }
         method set_root (PhP::AST::Ast $root) { $!root = $root }
