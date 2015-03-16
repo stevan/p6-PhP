@@ -98,6 +98,15 @@
 
 - the fact that subroutines need an `our` before them to be public was odd
 
+- at first, when I heard about the MAIN arguments -> ARGV behavior, I was like, wtf
+    - but then I used it:
+        $file?,           # <file> evaluate the code in a file and print the result
+        :$e?,             # -e evaluate a string of code and print the result
+        Bool :$c = False, # -c Just compile the source
+        Bool :$d = False, # -d turn on debugging (just dumping extra info for now) 
+        Bool :$v = False, # -v print out version information  
+    - and it translated beautifully
+
 # refactors to show
 
 - e7106955f0f60cbd83bf2e16552e223c00a2f8f2 => adding in the terminal nodes
