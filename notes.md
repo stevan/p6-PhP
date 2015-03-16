@@ -1,3 +1,7 @@
+# Questions
+
+- what is the difference between a package and a module?
+
 # Environment
 
 - rakudobrew is awesome! nuff said
