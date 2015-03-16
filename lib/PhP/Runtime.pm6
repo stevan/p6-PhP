@@ -16,8 +16,15 @@ package PhP::Runtime {
             }
         }
 
-        method get ( Str  $key  ) { %.pad{ $key } // $.parent.?get( $key ) }
-        method set ( Pair $pair ) { %.pad{ $pair.key } = $pair.value       }
+        method set ( Pair $pair ) { %.pad{ $pair.key } = $pair.value }
+        method get ( Str  $key  ) { 
+            return %.pad{ $key } if %.pad{ $key };
+            if $.parent { 
+                return $.parent.?get( $key );
+            } else {
+                die "Cannot find '$key' in the local Env: " ~ %.pad.gist;
+            }
+        }        
     }
 
     my Bool $IS_BOOTSTRAPPED = False;
