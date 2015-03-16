@@ -65,6 +65,18 @@
         - eventually I switched back to the p5 style
             - during conversion I am realizing how verbose the p6 style is
               and how slim the p5 style is, and clearer as well
+        - notes from switching
+            - the p5 style takes up less horizontal and verticle space
+                - the p6 style ends up being multiple levels deeper indent-wise
+            - the p6 style obscures Array parameters (attributes like: @.params, etc)
+                - since you can do:
+                    - :foo(10, 20, 30)
+                - but this is much clearer and familiar
+                    - foo => [ 10, 20, 30 ]
+                - one of the key strengths of the p5 reference syntax is how clear
+                  it is within a data structure, the same is true of JSON, which I think
+                  partially lead to it's success, the fact that it is easy for humans
+                  and for computers to parse. The same is true above.
 
 # Types
 
