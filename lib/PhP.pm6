@@ -13,13 +13,9 @@ package PhP {
         PhP::Runtime::bootstrap;
         return PhP::Interpreter::run(
             PhP::Runtime::CompilationUnit.new(
-                :options( %opts ),
-                :root( parse( $source, %opts ) ),
-                :env( 
-                    PhP::Runtime::Env.new( 
-                        :parent( PhP::Runtime::root_env ) 
-                    ) 
-                )
+                options => %opts,
+                root    => parse( $source, %opts ),
+                env     => PhP::Runtime::Env.new( parent => PhP::Runtime::root_env ),
             )
         );        
     }
@@ -27,8 +23,8 @@ package PhP {
     our sub compile ( Str $source, %opts? ) returns PhP::Runtime::CompilationUnit {
         return PhP::Compiler::compile( 
             PhP::Runtime::CompilationUnit.new(
-                :options( %opts ),
-                :root( parse( $source, %opts ) ),
+                options => %opts,
+                root    => parse( $source, %opts ),
             )
         );
     }

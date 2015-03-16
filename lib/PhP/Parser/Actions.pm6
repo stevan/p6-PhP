@@ -21,8 +21,8 @@ class PhP::Parser::Actions {
     method let-statement ($/) {
         $/.make(
             PhP::AST::Let.new(
-                :bindings( $/.<let-binding>>>.made ),
-                :body( $/.<let-body>.made )
+                bindings => $/.<let-binding>>>.made,
+                body     => $/.<let-body>.made,
             )
         );
     }
@@ -41,8 +41,8 @@ class PhP::Parser::Actions {
 
         $/.make( 
             PhP::AST::SimpleBind.new(
-                :var( PhP::AST::Var.new( :name( $ident ) ) ),
-                :value( $value )
+                var   => PhP::AST::Var.new( name => $ident ),
+                value => $value,
             )
         );
     }
@@ -50,9 +50,9 @@ class PhP::Parser::Actions {
     method let-destructuring-bind ($/) {    
         $/.make( 
             PhP::AST::DestructuringBind.new(
-                :is_slurpy( $/.<splat>.defined )
-                :pattern( $/.<let-destructuring-pattern>>>.made ),
-                :value( $/.<tuple-expression>.made; )
+                is_slurpy => $/.<splat>.defined,
+                pattern   => $/.<let-destructuring-pattern>>>.made,
+                value     => $/.<tuple-expression>.made
             )
         );
     }
@@ -74,8 +74,8 @@ class PhP::Parser::Actions {
     method func-statement ($/) {
         $/.make(
             PhP::AST::Func.new(
-                :params( $/.<func-param>>>.made.map:{ $_.name }),
-                :body( $/.<func-body>.made )
+                params => $/.<func-param>>>.made>>.name,
+                body   => $/.<func-body>.made,
             )
         );
     }    
@@ -109,9 +109,9 @@ class PhP::Parser::Actions {
     method cond-expression ($/) {
         $/.make(
             PhP::AST::Cond.new(
-                :condition( $/.<condition>.made ),
-                :if_true(   $/.<if_true>.made   ),
-                :if_false(  $/.<if_false>.made  ),
+                condition => $/.<condition>.made,
+                if_true   => $/.<if_true>.made,
+                if_false  => $/.<if_false>.made,
             )
         );
     }
@@ -119,26 +119,24 @@ class PhP::Parser::Actions {
     method apply-expression ($/) {
         $/.make(
             PhP::AST::Apply.new(
-                :name( ~ $/.<identifier> ),
-                :args(
-                    $/.<apply-argument>>>.made
-                )
+                name => ~ $/.<identifier>,
+                args => $/.<apply-argument>>>.made
             )
         );
     }
 
     method tuple-expression ($/) {
-        $/.make( PhP::AST::Tuple.new( :items( $/.<tuple-expression-item>>>.made ) ) );
+        $/.make( PhP::AST::Tuple.new( items => $/.<tuple-expression-item>>>.made ) );
     }    
 
     method binary-expression ($/) {
         $/.make( 
             PhP::AST::Apply.new( 
-                :name( ~ $/.<binary-op> ),
-                :args( 
+                name => ~ $/.<binary-op>,
+                args => [ 
                     ($/.<literal> // $/.<identifier> // $/.<apply-expression>).made,
                     $/.<expression>.made 
-                )
+                ]
             ) 
         );
     }
@@ -154,17 +152,17 @@ class PhP::Parser::Actions {
     method literal ($/) {
         if ( my $bool = $/.<literal-boolean> ) {
             if ( ~$bool eq 'true' ) {
-                $/.make( PhP::AST::Var.new( :name("#TRUE") ) );
+                $/.make( PhP::AST::Var.new( name => "#TRUE" ) );
             }
             elsif ( ~$bool eq 'false' ) {
-                $/.make( PhP::AST::Var.new( :name("#FALSE") ) );
+                $/.make( PhP::AST::Var.new( name => "#FALSE" ) );
             }
         }
         elsif ( my $string = $/.<literal-string> ) {
-            $/.make( PhP::AST::StringLiteral.new( :value( ~$string ) ) );
+            $/.make( PhP::AST::StringLiteral.new( value => ~$string ) );
         }
         elsif ( my $number = $/.<literal-number> ) {
-            $/.make( PhP::AST::NumberLiteral.new( :value( 0+ $number ) ) );
+            $/.make( PhP::AST::NumberLiteral.new( value => 0+$number ) );
         }
         else {
             die "I have no idea what kind of literal this is: $/"; 
@@ -172,6 +170,6 @@ class PhP::Parser::Actions {
     }
 
     method identifier ($/) {
-        $/.make( PhP::AST::Var.new( :name( ~ $/ ) ) );
+        $/.make( PhP::AST::Var.new( name => ~ $/ ) );
     }
 }

@@ -57,7 +57,7 @@ package PhP::Interpreter {
                 $env.set: $exp.pattern[$i].name => $value.get_item_at($i);
             }
             $env.set: $exp.pattern[ $num_patterns ].name => PhP::AST::Tuple.new(
-                :items( $value.items[ $num_patterns .. ($value.items.elems - 1) ] )
+                items => $value.items[ $num_patterns .. ($value.items.elems - 1) ]
             );
         }
         else {
@@ -72,7 +72,7 @@ package PhP::Interpreter {
     }
 
     multi evaluate ( PhP::AST::Let $exp, PhP::Runtime::Env $env ) returns PhP::AST::Ast {
-        my $new_env = PhP::Runtime::Env.new( :parent( $env ) );
+        my $new_env = PhP::Runtime::Env.new( parent => $env );
         for $exp.bindings -> $binding { 
             evaluate( $binding, $new_env );
         }
@@ -99,13 +99,11 @@ package PhP::Interpreter {
         # fix this later, but for now works).
         # - SL 
 
-        my $external_env = PhP::Runtime::Env.new( :parent( $env ) );
+        my $external_env = PhP::Runtime::Env.new( parent => $env );
         my $internal_env = PhP::Runtime::Env.new( 
-            :parent( 
-                $code.has_declaration_env 
-                    ?? $code.get_declaration_env 
-                    !! PhP::Runtime::root_env 
-            ) 
+            parent => $code.has_declaration_env 
+                        ?? $code.get_declaration_env 
+                        !! PhP::Runtime::root_env  
         );
 
         loop (my $i = 0; $i < $exp.args.elems; $i++ ) {

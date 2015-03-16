@@ -27,8 +27,8 @@ package PhP::Runtime {
     our sub is_bootstrapped { $IS_BOOTSTRAPPED }
 
     our sub bootstrap {
-        state $TRUE  = PhP::AST::BooleanLiteral.new( :value( True  ) );
-        state $FALSE = PhP::AST::BooleanLiteral.new( :value( False ) );
+        state $TRUE  = PhP::AST::BooleanLiteral.new( value => True  );
+        state $FALSE = PhP::AST::BooleanLiteral.new( value => False );
 
         return if $IS_BOOTSTRAPPED;
 

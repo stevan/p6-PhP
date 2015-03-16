@@ -50,6 +50,21 @@
     - :foo(10)   # new fancy Rubyish symbol style
     - :foo<10>   # new Perl 6 hash key style
     - TIMTOWTDI gone wild?
+    - What did I do??
+        - I started out with => p5 style
+        - but switched to :foo() style afterwards
+            - I liked it, but it did feel a little verbose
+            - i did not like how it wasn't conducive to vertical alignment
+                foo => 10,
+                bo  => 20,
+                etc => 30,
+            - v.s.
+                :foo(10)
+                :bo(20)
+                :etc(30)            
+        - eventually I switched back to the p5 style
+            - during conversion I am realizing how verbose the p6 style is
+              and how slim the p5 style is, and clearer as well
 
 # Types
 

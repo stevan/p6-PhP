@@ -16,21 +16,15 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            :root(
-                PhP::AST::Let.new(
-                    :bindings( 
-                        PhP::AST::SimpleBind.new(
-                            :var( PhP::AST::Var.new( :name('x') ) ),
-                            :value( PhP::AST::Literal.new( :value(10) ) )
-                        )
-                    ),
-                    :body( PhP::AST::Var.new( :name('x') ) ), 
-                )
-            ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
+            env  => PhP::Runtime::Env.new( parent => PhP::Runtime::root_env ),
+            root => PhP::AST::Let.new(
+                bindings => [
+                    PhP::AST::SimpleBind.new(
+                        var   => PhP::AST::Var.new( name => 'x' ),
+                        value => PhP::AST::Literal.new( value => 10 ),
+                    )
+                ],
+                body => PhP::AST::Var.new( name => 'x' ), 
             )
         ) 
     );

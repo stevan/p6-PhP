@@ -16,12 +16,8 @@ subtest {
 
     my $unit = PhP::Interpreter::run(
         PhP::Runtime::CompilationUnit.new( 
-            :root( PhP::AST::Literal.new( :value( 2 ) ) ),
-            :env( 
-                PhP::Runtime::Env.new( 
-                    :parent( PhP::Runtime::root_env ) 
-                ) 
-            )
+            root => PhP::AST::Literal.new( value => 2 ),
+            env  =>  PhP::Runtime::Env.new( parent => PhP::Runtime::root_env ) 
         )
     );
 
