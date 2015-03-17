@@ -26,22 +26,14 @@ package PhP::Runtime {
         method set ( Pair $pair ) { %.pad{ $pair.key } = $pair.value }
         method get ( Str  $key, :$namespace  ) { 
             if $namespace.defined {
-                if %.namespaces{ $namespace } {
-                    return %.namespaces{ $namespace }.get( $key );    
-                }
-                elsif $.parent { 
-                    return $.parent.get( $key, namespace => $namespace );
-                } else {
-                    die "Cannot find '$key' in the namespace: '$namespace', namespace does not exist";
-                }
+                return %.namespaces{ $namespace }.get( $key )        if %.namespaces{ $namespace };    
+                return $.parent.get( $key, namespace => $namespace ) if $.parent;
+                die "Cannot find '$key' in the namespace: '$namespace', namespace does not exist";
             }
             else {
-                return %.pad{ $key } if %.pad{ $key };
-                if $.parent { 
-                    return $.parent.get( $key );
-                } else {
-                    die "Cannot find '$key' in the local Env: " ~ %.pad.gist;
-                }
+                return %.pad{ $key }        if %.pad{ $key };
+                return $.parent.get( $key ) if $.parent;
+                die "Cannot find '$key' in the local Env: " ~ %.pad.gist;
             }
         }        
     }
@@ -96,8 +88,8 @@ package PhP::Runtime {
             %!options = %options;       
             $!root    = $root;
             $!env     = $env // PhP::Runtime::Env.new( parent => $ROOT_ENV );
-            if @linked.elems {
-                @!linked = @linked;
+            @!linked  = @linked;
+            if @!linked.elems {
                 for @!linked -> $link {
                     $!env.link_namespace( $link.key, $link.value.env.children[0] );
                 }
