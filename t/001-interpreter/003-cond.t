@@ -34,7 +34,7 @@ subtest {
                 ],
                 body => PhP::AST::Cond.new(
                     condition => PhP::AST::Apply.new(
-                        name => '==',
+                        func => PhP::AST::Var.new( name => '==' ),
                         args => [
                             PhP::AST::Var.new( name => 'x' ),
                             PhP::AST::Literal.new( :value(10) )
@@ -72,7 +72,7 @@ subtest {
                 ],
                 body => PhP::AST::Cond.new(
                     condition => PhP::AST::Apply.new(
-                        name => '!=',
+                        func => PhP::AST::Var.new( name => '!=' ),
                         args => [
                             PhP::AST::Var.new( name => 'x' ),
                             PhP::AST::Literal.new( :value(10) )
@@ -110,7 +110,7 @@ subtest {
                 ],
                 body => PhP::AST::Cond.new(
                     condition => PhP::AST::Apply.new(
-                        name => '<',
+                        func => PhP::AST::Var.new( name => '<' ),
                         args => [
                             PhP::AST::Var.new( name => 'x' ),
                             PhP::AST::Literal.new( value => 100 )
@@ -148,7 +148,7 @@ subtest {
                 ],
                 body => PhP::AST::Cond.new(
                     condition => PhP::AST::Apply.new(
-                        name => '<=',
+                        func => PhP::AST::Var.new( name => '<=' ),
                         args => [
                             PhP::AST::Var.new( name => 'x' ),
                             PhP::AST::Literal.new( value => 100 )
@@ -186,7 +186,7 @@ subtest {
                 ],
                 body => PhP::AST::Cond.new(
                     condition => PhP::AST::Apply.new(
-                        name => '>',
+                        func => PhP::AST::Var.new( name => '>' ),
                         args => [
                             PhP::AST::Var.new( name => 'x' ),
                             PhP::AST::Literal.new( value => 100 )
@@ -224,7 +224,7 @@ subtest {
                 ],
                 body => PhP::AST::Cond.new(
                     condition => PhP::AST::Apply.new(
-                        name => '>=',
+                        func => PhP::AST::Var.new( name => '>=' ),
                         args => [
                             PhP::AST::Var.new( name => 'x' ),
                             PhP::AST::Literal.new( value => 100 )

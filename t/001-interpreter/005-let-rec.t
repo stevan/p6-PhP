@@ -30,7 +30,7 @@ subtest {
                             params => [ 'x', 'y' ],
                             body   => PhP::AST::Cond.new(
                                 condition => PhP::AST::Apply.new( 
-                                    name => '==',
+                                    func => PhP::AST::Var.new( name => '==' ),
                                     args => [
                                         PhP::AST::Var.new( name => 'y' ),
                                         PhP::AST::Literal.new( value => 1 ),
@@ -38,15 +38,15 @@ subtest {
                                 ),
                                 if_true  => PhP::AST::Var.new( name => 'x' ),
                                 if_false => PhP::AST::Apply.new(
-                                    name => '+',
+                                    func => PhP::AST::Var.new( name => '+' ),
                                     args => [
                                         PhP::AST::Var.new( name => 'x' ),
                                         PhP::AST::Apply.new(
-                                            name => 'mul',
+                                            func => PhP::AST::Var.new( name => 'mul' ),
                                             args => [
                                                 PhP::AST::Var.new( name => 'x' ),
                                                 PhP::AST::Apply.new(
-                                                    name => '-',
+                                                    func => PhP::AST::Var.new( name => '-' ),
                                                     args => [
                                                         PhP::AST::Var.new( name => 'y' ),
                                                         PhP::AST::Literal.new( value => 1 ),
@@ -61,7 +61,7 @@ subtest {
                     )
                 ],
                 body => PhP::AST::Apply.new(
-                    name => 'mul',
+                    func => PhP::AST::Var.new( name => 'mul' ),
                     args => [
                         PhP::AST::Literal.new( :value( 13 ) ),
                         PhP::AST::Literal.new( :value( 2 ) ),
@@ -97,7 +97,7 @@ subtest {
                             params => [ 'n' ],
                             body   => PhP::AST::Cond.new(
                                 condition => PhP::AST::Apply.new( 
-                                    name => '==',
+                                    func => PhP::AST::Var.new( name => '==' ),
                                     args => [
                                         PhP::AST::Var.new( name => 'n' ),
                                         PhP::AST::Literal.new( value => 1 ),
@@ -105,14 +105,14 @@ subtest {
                                 ),
                                 if_true  => PhP::AST::Literal.new( value => 1 ),
                                 if_false => PhP::AST::Apply.new(
-                                    name => '*',
+                                    func => PhP::AST::Var.new( name => '*' ),
                                     args => [
                                         PhP::AST::Var.new( name => 'n' ),
                                         PhP::AST::Apply.new(
-                                            name => 'factorial',
+                                            func => PhP::AST::Var.new( name => 'factorial' ),
                                             args => [
                                                 PhP::AST::Apply.new(
-                                                    name => '-',
+                                                    func => PhP::AST::Var.new( name => '-' ),
                                                     args => [
                                                         PhP::AST::Var.new( name => 'n' ),
                                                         PhP::AST::Literal.new( value => 1 ),
@@ -127,7 +127,7 @@ subtest {
                     )
                 ],
                 body => PhP::AST::Apply.new(
-                    name => 'factorial',
+                    func => PhP::AST::Var.new( name => 'factorial' ),
                     args => [
                         PhP::AST::Literal.new( :value( 5 ) ),
                     ]
@@ -158,7 +158,7 @@ subtest {
                 params => [ 'n' ],
                 body   => PhP::AST::Cond.new(
                     condition => PhP::AST::Apply.new( 
-                        name => '==',
+                        func => PhP::AST::Var.new( name => '==' ),
                         args => [
                             PhP::AST::Var.new( name => 'n' ),
                             PhP::AST::Literal.new( value => 0 ),
@@ -166,14 +166,14 @@ subtest {
                     ),
                     if_true  => PhP::AST::Var.new( name => '#TRUE' ),
                     if_false => PhP::AST::Apply.new(
-                        name => 'is_odd',
+                        func => PhP::AST::Var.new( name => 'is_odd' ),
                         args => [
                             PhP::AST::Apply.new(
-                                :name( '-' ),
-                                :args(
+                                func => PhP::AST::Var.new( name => '-' ),
+                                args => [
                                     PhP::AST::Var.new( name => 'n' ),
                                     PhP::AST::Literal.new( value => 1 ),
-                                )
+                                ]
                             )
                         ]
                     )
@@ -186,7 +186,7 @@ subtest {
                 params => [ 'n' ],
                 body   => PhP::AST::Cond.new(
                     condition => PhP::AST::Apply.new( 
-                        name => '==',
+                        func => PhP::AST::Var.new( name => '==' ),
                         args => [
                             PhP::AST::Var.new( name => 'n' ),
                             PhP::AST::Literal.new( value => 0  ),
@@ -194,10 +194,10 @@ subtest {
                     ),
                     if_true  => PhP::AST::Var.new( name => '#FALSE' ),
                     if_false => PhP::AST::Apply.new(
-                        name => 'is_even',
+                        func => PhP::AST::Var.new( name => 'is_even' ),
                         args => [
                             PhP::AST::Apply.new(
-                                name => '-',
+                                func => PhP::AST::Var.new( name => '-' ),
                                 args => [
                                     PhP::AST::Var.new( name => 'n' ),
                                     PhP::AST::Literal.new( value => 1 ),
@@ -216,7 +216,7 @@ subtest {
                 root => PhP::AST::Let.new(
                     bindings => @bindings,
                     body => PhP::AST::Apply.new(
-                        name => 'is_even',
+                        func => PhP::AST::Var.new( name => 'is_even' ),
                         args => [
                             PhP::AST::Literal.new( :value( 2 ) ),
                         ]
@@ -237,7 +237,7 @@ subtest {
                 root => PhP::AST::Let.new(
                     bindings => @bindings,
                     body => PhP::AST::Apply.new(
-                        name => 'is_even',
+                        func => PhP::AST::Var.new( name => 'is_even' ),
                         args => [
                             PhP::AST::Literal.new( :value( 5 ) ),
                         ]
@@ -258,7 +258,7 @@ subtest {
                 root => PhP::AST::Let.new(
                     bindings => @bindings,
                     body => PhP::AST::Apply.new(
-                        name => 'is_odd',
+                        func => PhP::AST::Var.new( name => 'is_odd' ),
                         args => [
                             PhP::AST::Literal.new( :value( 2 ) ),
                         ]
@@ -279,7 +279,7 @@ subtest {
                 root => PhP::AST::Let.new(
                     bindings => @bindings,
                     body => PhP::AST::Apply.new(
-                        name => 'is_odd',
+                        func => PhP::AST::Var.new( name => 'is_odd' ),
                         args => [
                             PhP::AST::Literal.new( :value( 7 ) ),
                         ]

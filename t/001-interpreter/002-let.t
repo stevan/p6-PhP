@@ -47,7 +47,7 @@ subtest {
                     PhP::AST::SimpleBind.new(
                         var   => PhP::AST::Var.new( name => 'x' ),
                         value => PhP::AST::Apply.new(
-                            name => '+',
+                            func => PhP::AST::Var.new( name => '+' ),
                             args => [
                                 PhP::AST::Literal.new( value => 2 ), 
                                 PhP::AST::Literal.new( value => 2 ),
@@ -88,7 +88,7 @@ subtest {
                     )
                 ],
                 body => PhP::AST::Apply.new(
-                    name => '+',
+                    func => PhP::AST::Var.new( name => '+' ),
                     args => [
                         PhP::AST::Var.new( name => 'x' ), 
                         PhP::AST::Var.new( name => 'y' ),

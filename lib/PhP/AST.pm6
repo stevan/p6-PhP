@@ -50,7 +50,7 @@ package PhP::AST {
     }
 
     class Func is FunCallable {
-        has Str @.params;
+        has Str @.params; # XXX - think about converting these to Var objects
         has Ast $.body;
 
         method arity { @.params.elems }
@@ -59,7 +59,7 @@ package PhP::AST {
     }
 
     class NativeFunc is FunCallable {
-        has Str   @.params;
+        has Str   @.params; # XXX - think about converting these to Var objects
         has Block $.extern;
 
         method arity { @.params.elems }
@@ -70,22 +70,25 @@ package PhP::AST {
     # Non-Terminals
 
     class Var is Ast {
+        has Str $.namespace;
         has Str $.name;
 
-        method Str { $.name }
+        method has_namespace { $.namespace.defined }
+
+        method Str { ($.namespace ?? $.namespace ~ '.' !! '') ~ $.name }
     }
 
     class Bind is Ast {}
 
     class SimpleBind is Bind {
-        has Ast $.var;
+        has Var $.var;
         has Ast $.value;
 
         method Str { $.var ~ " = " ~ $.value }
     }    
 
     class DestructuringBind is Bind {
-        has Ast   @.pattern;
+        has Var   @.pattern;
         has Tuple $.value;
         has Bool  $.is_slurpy;
 
@@ -108,10 +111,10 @@ package PhP::AST {
     }
 
     class Apply is Ast {
-        has Str $.name;
+        has Var $.func;
         has Ast @.args;
 
-        method Str { $.name ~ '(' ~ @.args.join(', ') ~ ')' }
+        method Str { $.func.name ~ '(' ~ @.args.join(', ') ~ ')' }
     }
 }
 

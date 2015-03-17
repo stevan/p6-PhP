@@ -31,7 +31,14 @@ package PhP::Interpreter {
     }
 
     multi evaluate ( PhP::AST::Var $exp, PhP::Runtime::Env $env ) returns PhP::AST::Ast {
-        return $env.get( $exp.name ) // die "Unable to find the variable: " ~ $exp.name;
+        if $exp.has_namespace {
+            return $env.get( $exp.name, namespace => $exp.namespace )
+                // die "Unable to find the variable: " ~ $exp.name ~ " in namespace: " ~ $exp.namespace;
+        }
+        else {
+            return $env.get( $exp.name ) 
+                // die "Unable to find the variable: " ~ $exp.name;
+        }
     } 
 
     # NOTE:
@@ -80,7 +87,7 @@ package PhP::Interpreter {
     }
 
     multi evaluate ( PhP::AST::Apply $exp, PhP::Runtime::Env $env ) returns PhP::AST::Ast {
-        my $code = $env.get( $exp.name ) // die "Unable to find function to apply: " ~ $exp.name;
+        my $code = evaluate( $exp.func, $env ) // die "Unable to find function to apply: " ~ $exp.func.name;
         
         die "Incorrect number of arguments for " ~ $exp.name ~ ", got : " ~ $exp.args.elems ~ " expected: " ~ $code.params.elems
             unless $exp.args.elems == $code.params.elems;

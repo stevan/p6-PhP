@@ -30,7 +30,7 @@ subtest {
                     )
                 ],
                 body => PhP::AST::Apply.new(
-                    name => 'first',
+                    func => PhP::AST::Var.new( name => 'first' ),
                     args => [ PhP::AST::Var.new( name => 'x' ) ]
                 )
             )
@@ -65,7 +65,7 @@ subtest {
                     )
                 ],
                 body => PhP::AST::Apply.new(
-                    name => 'second',
+                    func => PhP::AST::Var.new( name => 'second' ),
                     args => [ PhP::AST::Var.new( name =>'x' ) ]
                 )
             ) 
@@ -100,7 +100,7 @@ subtest {
                     )
                 ],
                 body => PhP::AST::Apply.new(
-                    name => 'item_at',
+                    func => PhP::AST::Var.new( name => 'item_at' ),
                     args => [ 
                         PhP::AST::Var.new( name => 'x' ),
                         PhP::AST::Literal.new( value => 2 ) 

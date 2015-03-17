@@ -27,7 +27,9 @@ subtest {
                         )
                     )
                 ],
-                body => PhP::AST::Apply.new( name => 'ten' )
+                body => PhP::AST::Apply.new( 
+                    func => PhP::AST::Var.new( name => 'ten' ) 
+                )
             )
         ) 
     );
@@ -53,7 +55,7 @@ subtest {
                         value => PhP::AST::Func.new(
                             params => [ 'x', 'y' ],
                             body   => PhP::AST::Apply.new(
-                                name => '+',
+                                func => PhP::AST::Var.new( name => '+' ),
                                 args => [
                                     PhP::AST::Var.new( name => 'x' ), 
                                     PhP::AST::Var.new( name => 'y' ), 
@@ -63,7 +65,7 @@ subtest {
                     )
                 ],
                 body => PhP::AST::Apply.new(
-                    name => 'add',
+                    func => PhP::AST::Var.new( name => 'add' ),
                     args => [
                         PhP::AST::Literal.new( value => 10 ), 
                         PhP::AST::Literal.new( value => 10 ), 
@@ -96,7 +98,7 @@ subtest {
                         value => PhP::AST::Func.new(
                             params => [ 'x', 'y' ],
                             body   => PhP::AST::Apply.new(
-                                name => '+',
+                                func => PhP::AST::Var.new( name => '+' ),
                                 args => [
                                     PhP::AST::Var.new( name => 'x' ), 
                                     PhP::AST::Var.new( name => 'y' ), 
@@ -109,7 +111,7 @@ subtest {
                         value => PhP::AST::Func.new(
                             params => [ 'x' ],
                             body => PhP::AST::Apply.new(
-                                name => 'add',
+                                func => PhP::AST::Var.new( name => 'add' ),
                                 args => [
                                     PhP::AST::Var.new( name => 'x' ), 
                                     PhP::AST::Literal.new( value => 2 ), 
@@ -119,7 +121,7 @@ subtest {
                     )
                 ],
                 body => PhP::AST::Apply.new(
-                    name => 'add2',
+                    func => PhP::AST::Var.new( name => 'add2' ),
                     args => [
                         PhP::AST::Literal.new( value => 10 ), 
                     ]
@@ -152,7 +154,7 @@ subtest {
                         value => PhP::AST::Func.new(
                             params => [ 'x', 'y' ],
                             body   => PhP::AST::Apply.new(
-                                name => '+',
+                                func => PhP::AST::Var.new( name => '+' ),
                                 args => [                                            
                                     PhP::AST::Var.new( name => 'x' ), 
                                     PhP::AST::Var.new( name => 'y' ), 
@@ -165,7 +167,7 @@ subtest {
                         value => PhP::AST::Func.new(
                             params => [ 'x', 'y' ],
                             body   => PhP::AST::Apply.new(
-                                name => '-',
+                                func => PhP::AST::Var.new( name => '-' ),
                                 args => [
                                     PhP::AST::Var.new( name => 'x' ), 
                                     PhP::AST::Var.new( name => 'y' ), 
@@ -178,7 +180,7 @@ subtest {
                         value => PhP::AST::Func.new(
                             params => [ 'x', 'y' ],
                             body   => PhP::AST::Apply.new(
-                                name => '*',
+                                func => PhP::AST::Var.new( name => '*' ),
                                 args => [
                                     PhP::AST::Var.new( name => 'x' ), 
                                     PhP::AST::Var.new( name => 'y' ), 
@@ -188,15 +190,15 @@ subtest {
                     ),
                 ],
                 body => PhP::AST::Apply.new(
-                    name => 'add',
+                    func => PhP::AST::Var.new( name => 'add' ),
                     args => [
                         PhP::AST::Literal.new( value => 10 ),
                         PhP::AST::Apply.new(
-                            name => 'mul',
+                            func => PhP::AST::Var.new( name => 'mul' ),
                             args => [
                                 PhP::AST::Literal.new( value => 10 ),
                                 PhP::AST::Apply.new(
-                                    name => 'sub',
+                                    func => PhP::AST::Var.new( name => 'sub' ),
                                     args => [
                                         PhP::AST::Literal.new( value => 10 ),
                                         PhP::AST::Literal.new( value => 5  ),
@@ -237,7 +239,7 @@ subtest {
                         value => PhP::AST::Func.new(
                             params => [ 'y' ],
                             body => PhP::AST::Apply.new(
-                                name => '+',
+                                func => PhP::AST::Var.new( name => '+' ),
                                 args => [
                                     PhP::AST::Var.new( name => 'x' ), 
                                     PhP::AST::Var.new( name => 'y' ), 
@@ -247,7 +249,7 @@ subtest {
                     ),
                 ],
                 body => PhP::AST::Apply.new(
-                    name => 'add',
+                    func => PhP::AST::Var.new( name => 'add' ),
                     args => [
                         PhP::AST::Literal.new( value => 10 )
                     ]
@@ -285,7 +287,7 @@ subtest {
                             value => PhP::AST::Func.new(
                                 params => [ 'y' ],
                                 body   => PhP::AST::Apply.new(
-                                    name => '+',
+                                    func => PhP::AST::Var.new( name => '+' ),
                                     args => [
                                         PhP::AST::Var.new( name => 'x' ), 
                                         PhP::AST::Var.new( name => 'y' ), 
@@ -295,7 +297,7 @@ subtest {
                         ),
                     ],
                     body => PhP::AST::Apply.new(
-                        name => 'add',
+                        func => PhP::AST::Var.new( name => 'add' ),
                         args => [
                             PhP::AST::Literal.new( value => 10 )
                         ]
@@ -328,7 +330,7 @@ subtest {
                         value => PhP::AST::Func.new(
                             params => [ 'x', 'y' ],
                             body => PhP::AST::Apply.new(
-                                name => '+',
+                                func => PhP::AST::Var.new( name => '+' ),
                                 args => [
                                     PhP::AST::Var.new( name => 'x' ), 
                                     PhP::AST::Var.new( name => 'y' ), 
@@ -341,7 +343,7 @@ subtest {
                         value => PhP::AST::Func.new(
                             params => [ 'f', 'x', 'y' ],
                             body => PhP::AST::Apply.new(
-                                name => 'f',
+                                func => PhP::AST::Var.new( name => 'f' ),
                                 args => [
                                     PhP::AST::Var.new( name => 'x' ), 
                                     PhP::AST::Var.new( name => 'y' ), 
@@ -351,7 +353,7 @@ subtest {
                     ),
                 ],
                 body => PhP::AST::Apply.new(
-                    name => 'binop',
+                    func => PhP::AST::Var.new( name => 'binop' ),
                     args => [
                         PhP::AST::Var.new( name => 'add' ),
                         PhP::AST::Literal.new( value => 10 ), 

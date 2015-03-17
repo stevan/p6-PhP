@@ -25,7 +25,7 @@ subtest {
                         value => PhP::AST::Func.new(
                             params => [ 'y' ],
                             body   => PhP::AST::Apply.new(
-                                name => '+',
+                                func => PhP::AST::Var.new( name => '+' ),
                                 args => [
                                     PhP::AST::Var.new( name => 'x' ), 
                                     PhP::AST::Var.new( name => 'y' ), 
@@ -41,7 +41,6 @@ subtest {
 
     my $unit = PhP::Interpreter::run( 
         PhP::Runtime::CompilationUnit.new( 
-            link => $orig,
             root => PhP::AST::Let.new(
                 bindings => [ 
                     PhP::AST::SimpleBind.new(
@@ -50,12 +49,15 @@ subtest {
                     ),
                 ],
                 body => PhP::AST::Apply.new(
-                    name => 'add',
+                    func => PhP::AST::Var.new( name => 'add', namespace => 'BadMath' ),
                     args => [
                         PhP::AST::Literal.new( value => 10 )
                     ]
                 )
-            )
+            ),
+            linked => [
+                'BadMath' => $orig
+            ]
         ) 
     );
 

@@ -8,6 +8,7 @@ package PhP::Runtime {
         has Env           $.parent;
         has Env           @.children;        
         has PhP::AST::Ast %.pad;
+        has Env           %.namespaces;
 
         submethod BUILD ( :$parent ) {
             if $parent.defined {
@@ -16,13 +17,31 @@ package PhP::Runtime {
             }
         }
 
+        method link_namespace ( Str $name, Env $env ) {
+            die "Namespace ($name) already exists" 
+                if %.namespaces{ $name }.defined;
+            %.namespaces{ $name } = $env;
+        }
+
         method set ( Pair $pair ) { %.pad{ $pair.key } = $pair.value }
-        method get ( Str  $key  ) { 
-            return %.pad{ $key } if %.pad{ $key };
-            if $.parent { 
-                return $.parent.?get( $key );
-            } else {
-                die "Cannot find '$key' in the local Env: " ~ %.pad.gist;
+        method get ( Str  $key, :$namespace  ) { 
+            if $namespace.defined {
+                if %.namespaces{ $namespace } {
+                    return %.namespaces{ $namespace }.get( $key );    
+                }
+                elsif $.parent { 
+                    return $.parent.get( $key, namespace => $namespace );
+                } else {
+                    die "Cannot find '$key' in the namespace: '$namespace', namespace does not exist";
+                }
+            }
+            else {
+                return %.pad{ $key } if %.pad{ $key };
+                if $.parent { 
+                    return $.parent.get( $key );
+                } else {
+                    die "Cannot find '$key' in the local Env: " ~ %.pad.gist;
+                }
             }
         }        
     }
@@ -71,20 +90,18 @@ package PhP::Runtime {
         has PhP::AST::Ast   $.root;    # the root node of the AST 
         has PhP::AST::Ast   $.result;  # the result of compiling the AST
         has Env             $.env;     # the environment everything will be compiled into  
-        has CompilationUnit $.linked;                                       
+        has                 @.linked;                                       
 
-        submethod BUILD (:%options, :$root, :$env, :$link) {
-            %!options = %options;
+        submethod BUILD (:%options, :$name, :$root, :$env, :@linked) {
+            %!options = %options;       
             $!root    = $root;
-
-            if $link.defined {
-                $!linked = $link;
-                $!env    = PhP::Runtime::Env.new( parent => $link.env.children[0] );
+            $!env     = $env // PhP::Runtime::Env.new( parent => $ROOT_ENV );
+            if @linked.elems {
+                @!linked = @linked;
+                for @!linked -> $link {
+                    $!env.link_namespace( $link.key, $link.value.env.children[0] );
+                }
             }
-            else {
-                $!env = $env // PhP::Runtime::Env.new( parent => $ROOT_ENV );
-            }
-
         }
 
         method has_root                       { $!root.defined }

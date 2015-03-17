@@ -23,7 +23,7 @@ subtest {
                     PhP::AST::SimpleBind.new(
                         var   => PhP::AST::Var.new( name => 'x' ),
                         value => PhP::AST::Apply.new(
-                            name => '::',
+                            func => PhP::AST::Var.new( name => '::' ),
                             args => [
                                 PhP::AST::Literal.new( value => 1 ),
                                 PhP::AST::Tuple.new,
@@ -32,7 +32,7 @@ subtest {
                     )
                 ],
                 body => PhP::AST::Apply.new(
-                    name => 'head',
+                    func => PhP::AST::Var.new( name => 'head' ),
                     args => [ PhP::AST::Var.new( name => 'x' ) ]
                 )
             )
@@ -48,7 +48,7 @@ subtest {
 subtest {
     # CODE:
     # let x = 1 :: [] in 
-    #     head(x)
+    #     tail(x)
     # ;;
 
     my $unit = PhP::Interpreter::run( 
@@ -58,7 +58,7 @@ subtest {
                     PhP::AST::SimpleBind.new(
                         var   => PhP::AST::Var.new( name => 'x' ),
                         value => PhP::AST::Apply.new(
-                            name => '::',
+                            func => PhP::AST::Var.new( name => '::' ),
                             args => [
                                 PhP::AST::Literal.new( value => 1 ),
                                 PhP::AST::Tuple.new,
@@ -67,7 +67,7 @@ subtest {
                     )
                 ],
                 body => PhP::AST::Apply.new(
-                    name => 'tail',
+                    func => PhP::AST::Var.new( name => 'tail' ),
                     args => [ PhP::AST::Var.new( name => 'x' ) ]
                 )
             )
@@ -93,7 +93,7 @@ subtest {
                     PhP::AST::SimpleBind.new(
                         var   => PhP::AST::Var.new( name => 'x' ),
                         value => PhP::AST::Apply.new(
-                            name => '::',
+                            func => PhP::AST::Var.new( name => '::' ),
                             args => [
                                 PhP::AST::Literal.new( value => 1 ),
                                 PhP::AST::Tuple.new,
@@ -102,10 +102,10 @@ subtest {
                     )
                 ],
                 body => PhP::AST::Apply.new(
-                    name => 'is_nil',
+                    func => PhP::AST::Var.new( name => 'is_nil' ),
                     args => [
                         PhP::AST::Apply.new(
-                            name => 'tail',
+                            func => PhP::AST::Var.new( name => 'tail' ),
                             args => [ PhP::AST::Var.new( name => 'x' ) ]
                         )
                     ]
@@ -133,15 +133,15 @@ subtest {
                     PhP::AST::SimpleBind.new(
                         var   => PhP::AST::Var.new( name => 'x' ),
                         value => PhP::AST::Apply.new(
-                            name => '::',
+                            func => PhP::AST::Var.new( name => '::' ),
                             args => [
                                 PhP::AST::Literal.new( value => 1 ),
                                 PhP::AST::Apply.new(
-                                    name => '::',
+                                    func => PhP::AST::Var.new( name => '::' ),
                                     args => [
                                         PhP::AST::Literal.new( value => 2 ),
                                         PhP::AST::Apply.new(
-                                            name => '::',
+                                            func => PhP::AST::Var.new( name => '::' ),
                                             args => [
                                                 PhP::AST::Literal.new( value => 3 ),
                                                 PhP::AST::Tuple.new,
@@ -154,10 +154,10 @@ subtest {
                     ) 
                 ],
                 body => PhP::AST::Apply.new(
-                    name => 'head',
+                    func => PhP::AST::Var.new( name => 'head' ),
                     args => [ 
                        PhP::AST::Apply.new(
-                            name => 'tail',
+                            func => PhP::AST::Var.new( name => 'tail' ),
                             args => [ PhP::AST::Var.new( name => 'x' ) ]
                         )
                     ]
@@ -188,7 +188,7 @@ subtest {
                     PhP::AST::SimpleBind.new(
                         var   => PhP::AST::Var.new( name => 'z' ),
                         value => PhP::AST::Apply.new(
-                            name => '::',
+                            func => PhP::AST::Var.new( name => '::' ),
                             args => [
                                 PhP::AST::Literal.new( value => 3 ),
                                 PhP::AST::Tuple.new,
@@ -198,7 +198,7 @@ subtest {
                     PhP::AST::SimpleBind.new(
                         var   => PhP::AST::Var.new( name => 'y' ),
                         value => PhP::AST::Apply.new(
-                            name => '::',
+                            func => PhP::AST::Var.new( name => '::' ),
                             args => [
                                 PhP::AST::Literal.new( value => 2 ),
                                 PhP::AST::Var.new( name => 'z' ),
@@ -208,7 +208,7 @@ subtest {
                     PhP::AST::SimpleBind.new(
                         var   => PhP::AST::Var.new( name => 'x' ),
                         value => PhP::AST::Apply.new(
-                            name => '::',
+                            func => PhP::AST::Var.new( name => '::' ),
                             args => [
                                 PhP::AST::Literal.new( value => 1 ),
                                 PhP::AST::Var.new( name => 'y' ),
@@ -217,10 +217,10 @@ subtest {
                     )
                 ],
                 body => PhP::AST::Apply.new(
-                    name => 'head',
+                    func => PhP::AST::Var.new( name => 'head' ),
                     args => [ 
                        PhP::AST::Apply.new(
-                            name => 'tail',
+                            func => PhP::AST::Var.new( name => 'tail' ),
                             args => [ PhP::AST::Var.new( name => 'x' ) ]
                         )
                     ]

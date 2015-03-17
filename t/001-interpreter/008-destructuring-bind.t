@@ -34,7 +34,7 @@ subtest {
                     )
                 ],
                 body => PhP::AST::Apply.new(
-                    name => '+',
+                    func => PhP::AST::Var.new( name => '+' ),
                     args => [ 
                         PhP::AST::Var.new( name =>  'h' ),
                         PhP::AST::Var.new( name =>  't' ),
@@ -78,15 +78,15 @@ subtest {
                     )
                 ],
                 body => PhP::AST::Apply.new(
-                    name => '+',
+                    func => PhP::AST::Var.new( name => '+' ),
                     args => [ 
                         PhP::AST::Var.new( name => 'a' ),
                         PhP::AST::Apply.new(
-                            name => '+',
+                            func => PhP::AST::Var.new( name => '+' ),
                             args => [ 
                                 PhP::AST::Var.new( name => 'b' ),
                                 PhP::AST::Apply.new(
-                                    name => '+',
+                                    func => PhP::AST::Var.new( name => '+' ),
                                     args => [ 
                                         PhP::AST::Var.new( name => 'c' ),
                                         PhP::AST::Var.new( name => 'd' ),
@@ -135,22 +135,22 @@ subtest {
                     )
                 ],
                 body => PhP::AST::Apply.new(
-                    name =>'+',
+                    func => PhP::AST::Var.new( name => '+' ),
                     args => [ 
                         PhP::AST::Var.new( name => 'a' ),
                         PhP::AST::Apply.new(
-                            name =>'+',
+                            func => PhP::AST::Var.new( name => '+' ),
                             args => [ 
                                 PhP::AST::Var.new( name => 'b' ),
                                 PhP::AST::Apply.new(
-                                    name =>'+',
+                                    func => PhP::AST::Var.new( name => '+' ),
                                     args => [ 
                                         PhP::AST::Apply.new(
-                                            name =>'first',
+                                            func => PhP::AST::Var.new( name => 'first' ),
                                             args => [ PhP::AST::Var.new( name => 'c' ) ]
                                         ),
                                         PhP::AST::Apply.new(
-                                            name =>'second',
+                                            func => PhP::AST::Var.new( name => 'second' ),
                                             args => [ PhP::AST::Var.new( name => 'c' ) ]
                                         ),
                                     ]

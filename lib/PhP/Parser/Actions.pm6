@@ -119,7 +119,7 @@ class PhP::Parser::Actions {
     method apply-expression ($/) {
         $/.make(
             PhP::AST::Apply.new(
-                name => ~ $/.<identifier>,
+                func => $/.<identifier>.made,
                 args => $/.<apply-argument>>>.made
             )
         );
@@ -132,7 +132,7 @@ class PhP::Parser::Actions {
     method binary-expression ($/) {
         $/.make( 
             PhP::AST::Apply.new( 
-                name => ~ $/.<binary-op>,
+                func => $/.<binary-op>.made,
                 args => [ 
                     ($/.<literal> // $/.<identifier> // $/.<apply-expression>).made,
                     $/.<expression>.made 
@@ -167,6 +167,10 @@ class PhP::Parser::Actions {
         else {
             die "I have no idea what kind of literal this is: $/"; 
         }
+    }
+
+    method binary-op ($/) {
+        $/.make( PhP::AST::Var.new( name => ~ $/ ) );
     }
 
     method identifier ($/) {
