@@ -67,15 +67,24 @@ package PhP::Runtime {
     }
 
     class CompilationUnit {
-        has               %.options; # the set of options this was compiled
-        has PhP::AST::Ast $.root;    # the root node of the AST 
-        has PhP::AST::Ast $.result;  # the result of compiling the AST
-        has Env           $.env;     # the environment everything will be compiled into                                         
+        has                 %.options; # the set of options this was compiled
+        has PhP::AST::Ast   $.root;    # the root node of the AST 
+        has PhP::AST::Ast   $.result;  # the result of compiling the AST
+        has Env             $.env;     # the environment everything will be compiled into  
+        has CompilationUnit $.linked;                                       
 
-        submethod BUILD (:%options, :$root, :$env) {
+        submethod BUILD (:%options, :$root, :$env, :$link) {
             %!options = %options;
             $!root    = $root;
-            $!env     = $env // PhP::Runtime::Env.new( parent => $ROOT_ENV );
+
+            if $link.defined {
+                $!linked = $link;
+                $!env    = PhP::Runtime::Env.new( parent => $link.env.children[0] );
+            }
+            else {
+                $!env = $env // PhP::Runtime::Env.new( parent => $ROOT_ENV );
+            }
+
         }
 
         method has_root                       { $!root.defined }
