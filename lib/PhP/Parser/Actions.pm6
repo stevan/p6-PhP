@@ -174,6 +174,23 @@ class PhP::Parser::Actions {
     }
 
     method identifier ($/) {
+        $/.make(
+            $/.<local-identifier>.made 
+                //
+            $/.<namespaced-identifier>.made                 
+        );
+    }
+
+    method local-identifier ($/) {
         $/.make( PhP::AST::Var.new( name => ~ $/ ) );
+    }
+
+    method namespaced-identifier ($/) {
+        $/.make( 
+            PhP::AST::Var.new( 
+                name      => ~ $/.<name>,
+                namespace => ~ $/.<namespace> 
+            ) 
+        );
     }
 }

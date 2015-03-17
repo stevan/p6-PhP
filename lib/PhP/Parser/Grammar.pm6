@@ -133,9 +133,18 @@ grammar PhP::Parser::Grammar {
         \"         # "
     }
 
-    token identifier       { <.identifier-start><.identifier-rest>* }
-    token identifier-start { <[A..Za..z_]>     }
-    token identifier-rest  { <[A..Za..z0..9_]> }
+    token identifier {
+        [
+        | <namespaced-identifier>
+        | <local-identifier>
+        ]
+    }
+
+    token namespaced-identifier { <namespace=.local-identifier> "." <name=.local-identifier> }
+
+    token local-identifier       { <.local-identifier-start><.local-identifier-rest>* }
+    token local-identifier-start { <[A..Za..z_]>     }
+    token local-identifier-rest  { <[A..Za..z0..9_]> }
 }
 
 
