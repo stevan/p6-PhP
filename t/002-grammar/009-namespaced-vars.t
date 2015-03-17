@@ -31,7 +31,7 @@ subtest {
         let add = func (x, y) { x + y },
             mul = func (x, y) { x * y },
             sub = func (x, y) { x - y },
-            div = func (x, y) { x / y }
+            div = func (x, y) { x / y },
         in
             ()
         ;;
