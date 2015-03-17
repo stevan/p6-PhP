@@ -13,29 +13,36 @@ sub MAIN (
         Bool :$v = False, # -v print out version information        
     ) {
 
+    my %options = ( 
+        version => PhP::VERSION,
+        debug   => $d,
+    );
+
     if $v {
-        say PhP::VERSION;
+        say %options<version>;
         exit;
     }
 
     my Str $source;
 
     if $e.defined {
+        %options<file> = "-e";
         $source = ~ $e;
     }
     else {
         die "You must specify a file to execute" if ! $file.defined;
+        %options<file> = $file;
         $source = slurp $file;
     }
 
     if $c {
-        my $ast = PhP::parse( $source );
+        my $ast = PhP::parse( $source, %options );
         say ~ $ast if $d;
         say "Syntax OK" if $ast;  
         exit( $ast ?? 1 !! 0 );      
     }
     else {
-        my $unit = PhP::run( $source );
+        my $unit = PhP::run( $source, %options );
         say ~ $unit.root if $d;
         say ~ $unit.result;
         exit;
