@@ -19,9 +19,9 @@ Bugs (maybe)
 Modules ...
 ---------------------------------------------------------------------------------------------------------
 
-# in lib/Math.php
+add in syntax for this
 
-@export add, mul, sub, div
+# in lib/Math.php
 
 let add = func (x, y) { x + y },
     mul = func (x, y) { x * y },
@@ -42,22 +42,3 @@ Math.add(2, 2)
 @import Math
 
 Math.add(2, 2)
-
----------------------------------------------------------------------------------------------------------
-
-https://github.com/rakudo/rakudo/blob/2cd96450af5ee9836b449882ab080fe3b9ca7d49/src/core/CompUnit.pm
-
----------------------------------------------------------------------------------------------------------
-
-[x] Need a compilation unit AST node
-
-[x] The Env class needs child refs, which get cleaned up by the interpreter
-
-[ ] The compilation unit can point to the first child of the root_env as the place any public things are defined
-
-[ ] This can then be exported by merging this Env into the root Env of the compilation unit that imported it.
-
-[ ] We can also have a compiler pragma that takes the list of things to export and only let that be imported.
-
-[ ] Namespacing can be done by name mangling, we can track details inside the interpreter if we need to.
-
