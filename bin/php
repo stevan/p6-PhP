@@ -15,7 +15,7 @@ sub MAIN (
 
     my %options = ( 
         version => PhP::VERSION,
-        debug   => $d,
+        DEBUG   => $d,
     );
 
     if $v {
@@ -35,15 +35,17 @@ sub MAIN (
         $source = slurp $file;
     }
 
+    say "[DEBUG] SOURCE: " ~ $source if $d;
+
     if $c {
         my $ast = PhP::parse( $source, %options );
-        say ~ $ast if $d;
+        say "[DEBUG] AST: " ~ $ast if $d;
         say "Syntax OK" if $ast;  
         exit( $ast ?? 1 !! 0 );      
     }
     else {
         my $unit = PhP::run( $source, %options );
-        say ~ $unit.root if $d;
+        say "[DEBUG] ROOT: " ~ $unit.root if $d;
         say ~ $unit.result;
         exit;
     }

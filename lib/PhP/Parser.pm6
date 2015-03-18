@@ -12,8 +12,8 @@ package PhP::Parser {
         my $match   = PhP::Parser::Grammar.parse( $source, :$actions );
         
         if %opts{'DEBUG'} {
-            say ~ $match.gist;
-            say ~ $match.made.gist;
+            say "[DEBUG::PARSER] MATCH:\n" ~ $match.gist;
+            say "[DEBUG::PARSER::MATCH] AST:\n" ~ $match.made.gist;
         }
         
         die "Syntax Error" unless $match.defined;
