@@ -13,15 +13,15 @@ clean_up_moar () {
 }
 
 compile_to_moar () {
-    perl6 -I lib/ --target=mbc --encoding=utf8 --output=bin/php.moarvm bin/php
-    perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/PhP.pm6.moarvm lib/PhP.pm6
+    perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/PhP/Parser/Grammar.pm6.moarvm lib/PhP/Parser/Grammar.pm6
     perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/PhP/AST.pm6.moarvm lib/PhP/AST.pm6
+    perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/PhP/Parser/Actions.pm6.moarvm lib/PhP/Parser/Actions.pm6    
+    perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/PhP/Parser.pm6.moarvm lib/PhP/Parser.pm6
+    perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/PhP/Runtime.pm6.moarvm lib/PhP/Runtime.pm6
     perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/PhP/Compiler.pm6.moarvm lib/PhP/Compiler.pm6
     perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/PhP/Interpreter.pm6.moarvm lib/PhP/Interpreter.pm6
-    perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/PhP/Parser.pm6.moarvm lib/PhP/Parser.pm6
-    perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/PhP/Parser/Actions.pm6.moarvm lib/PhP/Parser/Actions.pm6
-    perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/PhP/Parser/Grammar.pm6.moarvm lib/PhP/Parser/Grammar.pm6
-    perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/PhP/Runtime.pm6.moarvm lib/PhP/Runtime.pm6
+    perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/PhP.pm6.moarvm lib/PhP.pm6
+    perl6 -I lib/ --target=mbc --encoding=utf8 --output=bin/php.moarvm bin/php
 }
 
 clean_up_moar
