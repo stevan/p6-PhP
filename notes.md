@@ -28,6 +28,25 @@
     - but I couldn't find Test.pm anywhere
         - https://github.com/rakudo/rakudo/blob/nom/lib/Test.pm
 
+- documentation on how to pre-compile Perl 6 files to moarvm was non-existant
+    - I had to dig through the panda source
+    - I found the basics, but was unclear of exactly how it works
+    - finally managed to find it by trial and error and vague recollections of the panda source
+    - so what is it??
+        - topologically sort your .p6/.pm6 files
+        - build them with the following:
+            --target=mbc
+            --encoding=utf8
+            --output=SameFileName.pm6.moarvm
+        - then just use perl6 in the same way
+            - and it will automagically find the .moarvm files
+    - see build.sh for details
+
+- documentation about MoarVM speedup was not easy to find
+    - it cut the test run to 29% of total 
+    - it cut the parse time to 17% of total 
+    - this very much changes the usability of the language!
+
 # Error messages
 
 - error messages vary widely
