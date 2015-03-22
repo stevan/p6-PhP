@@ -10,10 +10,9 @@ package PhP::Runtime {
         has PhP::AST::Ast %.pad;
         has Env           %.namespaces;
 
-        submethod BUILD ( :$parent ) {
-            if $parent.defined {
-                $parent.children.push: self;
-                $!parent = $parent;
+        submethod BUILD ( :$!parent = Env ) {
+            if $!parent.defined {
+                $!parent.children.push: self;
             }
         }
 
@@ -84,11 +83,8 @@ package PhP::Runtime {
         has Env             $.env;     # the environment everything will be compiled into  
         has                 @.linked;                                       
 
-        submethod BUILD (:%options, :$name, :$root, :$env, :@linked) {
-            %!options = %options;       
-            $!root    = $root;
-            $!env     = $env // PhP::Runtime::Env.new( parent => $ROOT_ENV );
-            @!linked  = @linked;
+        submethod BUILD (:%!options, :$!root, :$!env = Env, :@!linked) {
+            $!env //= PhP::Runtime::Env.new( parent => $ROOT_ENV );
             if @!linked.elems {
                 for @!linked -> $link {
                     $!env.link_namespace( $link.key, $link.value.env.children[0] );
