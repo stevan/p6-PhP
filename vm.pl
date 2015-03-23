@@ -1,194 +1,267 @@
 #!perl6
 
-our $DEBUG = 1;
+class Process {
+    has %.memory;
+    has @.data;
+    has @.frame;
+    has $.pc is rw = 0;
 
-enum INSTRUCTIONS (
-    LOAD => 'LOAD',
-    STOR => 'STOR',
+    method current_frame { @.frame[*-1] }
 
-    LLOAD => 'LLOAD',
-    LSTOR => 'LSTOR',
+    method halt { $.pc = -1 }
 
-    DUP  => 'DUP',
-    POP  => 'POP',
-
-    JUMP => 'JUMP',
-    COND => 'COND',
-
-    LJUMP => 'LJUMP',
-    LCOND => 'LCOND',
-
-    CALL => 'CALL',
-    RETN => 'RETN',
-
-    HALT => 'HALT',
-    NOOP => 'NOOP',    
-
-    ADD  => 'ADD',
-    SUB  => 'SUB',
-    MUL  => 'MUL',
-    DIV  => 'DIV',
-
-    EQ   => 'EQ',
-    NEQ  => 'NEQ',
-
-    OUT  => 'OUT',
-);
-
-sub execute (@program) {
-
-    my %memory;
-    my @data;
-    my @frame;
-
-    my $pc = 0;
-
-    while ( $pc < @program.elems ) {
-
-        my $inst = @program[ $pc++ ];
-
-        if $DEBUG {
-            warn "DEBUG: Running instruction <$inst> at <$pc> with:\n"
-                ~ "data-stack: [" ~ @data.join(', ') ~ "]\n"
-                ~ "frame-stack: [\n"
-                    ~ @frame.map(-> $f {
-                        "\t[\n" ~
-                        "\t\traddr: " ~ $f{'raddr'}     ~ "\n" ~
-                        "\t\tladdr: " ~ $f{'laddr'}     ~ "\n" ~
-                        "\t\tdata: "  ~ $f{'data'}.perl ~ "\n" ~
-                        "\t]"        
-                    }).join(', ')
-                ~ "\n]\n"
-                ~ "memory: " ~ %memory.perl 
-                ~ "\n";
+    method execute ( @program, %opts? ) {
+        if %opts<DEBUG> {
+            say "== START ========";            
         }
 
-        given $inst {
-                
-            # accessing memory 
-            when LOAD {
-                my $label = @data.pop;
-                @data.push( %memory{ $label } );
-            }
-            when STOR {         
-                my $label = @data.pop;                       
-                my $value = @data.pop;                
-                %memory{ $label } = $value;
-            }
+        while ( $.pc >= 0 && $.pc < @program.elems ) {
+            my $inst = @program[ $.pc++ ];        
+            $inst.call( self );
 
-            # accessing local memory
-            when LLOAD {
-                my $label = @data.pop;
-                @data.push( @frame[*-1]{'data'}{ $label } );
+            if %opts<DEBUG> {
+                self._dump_for_debug( $inst );
+                say "-----------------";
             }
-            when LSTOR {         
-                my $label = @data.pop;                       
-                my $value = @data.pop;                
-                @frame[*-1]{'data'}{ $label } = $value;
-            }
+        }
 
-            # stack manipulation
-            when DUP {
-                @data.push( @data[*-1].clone );
-            }
-            when POP {
-                @data.pop;
-            }
+        if %opts<DEBUG> {
+            say "== END ==========";
+        }
+    }
 
-            # labels
-            when LJUMP {
-                my $addr = @data.pop;
-                $pc = $addr + @frame[*-1]{'laddr'};
-            }
-            when LCOND {
-                my $addr  = @data.pop;                
-                my $value = @data.pop;
-                if $value == True {
-                    #warn "Got a true value $value, jumping to $addr";
-                    $pc = $addr + @frame[*-1]{'laddr'};
-                } else {
-                    #warn "Did not get a true value: $value"
-                }
-            }
+    method _dump_for_debug ($inst) {
+        say "COUNTER : " ~ $.pc;
+        say "CURRENT : " ~ $inst.gist;
+        say "--------|";
+        say "MEMORY  : " ~ %.memory.gist;
+        say "DATA    : " ~ @.data.gist;
+        say "FRAME   : " ~ @.frame>>.gist.join("\n        | ");
+    }
+}
 
-            when LJUMP {
-                my $addr = @data.pop;
-                $pc = $addr;
-            }
-            when COND {
-                my $addr  = @data.pop;                
-                my $value = @data.pop;
-                if $value == True {
-                    #warn "Got a true value $value, jumping to $addr";
-                    $pc = $addr;
-                } else {
-                    #warn "Did not get a true value: $value"
-                }
-            }
+class Frame {
+    has %.memory;
+    has $.raddr;
+    has $.laddr;
+}
 
-            when CALL {
-                my $addr = @data.pop;
-                @frame.push: { 
-                    raddr => $pc.clone, 
-                    laddr => $addr.clone, 
-                    data  => {} 
-                };
-                #say "WTF!!!!" ~ @frame[*-1].perl;
-                $pc = $addr;
-            }
-            when RETN {
-                my %frame = %( @frame.pop );
-                $pc = %frame{'raddr'};
-            }
+role Instruction {}
 
-            # Maths
-            when ADD {
-                my $l = @data.pop;
-                my $r = @data.pop;
-                @data.push( $l + $r );
-            }
-            when SUB {
-                my $l = @data.pop;
-                my $r = @data.pop;
-                @data.push( $l - $r );
-            }
-            when MUL {
-                my $l = @data.pop;
-                my $r = @data.pop;
-                @data.push( $l * $r );
-            }
-            when DIV {
-                my $l = @data.pop;
-                my $r = @data.pop;
-                @data.push( $l / $r );
-            }
+class CONST is Instruction {
+    has Any $.value;
 
-            # Logic
-            when EQ {
-                my $l = @data.pop;
-                my $r = @data.pop;
-                @data.push( $l == $r );
-            }
-            when NEQ {
-                my $l = @data.pop;
-                my $r = @data.pop;
-                @data.push( $l != $r );
-            }
+    method arity { 0 }
 
-            # I/O
-            when OUT {
-                print @data.pop;
-            }
+    method call ( Process $process ) {
+        $process.data.push( $.value );
+    }       
+}
 
-            # Misc
-            when NOOP { next }
-            when HALT { last }
+class LOAD is Instruction {
+    method arity { 1 }
 
-            # Data 
-            default {
-                @data.push( $inst );
-            }
-        } 
+    method call ( Process $process ) {
+        my $label = $process.data.pop;
+        $process.data.push( $process.memory{ $label } );
+    }   
+}
+
+class STOR is Instruction {
+    method arity { 2 }
+
+    method call ( Process $process ) {
+        my $label = $process.data.pop;                       
+        my $value = $process.data.pop;                
+        $process.memory{ $label } = $value;
+    }
+}
+
+class LLOAD is Instruction {
+    method arity { 1 }
+
+    method call ( Process $process ) {
+        my $label = $process.data.pop;
+        $process.data.push( $process.current_frame.memory{ $label } );
+    }
+}
+
+class LSTOR is Instruction {
+    method arity { 2 }
+
+    method call ( Process $process ) {
+        my $label = $process.data.pop;                       
+        my $value = $process.data.pop;                
+        $process.current_frame.memory{ $label } = $value;
+    }
+}
+
+class DUP is Instruction {
+    method arity { 0 }
+
+    method call ( Process $process ) {
+        $process.data.push( $process.data[*-1].clone );
+    }
+}
+
+class POP is Instruction {
+    method arity { 0 } 
+
+    method call ( Process $process ) {
+        $process.data.pop;
+    }
+}
+
+class JUMP is Instruction {
+    method arity { 1 }
+
+    method call ( Process $process ) {
+        my $addr = $process.data.pop;
+        $process.pc = $addr;
+    }
+}
+
+class COND is Instruction {
+    method arity { 2 }
+
+    method call ( Process $process ) {
+        my $addr  = $process.data.pop;                
+        my $value = $process.data.pop;
+        if $value == True {
+            #warn "Got a true value $value, jumping to $addr";
+            $process.pc = $addr;
+        } else {
+            #warn "Did not get a true value: $value"
+        }
+    }
+}
+
+class LJUMP is Instruction {
+    method arity { 1 }
+
+    method call ( Process $process ) {
+        my $addr = $process.data.pop;
+        $process.pc = $addr + $process.current_frame.laddr;
+    }
+}
+
+class LCOND is Instruction {
+    method arity { 2 }
+
+    method call ( Process $process ) {
+        my $addr  = $process.data.pop;                
+        my $value = $process.data.pop;
+        if $value == True {
+            #warn "Got a true value $value, jumping to $addr";
+            $process.pc = $addr + $process.current_frame.laddr;
+        } else {
+            #warn "Did not get a true value: $value"
+        }
+    }
+}
+
+class CALL is Instruction {
+    method arity { 1 }
+
+    method call ( Process $process ) {
+        my $addr = $process.data.pop;
+        $process.frame.push: Frame.new(
+            raddr => $process.pc.clone, 
+            laddr => $addr.clone,
+        );
+        #say "WTF!!!!" ~ $process.current_frame.perl;
+        $process.pc = $addr;
+    }
+}
+
+class RETN is Instruction {
+    method arity { 0 }
+
+    method call ( Process $process ) {
+        my $frame = $process.frame.pop;
+        $process.pc = $frame.raddr;   
+    }
+}
+
+class ADD is Instruction {
+    method arity { 2 }
+
+    method call ( Process $process ) {
+        my $l = $process.data.pop;
+        my $r = $process.data.pop;
+        $process.data.push( $l + $r );
+    }
+}
+
+class SUB is Instruction {
+    method arity { 2 }
+
+    method call ( Process $process ) {
+        my $l = $process.data.pop;
+        my $r = $process.data.pop;
+        $process.data.push( $l - $r );
+    }
+}
+
+class MUL is Instruction {
+    method arity { 2 }
+
+    method call ( Process $process ) {
+        my $l = $process.data.pop;
+        my $r = $process.data.pop;
+        $process.data.push( $l * $r );   
+    }
+}
+
+class DIV is Instruction {
+    method arity { 2 }
+
+    method call ( Process $process ) {
+        my $l = $process.data.pop;
+        my $r = $process.data.pop;
+        $process.data.push( $l / $r );
+    }
+}
+
+class EQ is Instruction {
+    method arity { 2 }
+
+    method call ( Process $process ) {
+        my $l = $process.data.pop;
+        my $r = $process.data.pop;
+        $process.data.push( $l == $r );
+    }
+}
+
+class NEQ is Instruction {
+    method arity { 2 }
+
+    method call ( Process $process ) {
+        my $l = $process.data.pop;
+        my $r = $process.data.pop;
+        $process.data.push( $l != $r );   
+    }
+}
+
+class NOOP is Instruction {
+    method arity { 0 }
+
+    method call ( Process $process ) {}
+}
+
+class OUT is Instruction {
+    method arity { 1 }
+
+    method call ( Process $process ) {
+        print $process.data.pop;
+    }
+}
+
+class HALT is Instruction {
+    method arity { 0 }
+
+    method call ( Process $process ) {
+        $process.halt;
     }
 }
 
@@ -264,10 +337,6 @@ my @init = build_symbol_table(
     }
 );
 
-# pprint_program( @mul );
-
-execute( @init );
-
 # utils ...
 
 sub build_symbol_table ( @prelude, @postlude, %symbols, :$local = False ) {
@@ -293,9 +362,18 @@ sub build_symbol_table ( @prelude, @postlude, %symbols, :$local = False ) {
 }
 
 sub pprint_program (@program) {
-    say @program.keys.map({ sprintf("%3d", $_) ~ ": " ~ @program[$_] }).join("\n");
+    my $c = 0;
+    while ( $c < @program.elems ) {
+        my $inst = @program[$c];
+        say sprintf("%3d", $c) ~": "~ @program[$c].perl;
+        $c++;
+    }
 }
 
+#pprint_program( @program );
 
-
+Process.new.execute( 
+    @init.map({ $_.does(Instruction) ?? $_.new !! CONST.new( value => $_ ) }), 
+    #{ :DEBUG }
+);
 
