@@ -12,7 +12,7 @@ class Process {
 
     method execute ( @program, %opts? ) {
         if %opts<DEBUG> {
-            say "== START ========";            
+            say "== START ===========";            
         }
 
         while ( $.pc >= 0 && $.pc < @program.elems ) {
@@ -21,19 +21,19 @@ class Process {
 
             if %opts<DEBUG> {
                 self._dump_for_debug( $inst );
-                say "-----------------";
+                say "--------------------";
             }
         }
 
         if %opts<DEBUG> {
-            say "== END ==========";
+            say "== END =============";
         }
     }
 
     method _dump_for_debug ($inst) {
         say "COUNTER : " ~ $.pc;
         say "CURRENT : " ~ $inst.gist;
-        say "--------|";
+        say "-------->";
         say "MEMORY  : " ~ %.memory.gist;
         say "DATA    : " ~ @.data.gist;
         say "FRAME   : " ~ @.frame>>.gist.join("\n        | ");
@@ -48,64 +48,56 @@ class Frame {
 
 role Instruction {}
 
-class CONST is Instruction {
-    has Any $.value;
-
-    method arity { 0 }
-
-    method call ( Process $process ) {
-        $process.data.push( $.value );
-    }       
-}
-
 class LOAD is Instruction {
-    method arity { 1 }
+    has $.label = die 'label is required';
 
     method call ( Process $process ) {
-        my $label = $process.data.pop;
-        $process.data.push( $process.memory{ $label } );
+        $process.data.push( $process.memory{ $.label } );
     }   
 }
 
 class STOR is Instruction {
-    method arity { 2 }
+    has $.label = die 'label is required';
+    has $.value;
 
-    method call ( Process $process ) {
-        my $label = $process.data.pop;                       
-        my $value = $process.data.pop;                
-        $process.memory{ $label } = $value;
+    method call ( Process $process ) { 
+        $process.memory{ $.label } = $.value // $process.data.pop;
     }
 }
 
 class LLOAD is Instruction {
-    method arity { 1 }
+    has $.label = die 'label is required';
 
     method call ( Process $process ) {
-        my $label = $process.data.pop;
-        $process.data.push( $process.current_frame.memory{ $label } );
+        $process.data.push( $process.current_frame.memory{ $.label } );
     }
 }
 
 class LSTOR is Instruction {
-    method arity { 2 }
+    has $.label = die 'label is required';
+    has $.value;    
 
-    method call ( Process $process ) {
-        my $label = $process.data.pop;                       
-        my $value = $process.data.pop;                
-        $process.current_frame.memory{ $label } = $value;
+    method call ( Process $process ) {              
+        $process.current_frame.memory{ $.label } = $.value // $process.data.pop;
     }
 }
 
 class DUP is Instruction {
-    method arity { 0 }
 
     method call ( Process $process ) {
         $process.data.push( $process.data[*-1].clone );
     }
 }
 
+class PUSH is Instruction {
+    has $.value = die 'value is required';
+
+    method call ( Process $process ) {
+        $process.data.push( $.value );
+    }
+}
+
 class POP is Instruction {
-    method arity { 0 } 
 
     method call ( Process $process ) {
         $process.data.pop;
@@ -113,7 +105,6 @@ class POP is Instruction {
 }
 
 class JUMP is Instruction {
-    method arity { 1 }
 
     method call ( Process $process ) {
         my $addr = $process.data.pop;
@@ -122,7 +113,6 @@ class JUMP is Instruction {
 }
 
 class COND is Instruction {
-    method arity { 2 }
 
     method call ( Process $process ) {
         my $addr  = $process.data.pop;                
@@ -137,7 +127,6 @@ class COND is Instruction {
 }
 
 class LJUMP is Instruction {
-    method arity { 1 }
 
     method call ( Process $process ) {
         my $addr = $process.data.pop;
@@ -146,7 +135,6 @@ class LJUMP is Instruction {
 }
 
 class LCOND is Instruction {
-    method arity { 2 }
 
     method call ( Process $process ) {
         my $addr  = $process.data.pop;                
@@ -161,7 +149,6 @@ class LCOND is Instruction {
 }
 
 class CALL is Instruction {
-    method arity { 1 }
 
     method call ( Process $process ) {
         my $addr = $process.data.pop;
@@ -175,7 +162,6 @@ class CALL is Instruction {
 }
 
 class RETN is Instruction {
-    method arity { 0 }
 
     method call ( Process $process ) {
         my $frame = $process.frame.pop;
@@ -184,7 +170,6 @@ class RETN is Instruction {
 }
 
 class ADD is Instruction {
-    method arity { 2 }
 
     method call ( Process $process ) {
         my $l = $process.data.pop;
@@ -194,7 +179,6 @@ class ADD is Instruction {
 }
 
 class SUB is Instruction {
-    method arity { 2 }
 
     method call ( Process $process ) {
         my $l = $process.data.pop;
@@ -204,7 +188,6 @@ class SUB is Instruction {
 }
 
 class MUL is Instruction {
-    method arity { 2 }
 
     method call ( Process $process ) {
         my $l = $process.data.pop;
@@ -214,7 +197,6 @@ class MUL is Instruction {
 }
 
 class DIV is Instruction {
-    method arity { 2 }
 
     method call ( Process $process ) {
         my $l = $process.data.pop;
@@ -224,7 +206,6 @@ class DIV is Instruction {
 }
 
 class EQ is Instruction {
-    method arity { 2 }
 
     method call ( Process $process ) {
         my $l = $process.data.pop;
@@ -234,7 +215,6 @@ class EQ is Instruction {
 }
 
 class NEQ is Instruction {
-    method arity { 2 }
 
     method call ( Process $process ) {
         my $l = $process.data.pop;
@@ -244,13 +224,11 @@ class NEQ is Instruction {
 }
 
 class NOOP is Instruction {
-    method arity { 0 }
 
     method call ( Process $process ) {}
 }
 
 class OUT is Instruction {
-    method arity { 1 }
 
     method call ( Process $process ) {
         print $process.data.pop;
@@ -258,7 +236,6 @@ class OUT is Instruction {
 }
 
 class HALT is Instruction {
-    method arity { 0 }
 
     method call ( Process $process ) {
         $process.halt;
@@ -284,52 +261,62 @@ class HALT is Instruction {
     
 my @mul = build_symbol_table( 
     [
-        ('$x', LSTOR),            # pull x off the stack
-        ('$y', LSTOR),            # pull y off the stack
+        LSTOR.new( label => '$x' ),     # pull $x off the stack
+        LSTOR.new( label => '$y' ),     # pull $y off the stack
     ], 
-    [  (('&main', LLOAD), LJUMP) ],
+    [ LLOAD.new( label => '&main'), LJUMP.new ],
     {
         '&cond001-if-true' => [
-            ('$x', LLOAD),              # put x on the stack
-            (('&leave', LLOAD), LJUMP), # jump to the postlude
+            LLOAD.new( label => '$x'     ),  # put $x on the stack
+            LLOAD.new( label => '&leave' ),  # put the local-exit address on the stack
+            LJUMP.new,                       # jump to the postlude
         ],
         '&cond001-if-false' => [ 
-            (1, ('$y', LLOAD), SUB),    # put y on the stack, then subtract by one
-            ('$x', LLOAD),              # put x on the stack            
-            (('&mul', LOAD), CALL),     # now call mul with the stack
-                                        # this leaves the result of mul on the stack
-            ('$x', LLOAD),              # put x on the stack
-            (ADD),                      # and add them together, leaving the result on the stack
-            (('&leave', LLOAD), LJUMP), # jump to the postlude
+            PUSH.new( value => 1 ),         # put 1 on the stack
+            LLOAD.new( label => '$y' ),     # put $y on the stack
+            SUB.new,                        # then subtract 1 from $y
+            LLOAD.new( label => '$x' ),     # put $x on the stack            
+            LOAD.new( label => '&mul' ),    # put the address of &mul on the stack
+            CALL.new,                       # call &mul
+                                            # this leaves the result of mul on the stack
+            LLOAD.new( label => '$x' ),     # put x on the stack
+            ADD.new,                        # and add the value of $x and the return value of &mul
+            LLOAD.new( label => '&leave' ), # put the local-exit address on the stack
+            LJUMP.new,                      # jump to the postlude
         ],
         '&main' => [
-            ('$y', LLOAD),                # put y on the stack
-            (1, EQ),                      # compares y to 1, gets y from the stack
-            ('&cond001-if-true', LLOAD),  # if y == 1, jump to the `then` portion
-            (LCOND),                        
-            ('&cond001-if-false', LLOAD), # jump to the `else` portion  
-            (LJUMP),                      
+            LLOAD.new( label => '$y' ),                # put $y on the stack
+            PUSH.new( value => 1 ),                    # put 1 on the stack
+            EQ.new,                                    # compare $y to 1, leave bool on the stack
+            LLOAD.new( label => '&cond001-if-true' ),  # load the address of the 'true' block
+            LCOND.new,                                 # if top of the stack is true, goto 'true' block
+            LLOAD.new( label => '&cond001-if-false' ), # if we are still here, load the address of the 'false' block
+            LJUMP.new,                                 # and then jump to the 'false' block
         ],
         '&leave' => [
-            (RETN)                      # return from the sub
+            RETN.new   # return from the sub
         ]
     },  
     local => True
 );
 
 my @main = 
-    (2, 13),
-    (('&mul', LOAD), CALL),
-    (OUT),
+    (PUSH.new( value => 2 ), PUSH.new( value => 13)),
+    (LOAD.new( label => '&mul'), CALL.new),
+    (OUT.new),
 ;
 
 my @exit = 
-    (HALT)
+    (HALT.new)
 ;
 
 my @init = build_symbol_table( 
     [], 
-    [ ((('&main', LOAD), CALL), (HALT)) ],
+    [ 
+        LOAD.new( label => '&main' ), 
+        CALL.new, 
+        HALT.new, 
+    ],
     {
         '&mul'  => @mul,
         '&main' => @main,     
@@ -343,14 +330,19 @@ sub build_symbol_table ( @prelude, @postlude, %symbols, :$local = False ) {
     my @unit;
 
     my $start = @prelude.elems;
-    my $end   = $start + (3 * %symbols.keys.elems) + @postlude.elems; 
+    my $end   = $start + %symbols.keys.elems + @postlude.elems; 
 
     @unit.push: @prelude.list;
 
+    my %locals;
+
     for %symbols.kv -> $k, $v {
-        @unit.push: $end, $k, ($local ?? LSTOR !! STOR);
+        %locals{ $k } = $end;
+        @unit.push: ($local ?? LSTOR !! STOR).new( label => $k, value => $end );
         $end += $v.elems;       
     }
+
+    warn %locals.gist;
 
     @unit.push: @postlude.list;
 
@@ -373,7 +365,7 @@ sub pprint_program (@program) {
 #pprint_program( @program );
 
 Process.new.execute( 
-    @init.map({ $_.does(Instruction) ?? $_.new !! CONST.new( value => $_ ) }), 
-    #{ :DEBUG }
+    @init,
+    { DEBUG => %*ENV<DEBUG> }
 );
 
