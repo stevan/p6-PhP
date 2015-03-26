@@ -49,7 +49,9 @@ package MCVM::Machine {
     }
 
     our sub execute ( @program, %opts? ) {
-        Process.new.execute( @program, %opts )
+        my $process = Process.new;
+        $process.execute( @program, %opts );
+        return $process;
     }
 
 }

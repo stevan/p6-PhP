@@ -7,8 +7,8 @@ package MCVM {
 
     our constant VERSION = '0.0.0';
 
-    our sub run ( @program, %opts? )  {
-        MCVM::Machine::execute( @program, %opts )
+    our sub run ( @program, %opts? ) returns MCVM::Machine::Process {
+        return MCVM::Machine::execute( @program, %opts )
     }
 
 }
