@@ -17,7 +17,7 @@ class Process {
 
         while ( $.pc >= 0 && $.pc < @program.elems ) {
             my $inst = @program[ $.pc++ ];        
-            $inst.call( self );
+            $inst.run( self );
 
             if %opts<DEBUG> {
                 self._dump_for_debug( $inst );
@@ -51,7 +51,7 @@ role Instruction {}
 class LOAD is Instruction {
     has $.label = die 'label is required';
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         $process.data.push( $process.memory{ $.label } );
     }   
 }
@@ -60,7 +60,7 @@ class STOR is Instruction {
     has $.label = die 'label is required';
     has $.value;
 
-    method call ( Process $process ) { 
+    method run ( Process $process ) { 
         $process.memory{ $.label } = $.value // $process.data.pop;
     }
 }
@@ -68,7 +68,7 @@ class STOR is Instruction {
 class LLOAD is Instruction {
     has $.label = die 'label is required';
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         $process.data.push( $process.current_frame.memory{ $.label } );
     }
 }
@@ -77,14 +77,14 @@ class LSTOR is Instruction {
     has $.label = die 'label is required';
     has $.value;    
 
-    method call ( Process $process ) {              
+    method run ( Process $process ) {              
         $process.current_frame.memory{ $.label } = $.value // $process.data.pop;
     }
 }
 
 class DUP is Instruction {
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         $process.data.push( $process.data[*-1].clone );
     }
 }
@@ -92,21 +92,21 @@ class DUP is Instruction {
 class PUSH is Instruction {
     has $.value = die 'value is required';
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         $process.data.push( $.value );
     }
 }
 
 class POP is Instruction {
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         $process.data.pop;
     }
 }
 
 class JUMP is Instruction {
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         my $addr = $process.data.pop;
         $process.pc = $addr;
     }
@@ -114,7 +114,7 @@ class JUMP is Instruction {
 
 class COND is Instruction {
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         my $addr  = $process.data.pop;                
         my $value = $process.data.pop;
         if $value == True {
@@ -128,7 +128,7 @@ class COND is Instruction {
 
 class LJUMP is Instruction {
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         my $addr = $process.data.pop;
         $process.pc = $addr + $process.current_frame.laddr;
     }
@@ -136,7 +136,7 @@ class LJUMP is Instruction {
 
 class LCOND is Instruction {
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         my $addr  = $process.data.pop;                
         my $value = $process.data.pop;
         if $value == True {
@@ -150,7 +150,7 @@ class LCOND is Instruction {
 
 class CALL is Instruction {
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         my $addr = $process.data.pop;
         $process.frame.push: Frame.new(
             raddr => $process.pc.clone, 
@@ -163,7 +163,7 @@ class CALL is Instruction {
 
 class RETN is Instruction {
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         my $frame = $process.frame.pop;
         $process.pc = $frame.raddr;   
     }
@@ -171,7 +171,7 @@ class RETN is Instruction {
 
 class ADD is Instruction {
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         my $l = $process.data.pop;
         my $r = $process.data.pop;
         $process.data.push( $l + $r );
@@ -180,7 +180,7 @@ class ADD is Instruction {
 
 class SUB is Instruction {
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         my $l = $process.data.pop;
         my $r = $process.data.pop;
         $process.data.push( $l - $r );
@@ -189,7 +189,7 @@ class SUB is Instruction {
 
 class MUL is Instruction {
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         my $l = $process.data.pop;
         my $r = $process.data.pop;
         $process.data.push( $l * $r );   
@@ -198,7 +198,7 @@ class MUL is Instruction {
 
 class DIV is Instruction {
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         my $l = $process.data.pop;
         my $r = $process.data.pop;
         $process.data.push( $l / $r );
@@ -207,7 +207,7 @@ class DIV is Instruction {
 
 class EQ is Instruction {
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         my $l = $process.data.pop;
         my $r = $process.data.pop;
         $process.data.push( $l == $r );
@@ -216,7 +216,7 @@ class EQ is Instruction {
 
 class NEQ is Instruction {
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         my $l = $process.data.pop;
         my $r = $process.data.pop;
         $process.data.push( $l != $r );   
@@ -225,19 +225,19 @@ class NEQ is Instruction {
 
 class NOOP is Instruction {
 
-    method call ( Process $process ) {}
+    method run ( Process $process ) {}
 }
 
 class OUT is Instruction {
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         print $process.data.pop;
     }
 }
 
 class HALT is Instruction {
 
-    method call ( Process $process ) {
+    method run ( Process $process ) {
         $process.halt;
     }
 }
@@ -264,7 +264,7 @@ my @mul = build_symbol_table(
         LSTOR.new( label => '$x' ),     # pull $x off the stack
         LSTOR.new( label => '$y' ),     # pull $y off the stack
     ], 
-    [ LLOAD.new( label => '&main'), LJUMP.new ],
+    [ LLOAD.new( label => '&enter'), LJUMP.new ],
     {
         '&cond001-if-true' => [
             LLOAD.new( label => '$x'     ),  # put $x on the stack
@@ -284,7 +284,7 @@ my @mul = build_symbol_table(
             LLOAD.new( label => '&leave' ), # put the local-exit address on the stack
             LJUMP.new,                      # jump to the postlude
         ],
-        '&main' => [
+        '&enter' => [
             LLOAD.new( label => '$y' ),                # put $y on the stack
             PUSH.new( value => 1 ),                    # put 1 on the stack
             EQ.new,                                    # compare $y to 1, leave bool on the stack
