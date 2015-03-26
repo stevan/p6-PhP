@@ -1,6 +1,11 @@
 set -x
 
 clean_up_moar () {
+    rm -f lib/MCVM/Instructions.pm6.moarvm
+    rm -f lib/MCVM/Machine.pm6.moarvm
+    rm -f lib/MCVM/Utils.pm6.moarvm
+    rm -f lib/MCVM.pm6.moarvm
+
     rm -f lib/PhP.pm6.moarvm
     rm -f lib/PhP/AST.pm6.moarvm
     rm -f lib/PhP/Compiler.pm6.moarvm
@@ -13,6 +18,11 @@ clean_up_moar () {
 }
 
 compile_to_moar () {
+    perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/MCVM/Machine.pm6.moarvm lib/MCVM/Machine.pm6
+    perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/MCVM/Instructions.pm6.moarvm lib/MCVM/Instructions.pm6
+    perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/MCVM/Utils.pm6.moarvm lib/MCVM/Utils.pm6
+    perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/MCVM.pm6.moarvm lib/MCVM.pm6
+
     perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/PhP/Parser/Grammar.pm6.moarvm lib/PhP/Parser/Grammar.pm6
     perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/PhP/AST.pm6.moarvm lib/PhP/AST.pm6
     perl6 -I lib/ --target=mbc --encoding=utf8 --output=lib/PhP/Parser/Actions.pm6.moarvm lib/PhP/Parser/Actions.pm6    
