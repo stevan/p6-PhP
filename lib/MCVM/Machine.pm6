@@ -4,29 +4,59 @@ package MCVM::Machine {
 
     class Frame {
         has %.memory;
-        has $.raddr;
-        has $.laddr;
+        has $.return_address;
+        has $.local_offset;
+
+        # memory 
+
+        method get_memory ( $addr )       { %.memory{ $addr }        }
+        method set_memory ( $addr, $val ) { %.memory{ $addr } = $val }
     }
 
     class Process {
         has Any   %.memory;
         has Any   @.data;
         has Frame @.frame;
-        has Int   $.pc is rw = 0;
+        has Int   $.program_counter is rw = 0;
+
+        # frames ...
 
         method current_frame { @.frame[*-1] }
 
-        method new_frame ( :$raddr, :$laddr ) {
-            @.frame.push: Frame.new( :$raddr, :$laddr )
+        method new_frame ( :$goto is copy ) {
+            @.frame.push( Frame.new( return_address => $.program_counter.clone, local_offset => $goto ) );
+            $.program_counter = $goto;
         }
 
-        method halt { $.pc = -1 }
+        method exit_frame { 
+            my $frame = @.frame.pop;
+            $.program_counter = $frame.return_address;
+        }
+
+        # data 
+
+        method peek_data          { @.data[*-1]         }
+        method pop_data           { @.data.pop          }
+        method push_data ( $val ) { @.data.push( $val ) }
+
+        # memory 
+
+        method get_memory ( $addr )       { %.memory{ $addr }        }
+        method set_memory ( $addr, $val ) { %.memory{ $addr } = $val }
+
+        # control 
+
+        method halt { $.program_counter = -1  }
+
+        method jump ( Int :$to, Bool :$is_local ) { 
+            $.program_counter = $to + ($is_local ?? self.current_frame.local_offset !! 0);
+        }
 
         method execute ( @program, %opts? ) {
             say "== START ===========" if %opts<DEBUG>;
 
-            while ( $.pc >= 0 && $.pc < @program.elems ) {
-                my $inst = @program[ $.pc++ ];        
+            while ( $.program_counter >= 0 && $.program_counter < @program.elems ) {
+                my $inst = @program[ $.program_counter++ ];        
                 $inst.run( self );
 
                 if %opts<DEBUG> {
@@ -39,7 +69,7 @@ package MCVM::Machine {
         }
 
         method _dump_for_debug ($inst) {
-            say "COUNTER : " ~ $.pc;
+            say "COUNTER : " ~ $.program_counter;
             say "CURRENT : " ~ $inst.gist;
             say "-------->";
             say "MEMORY  : " ~ %.memory.gist;

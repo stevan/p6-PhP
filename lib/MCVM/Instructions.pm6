@@ -10,7 +10,7 @@ package MCVM::Instructions {
         has $.label = die 'label is required';
 
         method run ( MCVM::Machine::Process $process ) {
-            $process.data.push( $process.memory{ $.label } );
+            $process.push_data( $process.get_memory( $.label ) );
         }   
     }
 
@@ -19,7 +19,7 @@ package MCVM::Instructions {
         has $.value;
 
         method run ( MCVM::Machine::Process $process ) { 
-            $process.memory{ $.label } = $.value // $process.data.pop;
+            $process.set_memory( $.label, $.value // $process.pop_data );
         }
     }
 
@@ -27,7 +27,7 @@ package MCVM::Instructions {
         has $.label = die 'label is required';
 
         method run ( MCVM::Machine::Process $process ) {
-            $process.data.push( $process.current_frame.memory{ $.label } );
+            $process.push_data( $process.current_frame.get_memory( $.label ) );
         }
     }
 
@@ -36,14 +36,14 @@ package MCVM::Instructions {
         has $.value;    
 
         method run ( MCVM::Machine::Process $process ) {              
-            $process.current_frame.memory{ $.label } = $.value // $process.data.pop;
+            $process.current_frame.set_memory( $.label, $.value // $process.pop_data );
         }
     }
 
     class DUP is INST {
 
         method run ( MCVM::Machine::Process $process ) {
-            $process.data.push( $process.data[*-1].clone );
+            $process.push_data( $process.peek_data.clone );
         }
     }
 
@@ -51,33 +51,33 @@ package MCVM::Instructions {
         has $.value = die 'value is required';
 
         method run ( MCVM::Machine::Process $process ) {
-            $process.data.push( $.value );
+            $process.push_data( $.value );
         }
     }
 
     class POP is INST {
 
         method run ( MCVM::Machine::Process $process ) {
-            $process.data.pop;
+            $process.pop_data;
         }
     }
 
     class JUMP is INST {
 
         method run ( MCVM::Machine::Process $process ) {
-            my $addr = $process.data.pop;
-            $process.pc = $addr;
+            my $addr = $process.pop_data;
+            $process.jump( to => $addr );
         }
     }
 
     class COND is INST {
 
         method run ( MCVM::Machine::Process $process ) {
-            my $addr  = $process.data.pop;                
-            my $value = $process.data.pop;
+            my $addr  = $process.pop_data;                
+            my $value = $process.pop_data;
             if $value == True {
                 #warn "Got a true value $value, jumping to $addr";
-                $process.pc = $addr;
+                $process.jump( to => $addr );
             } else {
                 #warn "Did not get a true value: $value"
             }
@@ -87,19 +87,19 @@ package MCVM::Instructions {
     class LJUMP is INST {
 
         method run ( MCVM::Machine::Process $process ) {
-            my $addr = $process.data.pop;
-            $process.pc = $addr + $process.current_frame.laddr;
+            my $addr = $process.pop_data;
+            $process.jump( to => $addr, is_local => True );
         }
     }
 
     class LCOND is INST {
 
         method run ( MCVM::Machine::Process $process ) {
-            my $addr  = $process.data.pop;                
-            my $value = $process.data.pop;
+            my $addr  = $process.pop_data;                
+            my $value = $process.pop_data;
             if $value == True {
                 #warn "Got a true value $value, jumping to $addr";
-                $process.pc = $addr + $process.current_frame.laddr;
+                $process.jump( to => $addr, is_local => True );
             } else {
                 #warn "Did not get a true value: $value"
             }
@@ -109,75 +109,69 @@ package MCVM::Instructions {
     class CALL is INST {
 
         method run ( MCVM::Machine::Process $process ) {
-            my $addr = $process.data.pop;
-            $process.new_frame(
-                raddr => $process.pc.clone, 
-                laddr => $addr.clone,
-            );
-            #say "WTF!!!!" ~ $process.current_frame.perl;
-            $process.pc = $addr;
+            my $addr = $process.pop_data;
+            $process.new_frame( goto => $addr );
         }
     }
 
     class RETN is INST {
 
         method run ( MCVM::Machine::Process $process ) {
-            my $frame = $process.frame.pop;
-            $process.pc = $frame.raddr;   
+            $process.exit_frame;
         }
     }
 
     class ADD is INST {
 
         method run ( MCVM::Machine::Process $process ) {
-            my $l = $process.data.pop;
-            my $r = $process.data.pop;
-            $process.data.push( $l + $r );
+            my $l = $process.pop_data;
+            my $r = $process.pop_data;
+            $process.push_data( $l + $r );
         }
     }
 
     class SUB is INST {
 
         method run ( MCVM::Machine::Process $process ) {
-            my $l = $process.data.pop;
-            my $r = $process.data.pop;
-            $process.data.push( $l - $r );
+            my $l = $process.pop_data;
+            my $r = $process.pop_data;
+            $process.push_data( $l - $r );
         }
     }
 
     class MUL is INST {
 
         method run ( MCVM::Machine::Process $process ) {
-            my $l = $process.data.pop;
-            my $r = $process.data.pop;
-            $process.data.push( $l * $r );   
+            my $l = $process.pop_data;
+            my $r = $process.pop_data;
+            $process.push_data( $l * $r );   
         }
     }
 
     class DIV is INST {
 
         method run ( MCVM::Machine::Process $process ) {
-            my $l = $process.data.pop;
-            my $r = $process.data.pop;
-            $process.data.push( $l / $r );
+            my $l = $process.pop_data;
+            my $r = $process.pop_data;
+            $process.push_data( $l / $r );
         }
     }
 
     class EQ is INST {
 
         method run ( MCVM::Machine::Process $process ) {
-            my $l = $process.data.pop;
-            my $r = $process.data.pop;
-            $process.data.push( $l == $r );
+            my $l = $process.pop_data;
+            my $r = $process.pop_data;
+            $process.push_data( $l == $r );
         }
     }
 
     class NEQ is INST {
 
         method run ( MCVM::Machine::Process $process ) {
-            my $l = $process.data.pop;
-            my $r = $process.data.pop;
-            $process.data.push( $l != $r );   
+            my $l = $process.pop_data;
+            my $r = $process.pop_data;
+            $process.push_data( $l != $r );   
         }
     }
 
@@ -189,7 +183,7 @@ package MCVM::Instructions {
     class OUT is INST {
 
         method run ( MCVM::Machine::Process $process ) {
-            print $process.data.pop;
+            print $process.pop_data;
         }
     }
 
