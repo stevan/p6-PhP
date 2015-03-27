@@ -10,5 +10,4 @@ package MCVM {
     our sub run ( @program, %opts? ) returns MCVM::Machine::Process {
         return MCVM::Machine::execute( @program, %opts )
     }
-
 }
