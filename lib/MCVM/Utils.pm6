@@ -35,11 +35,11 @@ package MCVM::Utils {
         return @unit;
     }
 
-    our sub pprint (@program) {
+    our sub pprint (@program, $printer = &say ) {
         my $c = 0;
         while ( $c < @program.elems ) {
             my $inst = @program[$c];
-            say sprintf("%3d", $c) ~": "~ @program[$c].perl;
+            $printer.( sprintf("%3d", $c) ~": "~ @program[$c].perl );
             $c++;
         }
     }

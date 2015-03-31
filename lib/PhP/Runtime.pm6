@@ -3,6 +3,7 @@ use v6;
 package PhP::Runtime {
 
     use PhP::AST;
+    use MCVM;
 
     class Env {
         has Env           $.parent;
@@ -77,11 +78,12 @@ package PhP::Runtime {
     }
 
     class CompilationUnit {
-        has                 %.options; # the set of options this was compiled
-        has PhP::AST::Ast   $.root;    # the root node of the AST 
-        has PhP::AST::Ast   $.result;  # the result of compiling the AST
-        has Env             $.env;     # the environment everything will be compiled into  
-        has                 @.linked;                                       
+        has                          %.options;   # the set of options this was compiled
+        has PhP::AST::Ast            $.root;      # the root node of the AST 
+        has PhP::AST::Ast            $.result;    # the result of interpreting the AST
+        has MCVM::Instructions::INST @.bytecode;  # the result of compiling the AST
+        has Env                      $.env;       # the environment everything will be compiled into  
+        has                          @.linked;                                       
 
         submethod BUILD (:%!options, :$!root, :$!env = Env, :@!linked) {
             $!env //= PhP::Runtime::Env.new( parent => $ROOT_ENV );
@@ -97,6 +99,9 @@ package PhP::Runtime {
 
         method has_result                         { $!result.defined   }
         method set_result (PhP::AST::Ast $result) { $!result = $result }
+
+        method has_bytecode                                      { @!bytecode.defined     }
+        method set_bytecode (MCVM::Instructions::INST @bytecode) { @!bytecode = @bytecode }        
     }
 
 }
