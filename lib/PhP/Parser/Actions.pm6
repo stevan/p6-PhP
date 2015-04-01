@@ -134,8 +134,8 @@ class PhP::Parser::Actions {
             PhP::AST::Apply.new( 
                 func => $/.<binary-op>.made,
                 args => [ 
-                    ($/.<literal> // $/.<identifier> // $/.<apply-expression>).made,
-                    $/.<expression>.made 
+                    $/.<lhs>.made,
+                    $/.<rhs>.made 
                 ]
             ) 
         );

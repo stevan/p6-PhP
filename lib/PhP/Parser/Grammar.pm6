@@ -76,9 +76,10 @@ grammar PhP::Parser::Grammar {
 
     rule binary-expression {
         [
-        | <literal>          <.ws>? <binary-op> <.ws>? <expression> 
-        | <identifier>       <.ws>? <binary-op> <.ws>? <expression> 
-        | <apply-expression> <.ws>? <binary-op> <.ws>? <expression> 
+        | <lhs=.literal>            <.ws>? <binary-op> <.ws>? <rhs=.expression> 
+        | <lhs=.identifier>         <.ws>? <binary-op> <.ws>? <rhs=.expression> 
+        | <lhs=.apply-expression>   <.ws>? <binary-op> <.ws>? <rhs=.expression> 
+        | "(" <lhs=.expression> ")" <.ws>? <binary-op> <.ws>? <rhs=.expression> 
         ]
     }
 
