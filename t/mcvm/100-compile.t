@@ -15,7 +15,7 @@ subtest {
     diag "AST:";
     diag ~ $unit.root;
 
-    my @program = $unit.bytecode;
+    my @program = $unit.result.instructions;
     diag "PROGRAM:";
     MCVM::Utils::pprint( @program, &diag );
 
@@ -30,7 +30,7 @@ subtest {
     diag "AST:";
     diag ~ $unit.root;
 
-    my @program = $unit.bytecode;
+    my @program = $unit.result.instructions;
     diag "PROGRAM:";
     MCVM::Utils::pprint( @program, &diag );
 

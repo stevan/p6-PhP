@@ -19,9 +19,9 @@ package PhP {
         );        
     }
 
-    our sub compile ( Str $source, %opts? ) returns PhP::Runtime::CompilationUnit {
+    our sub compile ( Str $source, %opts? ) returns PhP::Compiler::Executable {
         return PhP::Compiler::compile( 
-            PhP::Runtime::CompilationUnit.new(
+            PhP::Compiler::Executable.new(
                 options => %opts,
                 root    => parse( $source, %opts ),
             )
