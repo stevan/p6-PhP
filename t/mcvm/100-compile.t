@@ -12,14 +12,13 @@ plan *;
 
 subtest {
     my $unit = PhP::compile(q[1]);
+
     diag "AST:";
     diag ~ $unit.root;
-
-    my @program = $unit.result.instructions;
     diag "PROGRAM:";
-    MCVM::Utils::pprint( @program, &diag );
+    MCVM::Utils::pprint( $unit.result.instructions, &diag );
 
-    my $process = MCVM::run( @program, { DEBUG => %*ENV<DEBUG> } );
+    my $process = $unit.run;
     isa_ok($process, MCVM::Machine::Process);
     is($process.data[*-1], 1, '... found the right value on the top of the stack');
 
@@ -27,17 +26,30 @@ subtest {
 
 subtest {
     my $unit = PhP::compile(q[1 + 1]);
+
     diag "AST:";
     diag ~ $unit.root;
-
-    my @program = $unit.result.instructions;
     diag "PROGRAM:";
-    MCVM::Utils::pprint( @program, &diag );
+    MCVM::Utils::pprint( $unit.result.instructions, &diag );
 
-    my $process = MCVM::run( @program, { DEBUG => %*ENV<DEBUG> } );
+    my $process = $unit.run;
     isa_ok($process, MCVM::Machine::Process);
     is($process.data[*-1], 2, '... found the right value on the top of the stack');
 
-}, '... testing simple Int values';
+}, '... testing simple addition';
+
+subtest {
+    my $unit = PhP::compile(q[(1 + 2) - (3 * 3)]);
+
+    diag "AST:";
+    diag ~ $unit.root;
+    diag "PROGRAM:";
+    MCVM::Utils::pprint( $unit.result.instructions, &diag );
+
+    my $process = $unit.run;
+    isa_ok($process, MCVM::Machine::Process);
+    is($process.data[*-1], 6, '... found the right value on the top of the stack');
+
+}, '... testing simple addition';
 
 done;

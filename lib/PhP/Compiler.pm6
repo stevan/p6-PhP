@@ -31,7 +31,9 @@ package PhP::Compiler {
         method set_root (PhP::AST::Ast $root) { $!root = $root }
 
         method has_result                     { $!result.defined   }
-        method set_result (Assembler $result) { $!result = $result }         
+        method set_result (Assembler $result) { $!result = $result }
+
+        method run { MCVM::run( $.result.instructions ) }
     }
 
     our sub compile ( Executable $unit ) returns Executable {
