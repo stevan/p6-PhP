@@ -9,6 +9,8 @@ use MCVM::Utils;
 
 plan *;
 
+# in PhP:
+#
 # let mul = fun (x, y) 
 #               if ( y == 1 ) 
 #                   then x 
@@ -16,47 +18,46 @@ plan *;
 # in
 #    mul 13, 2
 # ;;
+#
+# in MCVM Assembler:
+#
+# SUB multiply {
+#     ARGS {
+#         LSTOR $x
+#         LSTOR $y
+#     }
+#     BODY {
+#         init:
+#             LLOAD &enter
+#             LJUMP
+#         enter:
+#             LLOAD $y
+#             PUSH @(1)
+#             EQ
+#             LLOAD &cond_if_true
+#             LCOND
+#             LLOAD &cond_if_false
+#             LJUMP
+#         cond_if_true:
+#             LLOAD $x
+#             LLOAD &leave
+#             LJUMP
+#         cond_if_false:
+#             PUSH @(1)
+#             LLOAD $y
+#             SUB
+#             LLOAD $x
+#             LOAD &multiply
+#             CALL
+#             LLOAD $x
+#             ADD
+#             LLOAD &leave
+#             LJUMP
+#         leave:
+#             RETN
+#     }
+# }
 
-=pod 
-
-SUB multiply {
-    ARGS {
-        LSTOR $x
-        LSTOR $y
-    }
-    BODY {
-        init:
-            LLOAD &enter
-            LJUMP
-        enter:
-            LLOAD $y
-            PUSH @(1)
-            EQ
-            LLOAD &cond_if_true
-            LCOND
-            LLOAD &cond_if_false
-            LJUMP
-        cond_if_true:
-            LLOAD $x
-            LLOAD &leave
-            LJUMP
-        cond_if_false:
-            PUSH @(1)
-            LLOAD $y
-            SUB
-            LLOAD $x
-            LOAD &multiply
-            CALL
-            LLOAD $x
-            ADD
-            LLOAD &leave
-            LJUMP
-        leave:
-            RETN
-    }
-}
-
-=cut
 
     
 my @mul = MCVM::Utils::assemble( 
