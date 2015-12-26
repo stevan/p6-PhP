@@ -9,7 +9,7 @@ package PhP::Compiler {
     use MCVM::Utils;
 
     class Assembler {
-        has %.symbols;       
+        has %.symbols;
         has @.instructions;
 
         method get_symbol ( Str $key ) { %!symbols{ $key } }
@@ -18,13 +18,15 @@ package PhP::Compiler {
         }
 
         method add_instructions ( *@inst ) {
-            @!instructions.push: @inst.list;
+            for @inst -> $inst {
+                @!instructions.push: $inst;
+            }
         }
     }
 
     class Executable {
         has               %.options;   # the set of options this was compiled
-        has PhP::AST::Ast $.root;      # the root node of the AST 
+        has PhP::AST::Ast $.root;      # the root node of the AST
         has Assembler     $.result;    # the result of compiling the AST
 
         method has_root                       { $!root.defined }
@@ -59,7 +61,7 @@ package PhP::Compiler {
     multi emit ( PhP::AST::StringLiteral $exp, Assembler $assm ) { ... }
 
     multi emit ( PhP::AST::NumberLiteral $exp, Assembler $assm ) {
-        $assm.add_instructions( 
+        $assm.add_instructions(
             MCVM::Instructions::PUSH.new( value => $exp.value )
         );
     }
@@ -68,7 +70,7 @@ package PhP::Compiler {
 
     multi emit ( PhP::AST::Unit $exp, Assembler $assm ) { ... }
 
-    multi emit ( PhP::AST::Var $exp, Assembler $assm ) { ... }   
+    multi emit ( PhP::AST::Var $exp, Assembler $assm ) { ... }
 
     multi emit ( PhP::AST::Let $exp, Assembler $assm ) { ... }
 
@@ -79,7 +81,7 @@ package PhP::Compiler {
     multi emit ( PhP::AST::Apply $exp, Assembler $assm ) {
         $exp.args.map: { emit( $_, $assm ) };
 
-        my @code = $assm.get_symbol( $exp.func.name ) 
+        my @code = $assm.get_symbol( $exp.func.name )
             || die "Cannot find function: (" ~ $exp.func.name ~ ")";
 
         $assm.add_instructions( @code );

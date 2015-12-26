@@ -12,18 +12,18 @@ PhP::Runtime::bootstrap;
 
 subtest {
     # CODE:
-    # let [ h, t ] = [ 1, 2 ] in 
+    # let [ h, t ] = [ 1, 2 ] in
     #     h + t
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::DestructuringBind.new(
-                        pattern => [ 
+                        pattern => [
                             PhP::AST::Var.new( name => 'h' ),
-                            PhP::AST::Var.new( name => 't' ), 
+                            PhP::AST::Var.new( name => 't' ),
                         ],
                         value => PhP::AST::Tuple.new(
                             items => [
@@ -35,37 +35,37 @@ subtest {
                 ],
                 body => PhP::AST::Apply.new(
                     func => PhP::AST::Var.new( name => '+' ),
-                    args => [ 
+                    args => [
                         PhP::AST::Var.new( name =>  'h' ),
                         PhP::AST::Var.new( name =>  't' ),
                     ]
                 )
-            ) 
+            )
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 3, '... got the value we expected';
 }, '... testing simple tuple with two captures';
 
 subtest {
     # CODE:
-    # let [ a, b, c, d ] = [ 1, 2, 3, 4 ] in 
+    # let [ a, b, c, d ] = [ 1, 2, 3, 4 ] in
     #     a + b + c + d
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::DestructuringBind.new(
-                        pattern => [ 
+                        pattern => [
                             PhP::AST::Var.new( name => 'a' ),
-                            PhP::AST::Var.new( name => 'b' ), 
-                            PhP::AST::Var.new( name => 'c' ), 
-                            PhP::AST::Var.new( name => 'd' ), 
+                            PhP::AST::Var.new( name => 'b' ),
+                            PhP::AST::Var.new( name => 'c' ),
+                            PhP::AST::Var.new( name => 'd' ),
                         ],
                         value => PhP::AST::Tuple.new(
                             items => [
@@ -79,15 +79,15 @@ subtest {
                 ],
                 body => PhP::AST::Apply.new(
                     func => PhP::AST::Var.new( name => '+' ),
-                    args => [ 
+                    args => [
                         PhP::AST::Var.new( name => 'a' ),
                         PhP::AST::Apply.new(
                             func => PhP::AST::Var.new( name => '+' ),
-                            args => [ 
+                            args => [
                                 PhP::AST::Var.new( name => 'b' ),
                                 PhP::AST::Apply.new(
                                     func => PhP::AST::Var.new( name => '+' ),
-                                    args => [ 
+                                    args => [
                                         PhP::AST::Var.new( name => 'c' ),
                                         PhP::AST::Var.new( name => 'd' ),
                                     ]
@@ -96,12 +96,12 @@ subtest {
                         )
                     ]
                 )
-            ) 
+            )
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 10, '... got the value we expected';
 }, '... testing simple tuple with 4 captures';
@@ -109,20 +109,20 @@ subtest {
 
 subtest {
     # CODE:
-    # let [ a, b, c* ] = [ 1, 2, 3, 4 ] in 
+    # let [ a, b, c* ] = [ 1, 2, 3, 4 ] in
     #     a + b + first(c) + second(d)
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::DestructuringBind.new(
-                        is_slurpy => True,                            
-                        pattern   => [ 
+                        is_slurpy => True,
+                        pattern   => [
                             PhP::AST::Var.new( name =>'a' ),
-                            PhP::AST::Var.new( name =>'b' ), 
-                            PhP::AST::Var.new( name =>'c' ),  
+                            PhP::AST::Var.new( name =>'b' ),
+                            PhP::AST::Var.new( name =>'c' ),
                         ],
                         value => PhP::AST::Tuple.new(
                             items => [
@@ -136,15 +136,15 @@ subtest {
                 ],
                 body => PhP::AST::Apply.new(
                     func => PhP::AST::Var.new( name => '+' ),
-                    args => [ 
+                    args => [
                         PhP::AST::Var.new( name => 'a' ),
                         PhP::AST::Apply.new(
                             func => PhP::AST::Var.new( name => '+' ),
-                            args => [ 
+                            args => [
                                 PhP::AST::Var.new( name => 'b' ),
                                 PhP::AST::Apply.new(
                                     func => PhP::AST::Var.new( name => '+' ),
-                                    args => [ 
+                                    args => [
                                         PhP::AST::Apply.new(
                                             func => PhP::AST::Var.new( name => 'first' ),
                                             args => [ PhP::AST::Var.new( name => 'c' ) ]
@@ -159,15 +159,15 @@ subtest {
                         )
                     ]
                 )
-            ) 
+            )
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 10, '... got the value we expected';
 }, '... testing simple tuple with 4 captures';
 
 
-done;
+done-testing;

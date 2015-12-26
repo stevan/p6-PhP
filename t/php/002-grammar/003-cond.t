@@ -10,108 +10,108 @@ plan *;
 
 subtest {
 
-    my $unit = PhP::run( 
+    my $unit = PhP::run(
        q[
             let x = 10 in
-                if x == 10 
+                if x == 10
                     then "YES"
                     else "NO"
             ;;
-       ] 
+       ]
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, '"YES"', '... got the value we expected';
 }, '... testing ==';
 
 subtest {
 
-    my $unit = PhP::run( 
+    my $unit = PhP::run(
        q[
             let x = 10 in
-                if x != 10 
+                if x != 10
                     then "YES"
                     else "NO"
             ;;
-       ] 
+       ]
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, '"NO"', '... got the value we expected';
 }, '... testing !=';
 
 subtest {
 
-    my $unit = PhP::run( 
+    my $unit = PhP::run(
          q[
             let x = 10 in
-                if x < 100 
+                if x < 100
                     then "YES"
                     else "NO"
             ;;
          ]
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, '"YES"', '... got the value we expected';
 }, '... testing <';
 
 subtest {
 
-    my $unit = PhP::run( 
+    my $unit = PhP::run(
          q[
             let x = 10 in
-                if x <= 100 
+                if x <= 100
                     then "YES"
                     else "NO"
             ;;
          ]
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, '"YES"', '... got the value we expected';
 }, '... testing <=';
 
 subtest {
 
-    my $unit = PhP::run( 
+    my $unit = PhP::run(
          q[
             let x = 10 in
-                if x > 100 
+                if x > 100
                     then "YES"
                     else "NO"
             ;;
          ]
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, '"NO"', '... got the value we expected';
 }, '... testing >';
 
 subtest {
 
-    my $unit = PhP::run( 
+    my $unit = PhP::run(
          q[
             let x = 10 in
-                if x >= 100 
+                if x >= 100
                     then "YES"
                     else "NO"
             ;;
          ]
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, '"NO"', '... got the value we expected';
 }, '... testing >=';
@@ -119,7 +119,7 @@ subtest {
 
 subtest {
 
-    my $unit = PhP::run( 
+    my $unit = PhP::run(
          q[
             let x = 10,
                 y = if x == 10 then 2 else 4,
@@ -130,15 +130,15 @@ subtest {
          ]
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 17, '... got the value we expected';
 }, '... testing cond inside let assignment';
 
 subtest {
 
-    my $unit = PhP::run( 
+    my $unit = PhP::run(
          q[
             let x = 11,
                 y = if x == 10 then 2 else 4,
@@ -149,11 +149,11 @@ subtest {
          ]
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 25, '... got the value we expected';
 }, '... testing cond inside let assignment (part deux)';
 
 
-done;
+done-testing;

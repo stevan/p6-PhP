@@ -10,10 +10,10 @@ plan *;
 
 subtest {
 
-    my $unit = PhP::run( 
+    my $unit = PhP::run(
        q[
-            let mul = func (x, y) { 
-                if y == 1 
+            let mul = func (x, y) {
+                if y == 1
                     then x
                     else x + mul( x, y - 1 )
             } in
@@ -22,18 +22,18 @@ subtest {
        ]
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 26, '... got the value we expected';
 }, '... testing recursive multiply function';
 
 subtest {
 
-    my $unit = PhP::run( 
+    my $unit = PhP::run(
        q[
-            let factorial = func (n) { 
-                if n == 1 
+            let factorial = func (n) {
+                if n == 1
                     then 1
                     else n * factorial( n - 1 )
             } in
@@ -42,17 +42,17 @@ subtest {
        ]
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 120, '... got the value we expected';
 }, '... testing recursive factorial function';
 
 subtest {
 
-    my $unit = PhP::run( 
+    my $unit = PhP::run(
        q[
-            let 
+            let
                 is_even = func (n) { if n == 0 then true  else is_odd( n - 1 )  },
                 is_odd  = func (n) { if n == 0 then false else is_even( n - 1 ) },
              in
@@ -61,17 +61,17 @@ subtest {
        ]
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     ok ?( $unit.result === PhP::Runtime::root_env.get('#TRUE') ), '... got the value we expected';
 }, '... testing even/odd predicate';
 
 subtest {
 
-    my $unit = PhP::run( 
+    my $unit = PhP::run(
        q[
-            let 
+            let
                 is_even = func (n) { if n == 0 then true  else is_odd( n - 1 )  },
                 is_odd  = func (n) { if n == 0 then false else is_even( n - 1 ) },
              in
@@ -80,10 +80,10 @@ subtest {
        ]
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     ok ?( $unit.result === PhP::Runtime::root_env.get('#FALSE') ), '... got the value we expected';
 }, '... testing even/odd predicate (again)';
 
-done;
+done-testing;

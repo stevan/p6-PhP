@@ -19,7 +19,7 @@ subtest {
     MCVM::Utils::pprint( $unit.result.instructions, &diag );
 
     my $process = $unit.run;
-    isa_ok($process, MCVM::Machine::Process);
+    isa-ok($process, MCVM::Machine::Process);
     is($process.data[*-1], 1, '... found the right value on the top of the stack');
 
 }, '... testing simple Int values';
@@ -33,7 +33,7 @@ subtest {
     MCVM::Utils::pprint( $unit.result.instructions, &diag );
 
     my $process = $unit.run;
-    isa_ok($process, MCVM::Machine::Process);
+    isa-ok($process, MCVM::Machine::Process);
     is($process.data[*-1], 2, '... found the right value on the top of the stack');
 
 }, '... testing simple addition';
@@ -47,9 +47,9 @@ subtest {
     MCVM::Utils::pprint( $unit.result.instructions, &diag );
 
     my $process = $unit.run;
-    isa_ok($process, MCVM::Machine::Process);
+    isa-ok($process, MCVM::Machine::Process);
     is($process.data[*-1], 6, '... found the right value on the top of the stack');
 
 }, '... testing simple addition';
 
-done;
+done-testing;

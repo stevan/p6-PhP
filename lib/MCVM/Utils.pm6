@@ -8,28 +8,35 @@ package MCVM::Utils {
         my @unit;
 
         my $start = @prelude.elems;
-        my $end   = $start + %symbols.keys.elems + @postlude.elems; 
+        my $end   = $start + %symbols.keys.elems + @postlude.elems;
 
-        @unit.push: @prelude.list;
+        for @prelude -> $inst {
+            @unit.push: $inst;
+        }
 
         my %locals;
 
         for %symbols.kv -> $k, $v {
             %locals{ $k } = $end;
             @unit.push(
-                $local 
+                $local
                     ?? MCVM::Instructions::LSTOR.new( label => $k, value => $end )
                     !! MCVM::Instructions::STOR.new( label => $k, value => $end )
             );
-            $end += $v.elems;       
+            $end += $v.elems;
         }
 
         #warn %locals.gist;
 
-        @unit.push: @postlude.list;
 
-        for %symbols.values -> $v {
-            @unit.push: $v.list;
+        for @postlude -> $inst {
+            @unit.push: $inst;
+        }
+
+        for %symbols.values -> @insts {
+            for @insts -> $inst {
+                @unit.push: $inst;
+            }
         }
 
         return @unit;

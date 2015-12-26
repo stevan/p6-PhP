@@ -12,12 +12,12 @@ PhP::Runtime::bootstrap;
 
 subtest {
     # CODE:
-    # let x = 1 :: [] in 
+    # let x = 1 :: [] in
     #     head(x)
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -39,20 +39,20 @@ subtest {
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 1, '... got the value we expected';
 }, '... testing simple list w/ head function';
 
 subtest {
     # CODE:
-    # let x = 1 :: [] in 
+    # let x = 1 :: [] in
     #     tail(x)
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -74,20 +74,20 @@ subtest {
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Tuple;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Tuple;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     ok $unit.result.is_empty, '... got the value we expected';
 }, '... testing simple list w/ tail function';
 
 subtest {
     # CODE:
-    # let x = 1 :: [] in 
+    # let x = 1 :: [] in
     #     is_nil(tail(x))
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -114,20 +114,20 @@ subtest {
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     ok $( $unit.result === PhP::Runtime::root_env.get('#TRUE') ), '... got the value we expected';
 }, '... testing simple list w/ is_nil(tail()) function';
 
 subtest {
     # CODE:
-    # let x = 1 :: 2 :: 3 :: [] in 
+    # let x = 1 :: 2 :: 3 :: [] in
     #     head(tail(x))
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -151,11 +151,11 @@ subtest {
                                 )
                             ]
                         )
-                    ) 
+                    )
                 ],
                 body => PhP::AST::Apply.new(
                     func => PhP::AST::Var.new( name => 'head' ),
-                    args => [ 
+                    args => [
                        PhP::AST::Apply.new(
                             func => PhP::AST::Var.new( name => 'tail' ),
                             args => [ PhP::AST::Var.new( name => 'x' ) ]
@@ -166,8 +166,8 @@ subtest {
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 2, '... got the value we expected';
 }, '... testing longer list w/ head(tail()) function';
@@ -181,8 +181,8 @@ subtest {
     #     head(tail(x))
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -218,7 +218,7 @@ subtest {
                 ],
                 body => PhP::AST::Apply.new(
                     func => PhP::AST::Var.new( name => 'head' ),
-                    args => [ 
+                    args => [
                        PhP::AST::Apply.new(
                             func => PhP::AST::Var.new( name => 'tail' ),
                             args => [ PhP::AST::Var.new( name => 'x' ) ]
@@ -229,11 +229,11 @@ subtest {
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 2, '... got the value we expected';
 }, '... testing nested list w/ head(tail()) function';
 
 
-done;
+done-testing;

@@ -12,8 +12,8 @@ PhP::Runtime::bootstrap;
 
 subtest {
 
-    my $orig = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $orig = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -27,8 +27,8 @@ subtest {
                             body   => PhP::AST::Apply.new(
                                 func => PhP::AST::Var.new( name => '+' ),
                                 args => [
-                                    PhP::AST::Var.new( name => 'x' ), 
-                                    PhP::AST::Var.new( name => 'y' ), 
+                                    PhP::AST::Var.new( name => 'x' ),
+                                    PhP::AST::Var.new( name => 'y' ),
                                 ]
                             )
                         )
@@ -36,13 +36,13 @@ subtest {
                 ],
                 body => PhP::AST::Unit.new
             )
-        ) 
+        )
     );
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
-                bindings => [ 
+                bindings => [
                     PhP::AST::SimpleBind.new(
                         var   => PhP::AST::Var.new( name => 'x' ),
                         value => PhP::AST::Literal.new( value => 5 ),
@@ -58,13 +58,13 @@ subtest {
             linked => [
                 'BadMath' => $orig
             ]
-        ) 
+        )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 20, '... got the value we expected';
 }, '... testing simple closure works when imported into another CompilatonUnit';
 
-done;
+done-testing;

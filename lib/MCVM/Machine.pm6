@@ -7,7 +7,7 @@ package MCVM::Machine {
         has $.return_address;
         has $.local_offset;
 
-        # memory 
+        # memory
 
         method get_memory ( $addr )       { %.memory{ $addr }        }
         method set_memory ( $addr, $val ) { %.memory{ $addr } = $val }
@@ -28,27 +28,27 @@ package MCVM::Machine {
             $.program_counter = $goto;
         }
 
-        method exit_frame { 
+        method exit_frame {
             my $frame = @.frame.pop;
             $.program_counter = $frame.return_address;
         }
 
-        # data 
+        # data
 
         method peek_data          { @.data[*-1]         }
         method pop_data           { @.data.pop          }
         method push_data ( $val ) { @.data.push( $val ) }
 
-        # memory 
+        # memory
 
         method get_memory ( $addr )       { %.memory{ $addr }        }
         method set_memory ( $addr, $val ) { %.memory{ $addr } = $val }
 
-        # control 
+        # control
 
         method halt { $.program_counter = -1  }
 
-        method jump ( Int :$to, Bool :$is_local ) { 
+        method jump ( Int :$to, Bool :$is_local ) {
             $.program_counter = $to + ($is_local ?? self.current_frame.local_offset !! 0);
         }
 
@@ -56,7 +56,7 @@ package MCVM::Machine {
             say "== START ===========" if %opts<DEBUG>;
 
             while ( $.program_counter >= 0 && $.program_counter < @program.elems ) {
-                my $inst = @program[ $.program_counter++ ];        
+                my $inst = @program[ $.program_counter++ ];
                 $inst.run( self );
 
                 if %opts<DEBUG> {

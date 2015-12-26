@@ -11,20 +11,20 @@ plan *;
 PhP::Runtime::bootstrap;
 
 # NOTE:
-# This will test all the comparison operators we 
+# This will test all the comparison operators we
 # currently support through the PhP::Runtime
 # - SL
 
 subtest {
     # CODE:
     # let x = 10 in
-    #     if x == 10 
+    #     if x == 10
     #         then 'YES'
     #         else 'NO'
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -43,12 +43,12 @@ subtest {
                     if_true  => PhP::AST::Literal.new( value => 'YES' ),
                     if_false => PhP::AST::Literal.new( value => 'NO' ),
                 )
-            ) 
+            )
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 'YES', '... got the value we expected';
 }, '... testing ==';
@@ -56,13 +56,13 @@ subtest {
 subtest {
     # CODE:
     # let x = 10 in
-    #     if x != 10 
+    #     if x != 10
     #         then 'YES'
     #         else 'NO'
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -81,12 +81,12 @@ subtest {
                     if_true  => PhP::AST::Literal.new( value => 'YES' ),
                     if_false => PhP::AST::Literal.new( value => 'NO' ),
                 )
-            ) 
+            )
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 'NO', '... got the value we expected';
 }, '... testing !=';
@@ -94,13 +94,13 @@ subtest {
 subtest {
     # CODE:
     # let x = 10 in
-    #     if x < 100 
+    #     if x < 100
     #         then 'YES'
     #         else 'NO'
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -118,13 +118,13 @@ subtest {
                     ),
                     if_true  => PhP::AST::Literal.new( value => 'YES' ),
                     if_false => PhP::AST::Literal.new( value => 'NO' ),
-                ) 
+                )
             )
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 'YES', '... got the value we expected';
 }, '... testing <';
@@ -132,13 +132,13 @@ subtest {
 subtest {
     # CODE:
     # let x = 10 in
-    #     if x <= 100 
+    #     if x <= 100
     #         then 'YES'
     #         else 'NO'
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -158,11 +158,11 @@ subtest {
                     if_false => PhP::AST::Literal.new( value => 'NO' ),
                 )
             )
-        ) 
+        )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 'YES', '... got the value we expected';
 }, '... testing <=';
@@ -170,13 +170,13 @@ subtest {
 subtest {
     # CODE:
     # let x = 10 in
-    #     if x > 100 
+    #     if x > 100
     #         then 'YES'
     #         else 'NO'
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -196,11 +196,11 @@ subtest {
                     if_false => PhP::AST::Literal.new( value => 'NO' ),
                 )
             )
-        ) 
+        )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 'NO', '... got the value we expected';
 }, '... testing >';
@@ -208,13 +208,13 @@ subtest {
 subtest {
     # CODE:
     # let x = 10 in
-    #     if x >= 100 
+    #     if x >= 100
     #         then 'YES'
     #         else 'NO'
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -237,10 +237,10 @@ subtest {
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 'NO', '... got the value we expected';
 }, '... testing >=';
 
-done;
+done-testing;

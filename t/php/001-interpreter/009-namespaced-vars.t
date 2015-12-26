@@ -20,8 +20,8 @@ subtest {
     #
     # let x = 10 in Foo.x + x;;
 
-    my $Foo = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $Foo = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -29,13 +29,13 @@ subtest {
                         value => PhP::AST::Literal.new( value => 5 ),
                     )
                 ],
-                body => PhP::AST::Unit.new 
+                body => PhP::AST::Unit.new
             )
-        ) 
+        )
     );
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -46,22 +46,22 @@ subtest {
                 body => PhP::AST::Apply.new(
                     func => PhP::AST::Var.new( name => '+' ),
                     args => [
-                        PhP::AST::Var.new( name => 'x', namespace => 'Foo' ), 
-                        PhP::AST::Var.new( name => 'x' ), 
+                        PhP::AST::Var.new( name => 'x', namespace => 'Foo' ),
+                        PhP::AST::Var.new( name => 'x' ),
                     ]
                 )
             ),
-            linked => [ 
-                Foo => $Foo 
+            linked => [
+                Foo => $Foo
             ],
-        ) 
+        )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 15, '... got the value we expected';
 }, '... testing simple let';
 
 
-done;
+done-testing;

@@ -10,4 +10,4 @@ plan *;
 
 pass '... we got here';
 
-done;
+done-testing;

@@ -15,15 +15,15 @@ subtest {
     # 2
 
     my $unit = PhP::Interpreter::run(
-        PhP::Runtime::CompilationUnit.new( 
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Literal.new( value => 2 )
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 2, '... got the value we expected';
 }, '... testing simple literals';
 
-done;
+done-testing;

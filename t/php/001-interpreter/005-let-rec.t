@@ -12,16 +12,16 @@ PhP::Runtime::bootstrap;
 
 subtest {
     # CODE:
-    # let mul = func (x, y) { 
-    #     if y == 1 
+    # let mul = func (x, y) {
+    #     if y == 1
     #         then x
     #         else x + mul( x, y - 1 )
     # } in
     #     mul(13, 2)
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -29,7 +29,7 @@ subtest {
                         value =>  PhP::AST::Func.new(
                             params => [ 'x', 'y' ],
                             body   => PhP::AST::Cond.new(
-                                condition => PhP::AST::Apply.new( 
+                                condition => PhP::AST::Apply.new(
                                     func => PhP::AST::Var.new( name => '==' ),
                                     args => [
                                         PhP::AST::Var.new( name => 'y' ),
@@ -71,24 +71,24 @@ subtest {
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 26, '... got the value we expected';
 }, '... testing recursive multiplation';
 
 subtest {
     # CODE:
-    # let factorial = func (n) { 
-    #     if n == 1 
+    # let factorial = func (n) {
+    #     if n == 1
     #         then 1
     #         else n * factorial( n - 1 )
     # } in
     #     factorial( 5 )
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -96,7 +96,7 @@ subtest {
                         value => PhP::AST::Func.new(
                             params => [ 'n' ],
                             body   => PhP::AST::Cond.new(
-                                condition => PhP::AST::Apply.new( 
+                                condition => PhP::AST::Apply.new(
                                     func => PhP::AST::Var.new( name => '==' ),
                                     args => [
                                         PhP::AST::Var.new( name => 'n' ),
@@ -136,15 +136,15 @@ subtest {
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 120, '... got the value we expected';
 }, '... testing factorial';
 
 subtest {
     # CODE:
-    # let 
+    # let
     #     is_even = func (n) -> if n == 0 then true  else is_odd( n - 1 ),
     #     is_odd  = func (n) -> if n == 0 then false else is_even( n - 1 ),
     #  in
@@ -157,7 +157,7 @@ subtest {
             value => PhP::AST::Func.new(
                 params => [ 'n' ],
                 body   => PhP::AST::Cond.new(
-                    condition => PhP::AST::Apply.new( 
+                    condition => PhP::AST::Apply.new(
                         func => PhP::AST::Var.new( name => '==' ),
                         args => [
                             PhP::AST::Var.new( name => 'n' ),
@@ -185,7 +185,7 @@ subtest {
             value =>  PhP::AST::Func.new(
                 params => [ 'n' ],
                 body   => PhP::AST::Cond.new(
-                    condition => PhP::AST::Apply.new( 
+                    condition => PhP::AST::Apply.new(
                         func => PhP::AST::Var.new( name => '==' ),
                         args => [
                             PhP::AST::Var.new( name => 'n' ),
@@ -211,8 +211,8 @@ subtest {
     );
 
     {
-        my $unit = PhP::Interpreter::run( 
-            PhP::Runtime::CompilationUnit.new( 
+        my $unit = PhP::Interpreter::run(
+            PhP::Runtime::CompilationUnit.new(
                 root => PhP::AST::Let.new(
                     bindings => @bindings,
                     body => PhP::AST::Apply.new(
@@ -225,15 +225,15 @@ subtest {
             )
         );
 
-        isa_ok $unit.result, PhP::AST::Literal;
-        isa_ok $unit.result, PhP::AST::Ast;
+        isa-ok $unit.result, PhP::AST::Literal;
+        isa-ok $unit.result, PhP::AST::Ast;
 
         ok ?( $unit.result === PhP::Runtime::root_env.get('#TRUE') ), '... got the value we expected';
     }
 
     {
-        my $unit = PhP::Interpreter::run( 
-            PhP::Runtime::CompilationUnit.new( 
+        my $unit = PhP::Interpreter::run(
+            PhP::Runtime::CompilationUnit.new(
                 root => PhP::AST::Let.new(
                     bindings => @bindings,
                     body => PhP::AST::Apply.new(
@@ -246,15 +246,15 @@ subtest {
             )
         );
 
-        isa_ok $unit.result, PhP::AST::Literal;
-        isa_ok $unit.result, PhP::AST::Ast;
+        isa-ok $unit.result, PhP::AST::Literal;
+        isa-ok $unit.result, PhP::AST::Ast;
 
         ok ?( $unit.result === PhP::Runtime::root_env.get('#FALSE') ), '... got the value we expected';
     }
 
     {
-        my $unit = PhP::Interpreter::run( 
-            PhP::Runtime::CompilationUnit.new( 
+        my $unit = PhP::Interpreter::run(
+            PhP::Runtime::CompilationUnit.new(
                 root => PhP::AST::Let.new(
                     bindings => @bindings,
                     body => PhP::AST::Apply.new(
@@ -267,15 +267,15 @@ subtest {
             )
         );
 
-        isa_ok $unit.result, PhP::AST::Literal;
-        isa_ok $unit.result, PhP::AST::Ast;
+        isa-ok $unit.result, PhP::AST::Literal;
+        isa-ok $unit.result, PhP::AST::Ast;
 
         ok ?( $unit.result === PhP::Runtime::root_env.get('#FALSE') ), '... got the value we expected';
     }
 
     {
-        my $unit = PhP::Interpreter::run( 
-            PhP::Runtime::CompilationUnit.new( 
+        my $unit = PhP::Interpreter::run(
+            PhP::Runtime::CompilationUnit.new(
                 root => PhP::AST::Let.new(
                     bindings => @bindings,
                     body => PhP::AST::Apply.new(
@@ -288,8 +288,8 @@ subtest {
             )
         );
 
-        isa_ok $unit.result, PhP::AST::Literal;
-        isa_ok $unit.result, PhP::AST::Ast;
+        isa-ok $unit.result, PhP::AST::Literal;
+        isa-ok $unit.result, PhP::AST::Ast;
 
         ok ?( $unit.result === PhP::Runtime::root_env.get('#TRUE') ), '... got the value we expected';
     }
@@ -297,4 +297,4 @@ subtest {
 }, '... testing multually recursive even/odd predicate';
 
 
-done;
+done-testing;

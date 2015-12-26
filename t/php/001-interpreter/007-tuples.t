@@ -12,12 +12,12 @@ PhP::Runtime::bootstrap;
 
 subtest {
     # CODE:
-    # let x = [ 1 ] in 
+    # let x = [ 1 ] in
     #     first(x)
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -37,20 +37,20 @@ subtest {
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 1, '... got the value we expected';
 }, '... testing simple tuple';
 
 subtest {
     # CODE:
-    # let x = [ 1, 2, 3 ] in 
+    # let x = [ 1, 2, 3 ] in
     #     second(x)
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -68,24 +68,24 @@ subtest {
                     func => PhP::AST::Var.new( name => 'second' ),
                     args => [ PhP::AST::Var.new( name =>'x' ) ]
                 )
-            ) 
+            )
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 2, '... got the value we expected';
 }, '... testing simple tuple';
 
 subtest {
     # CODE:
-    # let x = [ 1, 2, 3 ] in 
+    # let x = [ 1, 2, 3 ] in
     #     item_at(x, 2)
     # ;;
 
-    my $unit = PhP::Interpreter::run( 
-        PhP::Runtime::CompilationUnit.new( 
+    my $unit = PhP::Interpreter::run(
+        PhP::Runtime::CompilationUnit.new(
             root => PhP::AST::Let.new(
                 bindings => [
                     PhP::AST::SimpleBind.new(
@@ -101,19 +101,19 @@ subtest {
                 ],
                 body => PhP::AST::Apply.new(
                     func => PhP::AST::Var.new( name => 'item_at' ),
-                    args => [ 
+                    args => [
                         PhP::AST::Var.new( name => 'x' ),
-                        PhP::AST::Literal.new( value => 2 ) 
+                        PhP::AST::Literal.new( value => 2 )
                     ]
                 )
-            ) 
+            )
         )
     );
 
-    isa_ok $unit.result, PhP::AST::Literal;
-    isa_ok $unit.result, PhP::AST::Ast;
+    isa-ok $unit.result, PhP::AST::Literal;
+    isa-ok $unit.result, PhP::AST::Ast;
 
     is $unit.result.value, 3, '... got the value we expected';
 }, '... testing simple tuple';
 
-done;
+done-testing;
